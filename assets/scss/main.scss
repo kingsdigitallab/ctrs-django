@@ -12,9 +12,10 @@
  *  3.  Grid
  *  4.  Layout
  *          4.1 Header
- *          4.2 Main
- *          4.3 Sidebar
- *          4.4 Footer
+ *          4.2 Navigation
+ *          4.3 Main
+ *          4.4 Sidebar
+ *          4.5 Footer
  *  5.  Typography
  *  6.  Media queries
  *  7.  Print
@@ -57,7 +58,9 @@ $rich-black: #06070e;
 
 /* 2. Globals */
 
-* {
+*,
+*:before,
+*:after {
     box-sizing: border-box;
 }
 
@@ -103,8 +106,41 @@ a {
 
 /* 3. Grid */
 
-.grid {
-    background: lighten($primary-color, 70%)
+.wrapper {
+    display: grid;
+    grid-gap: 10px;
+    margin: 0 auto;
+    max-width: 1920px;
+}
+
+// .wrapper {
+//     display: flex;
+//     flex-wrap: wrap;
+// }
+
+header {
+    .wrapper {
+
+    }
+}
+
+main {
+    .wrapper {
+        grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+        grid-auto-rows: minmax(150px, auto);
+    }
+
+    .panel {
+        background: $secondary-color;
+        /* needed for the flex layout*/
+        flex: 1 1 200px;
+        margin-left: 5px;
+        margin-right: 5px;
+    }
+
+    .tall-panel {
+        grid-row-end: span 2;
+    }
 }
 
 /* 4. Layout */
@@ -112,15 +148,36 @@ a {
 header,
 footer {
     color: white;
+    flex: 0 1 100%;
+    grid-column: 1 / -1;
+    margin-left: 5px;
+    margin-right: 5px;
 }
 
 // 4.1 Header
 
-// 4.2 Main
+header {
+    a {
+        color: white;
+    }
+}
 
-// 4.3 Sidebar
+// 4.2 Navigation
 
-// 4.4 Footer
+nav {
+    background: $rich-black;
+    color: white;
+}
+
+// 4.3 Main
+
+main {
+    background: lighten($primary-color, 70%)
+}
+
+// 4.4 Sidebar
+
+// 4.5 Footer
 
 /* 5. Typography */
 
@@ -182,3 +239,9 @@ footer {
 /* 6. Media queries */
 
 /* 7. Print */
+
+@supports (display: grid) {
+  .wrapper > * {
+    margin: 0;
+  }
+}
