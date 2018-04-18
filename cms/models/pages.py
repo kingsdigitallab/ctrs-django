@@ -4,9 +4,8 @@ import logging
 
 from django.conf import settings
 from django.core.paginator import EmptyPage, PageNotAnInteger, Paginator
-from wagtail.wagtailadmin.edit_handlers import FieldPanel, StreamFieldPanel
-from wagtail.wagtailcore.models import Page
-from wagtail.wagtailsearch import index
+from wagtail.admin.edit_handlers import FieldPanel, StreamFieldPanel
+from wagtail.core.models import Page
 
 from .behaviours import WithStreamField
 
@@ -29,10 +28,6 @@ def _paginate(request, items):
 
 
 class HomePage(Page, WithStreamField):
-    search_fields = Page.search_fields + [
-        index.SearchField('body'),
-    ]
-
     subpage_types = [
         'IndexPage',
         'RichTextPage'
@@ -48,10 +43,6 @@ HomePage.promote_panels = Page.promote_panels
 
 
 class IndexPage(Page, WithStreamField):
-    search_fields = Page.search_fields + [
-        index.SearchField('body'),
-    ]
-
     subpage_types = ['IndexPage', 'RichTextPage']
 
 
@@ -64,10 +55,6 @@ IndexPage.promote_panels = Page.promote_panels
 
 
 class RichTextPage(Page, WithStreamField):
-    search_fields = Page.search_fields + [
-        index.SearchField('body'),
-    ]
-
     subpage_types = []
 
 

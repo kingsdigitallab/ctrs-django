@@ -84,8 +84,9 @@ INSTALLED_APPS = [
 ]
 
 INSTALLED_APPS += [    # your project apps here
-    
     'activecollab_digger',
+    'cms',
+    'ctrs',
     'kdl_ldap',
     'rest_framework',
     'wagtail.core',
@@ -175,9 +176,6 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    
-
-
     'wagtail.core.middleware.SiteMiddleware',
     'wagtail.contrib.redirects.middleware.RedirectMiddleware',
 ]
@@ -200,10 +198,7 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.template.context_processors.static',
                 'django.contrib.messages.context_processors.messages',
-                
-				'activecollab_digger.context_processors.activecollab_digger',
-
-
+                'activecollab_digger.context_processors.activecollab_digger',
             ],
         },
     },

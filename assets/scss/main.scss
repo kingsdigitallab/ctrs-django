@@ -6,8 +6,9 @@
  *  2.  Globals
  *          2.1 Buttons
  *          2.2 Forms
- *          2.3 Links
- *          2.4 Tables
+ *          2.3 Headings
+ *          2.4 Links
+ *          2.5 Tables
  *  3.  Grid
  *  4.  Layout
  *          4.1 Header
@@ -19,9 +20,14 @@
  *  7.  Print
  */
 
- /* 1. Settings / Variables */
+/* 1. Settings / Variables */
 
- // 1.1 Breakpoints
+$base-font-size: 20px;
+
+$body-font-family: 'Lora', serif;
+$headings-font-family: 'Open Sans Condensed', sans-serif;
+
+// 1.1 Breakpoints
 
 $break-small: 767px;
 $break-medium: 768px;
@@ -29,7 +35,7 @@ $break-large: 1199px;
 
 // 1.2 Colours
 
-// Possible colour palette
+// Possible colour palettes
 // https://coolors.co/984447-add9f4-476c9b-468c98-101419
 // https://coolors.co/4e598c-ffffff-f9c784-fcaf58-ff8c42
 // https://coolors.co/edeec0-433e0e-7c9082-a7a284-d0c88e
@@ -49,27 +55,130 @@ $rich-black: #06070e;
 
 // $dark: #122c34;
 
- /* 2. Globals */
+/* 2. Globals */
 
- * {
+* {
     box-sizing: border-box;
- }
+}
 
- body {
+body {
     background: $primary-color;
     color: $rich-black;
- }
+    font-family: $body-font-family;
+    font-size: $base-font-size;
+    font-weight: 400;
+    margin: 0;
+}
 
- /* 3. Grid */
+// 2.1 Buttons
 
- .grid {
+button,
+.button {
+    background: $primary-color;
+    color: white;
+    padding: 5px 10px;
+}
+
+// 2.2 Forms
+
+// 2.3 Headings
+
+h1, h2, h3, h4, h5, h6 {
+    font-family: $headings-font-family;
+}
+
+
+// 2.4 Links
+
+a {
+    color: $secondary-color;
+    text-decoration: none;
+
+    &:hover {
+        text-decoration: underline;
+    }
+}
+
+// 2.5 Tables
+
+/* 3. Grid */
+
+.grid {
     background: lighten($primary-color, 70%)
- }
+}
 
- /* 4. Layout */
+/* 4. Layout */
 
- /* 5. Typography */
+header,
+footer {
+    color: white;
+}
 
- /* 6. Media queries */
+// 4.1 Header
 
- /* 7. Print */
+// 4.2 Main
+
+// 4.3 Sidebar
+
+// 4.4 Footer
+
+/* 5. Typography */
+
+// Lora
+
+@font-face {
+    font-family: 'Lora';
+    src: '../fonts/Lora/Lora-Regular.ttf' format('truetype');
+
+    font-weight: normal;
+}
+
+@font-face {
+    font-family: 'Lora';
+    src: '../fonts/Lora/Lora-Bold.ttf' format('truetype');
+
+    font-weight: bold;
+}
+
+@font-face {
+    font-family: 'Lora';
+    src: '../fonts/Lora/Lora-Italic.ttf' format('truetype');
+
+    font-style: italic;
+}
+
+@font-face {
+    font-family: 'Lora';
+    src: '../fonts/Lora/Lora-BoldItalic.ttf' format('truetype');
+
+    font-style: italic;
+    font-weight: bold;
+}
+
+// Open Sans Condensed
+
+@font-face {
+    font-family: 'Open Sans Condensed';
+    src: '../fonts/Open_Sans_Condensed/OpenSanscondensed-Light.ttf' format('truetype');
+
+    font-weight: 300;
+}
+
+@font-face {
+    font-family: 'Open Sans Condensed';
+    src: '../fonts/Open_Sans_Condensed/OpenSanscondensed-Bold.ttf' format('truetype');
+
+    font-weight: 700;
+}
+
+@font-face {
+    font-family: 'Open Sans Condensed';
+    src: '../fonts/Open_Sans_Condensed/OpenSanscondensed-LightItalic.ttf' format('truetype');
+
+    font-style: italic;
+    font-weight: 300;
+}
+
+/* 6. Media queries */
+
+/* 7. Print */
