@@ -1,8 +1,7 @@
 {% load wagtailcore_tags cms_tags %}
-<ul class=" medium-horizontal vertical dropdown menu">
-  
+<ul class="menu">
   {% for page in menu_pages %}
-  <li {% if page.active %} class="is-active" {% endif %}><a href="{% pageurl page %}">{{ page.title }}</a></li>
+  <li{% if page.active %} class="active"{% endif %}><a href="{% pageurl page %}">{{ page.title }}</a></li>
   {% endfor %}
 
   {% if request.user.is_authenticated %}
@@ -11,6 +10,5 @@
   {% endif %}
   <li><a href="/admin/logout/">Logout {{ request.user.first_name }}</a></li>
   {% endif %}
-  
 </ul>
 
