@@ -4,6 +4,10 @@
  *          1.1 Breakpoints
  *          1.2 Colours
  *  2.  Globals
+ *          2.1 Buttons
+ *          2.2 Forms
+ *          2.3 Links
+ *          2.4 Tables
  *  3.  Grid
  *  4.  Layout
  *          4.1 Header
@@ -17,13 +21,50 @@
 
  /* 1. Settings / Variables */
 
+ // 1.1 Breakpoints
+
+$break-small: 767px;
+$break-medium: 768px;
+$break-large: 1199px;
+
+// 1.2 Colours
+
+// Possible colour palette
+// https://coolors.co/984447-add9f4-476c9b-468c98-101419
+// https://coolors.co/4e598c-ffffff-f9c784-fcaf58-ff8c42
+// https://coolors.co/edeec0-433e0e-7c9082-a7a284-d0c88e
+// https://coolors.co/151515-a63d40-e9b872-90a959-6494aa
+// https://coolors.co/122c34-224870-2a4494-4ea5d9-44cfcb
+
+// https://coolors.co/55dde0-33658a-2f4858-f6ae2d-f26419
+
+$primary-color: #2f4858;
+$secondary-color: #f26419;
+
+$error-color: #a63d40;
+$success-color: #54af68;
+$warning-color: #f6ae2d;
+
+$rich-black: #06070e;
+
+// $dark: #122c34;
+
  /* 2. Globals */
 
  * {
     box-sizing: border-box;
  }
 
+ body {
+    background: $primary-color;
+    color: $rich-black;
+ }
+
  /* 3. Grid */
+
+ .grid {
+    background: lighten($primary-color, 70%)
+ }
 
  /* 4. Layout */
 
