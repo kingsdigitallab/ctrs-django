@@ -280,7 +280,7 @@ FABRIC_USER = getpass.getuser()
 # -----------------------------------------------------------------------------
 
 # Google Analytics ID
-GA_ID = ''
+GA_ID = 'UA-67707155-4'
 
 # -----------------------------------------------------------------------------
 # Automatically generated settings
@@ -296,7 +296,7 @@ AC_BASE_URL = 'https://app.activecollab.com/148987'
 AC_API_URL = AC_BASE_URL + '/api/v1/'
 AC_PROJECT_ID = 759
 AC_USER = 36
-AC_TOKEN = ''
+AC_TOKEN = '36-iujn8hZ9sbfdQmHX1ksp1gweXRY5NYseAWA7JzVP'
 AUTH_LDAP_REQUIRE_GROUP = (
     (
         LDAPGroupQuery('cn=kdl-staff,' + LDAP_BASE_OU) |
