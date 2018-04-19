@@ -1,6 +1,6 @@
-{% load staticfiles compress  %}
+{% load staticfiles compress %}
 <!DOCTYPE html>
-<html>
+<html lang="en-GB">
 <head>
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -15,23 +15,31 @@
 </head>
 <body>
   <header>
-    {% include 'includes/header.html' %}
+    <div class="wrapper">
+      {% include 'includes/header.html' %}
+    </div>
   </header>
 
   <nav>
-    {% include 'includes/navigation.html' %}
+    <div class="wrapper">
+      {% include 'includes/navigation.html' %}
+    </div>
   </nav>
 
   <main>
-    {% block title %}{% endblock %}
-    {% block main %}
-    {% endblock %}
+    <div class="wrapper">
+      {% block title %}{% endblock %}
+      {% block main %}
+      {% endblock %}
+    </div>
   </main>
 
   <footer>
-    {% block footer %}
-    {% include 'includes/footer.html' %}
-    {% endblock %}
+    <div class="wrapper">
+      {% block footer %}
+      {% include 'includes/footer.html' %}
+      {% endblock %}
+    </div>
   </footer>
 
   {% compress js %}

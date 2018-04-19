@@ -1,0 +1,10 @@
+{% load wagtailcore_tags %}
+{% if menu_pages %}
+<ul>
+    {% for page in menu_pages %}
+    <li{% if page.active %} class="is-active" {% endif %}>
+        <a href="{% pageurl page %}">{{ page.title }}</a>
+    </li>
+    {% endfor %}
+</ul>
+{% endif %}

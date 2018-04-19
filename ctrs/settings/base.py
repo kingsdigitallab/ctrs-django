@@ -84,8 +84,9 @@ INSTALLED_APPS = [
 ]
 
 INSTALLED_APPS += [    # your project apps here
-    
     'activecollab_digger',
+    'cms',
+    'ctrs',
     'kdl_ldap',
     'rest_framework',
     'wagtail.core',
@@ -175,9 +176,6 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    
-
-
     'wagtail.core.middleware.SiteMiddleware',
     'wagtail.contrib.redirects.middleware.RedirectMiddleware',
 ]
@@ -200,10 +198,7 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.template.context_processors.static',
                 'django.contrib.messages.context_processors.messages',
-                
-				'activecollab_digger.context_processors.activecollab_digger',
-
-
+                'activecollab_digger.context_processors.activecollab_digger',
             ],
         },
     },
@@ -285,7 +280,7 @@ FABRIC_USER = getpass.getuser()
 # -----------------------------------------------------------------------------
 
 # Google Analytics ID
-GA_ID = ''
+GA_ID = 'UA-67707155-4'
 
 # -----------------------------------------------------------------------------
 # Automatically generated settings
@@ -301,7 +296,7 @@ AC_BASE_URL = 'https://app.activecollab.com/148987'
 AC_API_URL = AC_BASE_URL + '/api/v1/'
 AC_PROJECT_ID = 759
 AC_USER = 36
-AC_TOKEN = ''
+AC_TOKEN = '36-iujn8hZ9sbfdQmHX1ksp1gweXRY5NYseAWA7JzVP'
 AUTH_LDAP_REQUIRE_GROUP = (
     (
         LDAPGroupQuery('cn=kdl-staff,' + LDAP_BASE_OU) |

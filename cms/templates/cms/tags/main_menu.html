@@ -1,0 +1,14 @@
+{% load wagtailcore_tags cms_tags %}
+<ul class="menu">
+  {% for page in menu_pages %}
+  <li{% if page.active %} class="active"{% endif %}><a href="{% pageurl page %}">{{ page.title }}</a></li>
+  {% endfor %}
+
+  {% if request.user.is_authenticated %}
+  {% if request.user.is_staff %}
+  <li><a href="/admin/">Admin Panel</a></li>
+  {% endif %}
+  <li><a href="/admin/logout/">Logout {{ request.user.first_name }}</a></li>
+  {% endif %}
+</ul>
+

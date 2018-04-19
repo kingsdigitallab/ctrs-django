@@ -1,0 +1,84 @@
+/* 5. Typography */
+
+// Martel
+
+@font-face {
+    font-family: 'Martel';
+    src: url('/static/fonts/Martel/Martel-Regular.ttf') format('truetype');
+}
+
+@font-face {
+    font-family: 'Martel';
+    src: url('/static/fonts/Martel/Martel-Bold.ttf') format('truetype');
+
+    font-weight: bold;
+}
+
+// @font-face {
+//     font-family: 'Martel';
+//     src: url('/static/fonts/Martel/Martel-Italic.ttf') format('truetype');
+
+//     font-style: italic;
+// }
+
+// @font-face {
+//     font-family: 'Martel';
+//     src: url('/static/fonts/Martel/Martel-BoldItalic.ttf') format('truetype');
+
+//     font-style: italic;
+//     font-weight: bold;
+// }
+
+
+// Playfair Display
+
+@font-face {
+    font-family: 'PlayfairDisplay';
+    src: url('/static/fonts/Playfair_Display/PlayfairDisplay-Regular.ttf') format('truetype');
+}
+
+@font-face {
+    font-family: 'PlayfairDisplay';
+    src: url('/static/fonts/Playfair_Display/PlayfairDisplay-Bold.ttf') format('truetype');
+
+    font-weight: bold;
+}
+
+@font-face {
+    font-family: 'PlayfairDisplay';
+    src: url('/static/fonts/Playfair_Display/PlayfairDisplay-Italic.ttf') format('truetype');
+
+    font-style: italic;
+}
+
+@font-face {
+    font-family: 'PlayfairDisplay';
+    src: url('/static/fonts/Playfair_Display/PlayfairDisplay-BoldItalic.ttf') format('truetype');
+
+    font-style: italic;
+    font-weight: bold;
+}
+
+// Open Sans Condensed
+
+@font-face {
+    font-family: 'Open Sans Condensed';
+    src: url('/static/fonts/Open_Sans_Condensed/OpenSanscondensed-Light.ttf') format('truetype');
+
+    font-weight: 300;
+}
+
+@font-face {
+    font-family: 'Open Sans Condensed';
+    src: url('/static/fonts/Open_Sans_Condensed/OpenSanscondensed-Bold.ttf') format('truetype');
+
+    font-weight: 700;
+}
+
+@font-face {
+    font-family: 'Open Sans Condensed';
+    src: url('/static/fonts/Open_Sans_Condensed/OpenSanscondensed-LightItalic.ttf') format('truetype');
+
+    font-style: italic;
+    font-weight: 300;
+}
