@@ -18,6 +18,10 @@
  *          4.5 Footer
  *  5.  Media queries
  *  6.  Print
+ *
+ *  TODO - Add:
+ *      code (pre & code)
+ *      blockquote
  */
 
 /* 1. Imports / Settings / Variables */
@@ -114,7 +118,8 @@ a {
 
 // Fallback for browsers that don't support css grid
 .wrapper > div.panel {
-    float: left;
+    display: inline-block;
+    // float: left;
 }
 
 .wrapper {
