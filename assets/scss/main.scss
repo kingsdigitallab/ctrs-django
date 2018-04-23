@@ -112,17 +112,17 @@ a {
 
 /* 3. Grid */
 
+// Fallback for browsers that don't support css grid
+.wrapper > div {
+    float: left;
+}
+
 .wrapper {
     display: grid;
     grid-gap: 10px;
     margin: 0 auto;
     max-width: 1920px;
 }
-
-// .wrapper {
-//     display: flex;
-//     flex-wrap: wrap;
-// }
 
 header {
     .wrapper {
@@ -142,6 +142,7 @@ main {
         flex: 1 1 200px;
         margin-left: 5px;
         margin-right: 5px;
+        max-width: 400px;
     }
 
     .tall-panel {
