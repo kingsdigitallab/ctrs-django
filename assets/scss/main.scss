@@ -143,13 +143,13 @@ header {
         margin-left: 5px;
         margin-right: 5px;
         /* needed for the float layout */
-        min-width: 50px;
+        min-height: 50px;
         width: 400px;
     }
 
     .tall-panel {
         grid-row-end: span 2;
-        min-width: 100px;
+        min-height: 100px;
     }
 // }
 
