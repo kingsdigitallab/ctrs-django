@@ -123,16 +123,13 @@ a {
 }
 
 .wrapper {
-    display: grid;
+    // display: grid;
     grid-gap: 10px;
     margin: 0 auto;
     max-width: 1920px;
 }
 
 header {
-    .wrapper {
-
-    }
 }
 
 main {
@@ -229,7 +226,11 @@ main {
 /* 6. Print */
 
 @supports (display: grid) {
-  .wrapper > * {
-    margin: 0;
-  }
+    .wrapper {
+        display: grid;
+    }
+
+    .wrapper > * {
+        margin: 0;
+    }
 }
