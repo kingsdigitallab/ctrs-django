@@ -109,7 +109,20 @@ a {
 
 /* 3. Grid */
 
-main {
+/*
+ * Since developing with mobile first approach, there is no need to wrap this
+ * in a media query.
+ * This style doesn't need a grid, it's a single column, our base layout.
+ */
+
+.wrapper {
+    width: 100%;
+
+    > div.panel {
+        background: $secondary-color;
+        margin: 10px;
+        max-width: 620px;
+    }
 }
 
 /* 4. Layout */
@@ -177,38 +190,26 @@ main {
 // 4.5 Footer
 
 
-
 /* 5. Media queries */
 
-@media screen and (max-width: 640px) {
-    .wrapper {
-        width: 100%;
+@media screen and (min-width: 640px) {
+    // .wrapper {
+    //     margin: 0 auto;
+    //     max-width: 740px;
+    // }
 
-        > div.panel {
-            background: $secondary-color;
-            margin: 10px;
-            max-width: 620px;
-        }
-    }
-}
-
-@media screen and (min-width: 641px) {
     main {
         .wrapper {
-            display: grid;
-            grid-gap: 10px;
+            // display: grid;
+            // grid-gap: 10px;
             grid-auto-rows: minmax(150px, auto);
             grid-template-columns: 1fr 1fr;
-            margin: 0 auto;
-            max-width: 740px;
 
             > div.panel {
                 -ms-grid-columns: 1fr 1fr;
-                -ms-grid-rows: 50px 5em auto;
                 background: $secondary-color;
                 display: -ms-grid;
-                /* needed for the float layout */
-                min-height: 50px;
+                margin: 0;
             }
         
             > div.tall-panel {
@@ -219,16 +220,53 @@ main {
     }
 }
 
-@media screen and (min-width: 769px) {
+@media screen and (min-width: 768px) {
+    // .wrapper {
+    //     max-width: 960px;
+    // }
 
+    main {
+        .wrapper {
+            grid-template-columns: 1fr 1fr 1fr;
+
+            > div.panel {
+                -ms-grid-columns: 1fr 1fr 1fr;
+            }
+        }
+    }
 }
 
-@media screen and (min-width: 961px) {
+@media screen and (min-width: 960px) {
+    // .wrapper {
+    //     max-width: 1280px;
+    // }
 
+    main {
+        .wrapper {
+            grid-template-columns: 1fr 1fr 1fr 1fr;
+
+            > div.panel {
+                -ms-grid-columns: 1fr 1fr 1fr 1fr;
+            }
+        }
+    }
 }
 
-@media screen and (min-width: 1281px) {
+@media screen and (min-width: 1280px) {
+    .wrapper {
+        margin: 0 auto;
+        max-width: 1920px;
+    }
 
+    main {
+        .wrapper {
+            grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr;
+
+            > div.panel {
+                -ms-grid-columns: 1fr 1fr 1fr 1fr 1fr 1fr;
+            }
+        }
+    }
 }
 
 /* 6. Print */
@@ -238,9 +276,6 @@ main {
 @supports (display: grid) {
     .wrapper {
         display: grid;
-    }
-
-    .wrapper > * {
-        margin: 0;
+        grid-gap: 10px;
     }
 }
