@@ -17,8 +17,8 @@
  *          4.4 Sidebar
  *          4.5 Footer
  *  5.  Media queries
- *  6.  Print
- *  7.  @supports
+ *  6.  @supports
+ *  7.  Print
  *
  *  TODO - Add:
  *      code (pre & code)
@@ -116,10 +116,22 @@ a {
  */
 
 .wrapper {
+    // clear: both;
+    display: block;
+    // overflow: hidden;
     width: 100%;
+
+    // clearfix
+    &::after {
+        content: "";
+        clear: both;
+        display: table;
+    }
 
     > div.panel {
         background: $secondary-color;
+        display: block;
+        float: left;
         margin: 10px;
         max-width: 620px;
     }
@@ -193,15 +205,8 @@ main {
 /* 5. Media queries */
 
 @media screen and (min-width: 640px) {
-    // .wrapper {
-    //     margin: 0 auto;
-    //     max-width: 740px;
-    // }
-
     main {
         .wrapper {
-            // display: grid;
-            // grid-gap: 10px;
             grid-auto-rows: minmax(150px, auto);
             grid-template-columns: 1fr 1fr;
 
@@ -221,10 +226,6 @@ main {
 }
 
 @media screen and (min-width: 768px) {
-    // .wrapper {
-    //     max-width: 960px;
-    // }
-
     main {
         .wrapper {
             grid-template-columns: 1fr 1fr 1fr;
@@ -237,10 +238,6 @@ main {
 }
 
 @media screen and (min-width: 960px) {
-    // .wrapper {
-    //     max-width: 1280px;
-    // }
-
     main {
         .wrapper {
             grid-template-columns: 1fr 1fr 1fr 1fr;
@@ -269,13 +266,17 @@ main {
     }
 }
 
-/* 6. Print */
-
-/* 7. @supports */
+/* 6. @supports */
 
 @supports (display: grid) {
+    main > div.panel {
+        display: grid;
+    }
+
     .wrapper {
         display: grid;
         grid-gap: 10px;
     }
 }
+
+/* 7. Print */
