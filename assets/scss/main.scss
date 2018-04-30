@@ -31,7 +31,7 @@
 $base-font-size: 20px;
 
 $text-font-family: 'Martel', serif;
-$headings-font-family: 'Martel', serif;
+$headings-font-family: 'Open Sans Condensed', serif;
 
 // 1.1 Breakpoints
 
@@ -116,9 +116,7 @@ a {
  */
 
 .wrapper {
-    // clear: both;
     display: block;
-    // overflow: hidden;
     width: 100%;
 
     // clearfix
@@ -128,12 +126,14 @@ a {
         display: table;
     }
 
-    > div.panel {
+    .panel {
         background: $secondary-color;
+        border: 1px solid #666;
         display: block;
         float: left;
-        margin: 10px;
         max-width: 620px;
+        min-width: 200px;
+        padding: 16px;
     }
 }
 
@@ -151,7 +151,6 @@ nav {
 footer,
 header {
     color: white;
-    flex: 0 1 100%;
     grid-column: 1 / -1;
     margin-left: 5px;
     margin-right: 5px;
@@ -210,14 +209,12 @@ main {
             grid-auto-rows: minmax(150px, auto);
             grid-template-columns: 1fr 1fr;
 
-            > div.panel {
-                -ms-grid-columns: 1fr 1fr;
+            .panel {
                 background: $secondary-color;
-                display: -ms-grid;
                 margin: 0;
             }
         
-            > div.tall-panel {
+            .tall-panel {
                 grid-row-end: span 2;
                 min-height: 100px;
             }
@@ -229,10 +226,6 @@ main {
     main {
         .wrapper {
             grid-template-columns: 1fr 1fr 1fr;
-
-            > div.panel {
-                -ms-grid-columns: 1fr 1fr 1fr;
-            }
         }
     }
 }
@@ -241,10 +234,6 @@ main {
     main {
         .wrapper {
             grid-template-columns: 1fr 1fr 1fr 1fr;
-
-            > div.panel {
-                -ms-grid-columns: 1fr 1fr 1fr 1fr;
-            }
         }
     }
 }
@@ -258,10 +247,6 @@ main {
     main {
         .wrapper {
             grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr;
-
-            > div.panel {
-                -ms-grid-columns: 1fr 1fr 1fr 1fr 1fr 1fr;
-            }
         }
     }
 }
