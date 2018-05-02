@@ -13,7 +13,6 @@ import logging
 import os
 
 
-
 from kdl_ldap.settings import * # noqa
 from django_auth_ldap.config import LDAPGroupQuery
 
