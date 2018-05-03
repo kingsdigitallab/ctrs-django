@@ -28,7 +28,7 @@
 /* 1. Imports / Settings / Variables */
 @import 'typography';
 
-$base-font-size: 20px;
+$base-font-size: 16px;
 
 $text-font-family: 'Martel', serif;
 $headings-font-family: 'Open Sans Condensed', serif;
@@ -43,12 +43,12 @@ $break-large: 1199px;
 
 // https://coolors.co/55dde0-33658a-2f4858-f6ae2d-f26419
 
-$primary-color: #2f4858;
-$secondary-color: #f26419;
+$primary: #2f4858;
+$secondary: #f26419;
 
-$error-color: #a63d40;
-$success-color: #54af68;
-$warning-color: #f6ae2d;
+$error: #a63d40;
+$success: #54af68;
+$warning: #f6ae2d;
 
 $rich-black: #06070e;
 
@@ -63,12 +63,16 @@ $rich-black: #06070e;
 }
 
 body {
-    background: $primary-color;
+    background: $primary;
     color: $rich-black;
     font-family: $text-font-family;
     font-size: $base-font-size;
     font-weight: 400;
     margin: 0;
+}
+
+.hide {
+    display: none;
 }
 
 p {
@@ -79,9 +83,20 @@ p {
 
 button,
 .button {
-    background: $primary-color;
+    background: $primary;
+    border: none;
     color: white;
+    cursor: pointer;
+    line-height: 1.75em;
     padding: 5px 10px;
+
+    &.secondary {
+        background: $secondary;
+    }
+
+    &.success {
+        background: $success;
+    }
 }
 
 // 2.2 Forms
@@ -97,7 +112,7 @@ h1, h2, h3, h4, h5, h6 {
 // 2.4 Links
 
 a {
-    color: $secondary-color;
+    color: $secondary;
     text-decoration: none;
 
     &:hover {
@@ -127,7 +142,7 @@ a {
     }
 
     .panel {
-        background: $secondary-color;
+        background: $secondary;
         border: 1px solid #666;
         display: block;
         float: left;
@@ -176,7 +191,7 @@ nav {
         padding: 16px;
 
         &:hover {
-            background: $primary-color;
+            background: $primary;
             text-decoration: none;
         }
     }
@@ -193,13 +208,26 @@ nav {
 // 4.3 Main
 
 main {
-    background: lighten($primary-color, 70%)
+    background: lighten($primary, 70%)
 }
 
 // 4.4 Sidebar
 
 // 4.5 Footer
 
+// Cookies box
+
+.cookies-box {
+    background: $primary;
+    bottom: 0;
+    color: white;
+    left: 0;
+    margin: 0;
+    opacity: 0.95;
+    position: fixed;
+    text-align: center;
+    width: 100%;
+}
 
 /* 5. Media queries */
 
@@ -210,7 +238,7 @@ main {
             grid-template-columns: 1fr 1fr;
 
             .panel {
-                background: $secondary-color;
+                background: $secondary;
                 margin: 0;
             }
         
