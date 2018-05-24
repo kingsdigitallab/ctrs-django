@@ -44,7 +44,8 @@ $break-large: 1199px;
 // https://coolors.co/55dde0-33658a-2f4858-f6ae2d-f26419
 
 $primary: #2f4858;
-$secondary: #f26419;
+// $secondary: #f26419;
+$secondary: #cab7a2;
 
 $error: #a63d40;
 $success: #54af68;
@@ -79,6 +80,10 @@ p {
     font-family: $text-font-family;
 }
 
+.right {
+    float: right;
+}
+
 // 2.1 Buttons
 
 button,
@@ -91,7 +96,8 @@ button,
     padding: 5px 10px;
 
     &.secondary {
-        background: $secondary;
+        background: lighten($secondary, 15%);
+        color: $primary
     }
 
     &.success {
@@ -106,6 +112,14 @@ button,
 h1, h2, h3, h4, h5, h6 {
     font-family: $headings-font-family;
     font-weight: normal;
+}
+
+h2 {
+    font-size: 38px;
+}
+
+h3 {
+    font-size: 30px;
 }
 
 
@@ -132,6 +146,8 @@ a {
 
 .wrapper {
     display: block;
+    // for now
+    padding: 0 1rem;
     width: 100%;
 
     // clearfix
@@ -182,7 +198,7 @@ header {
 // 4.2 Navigation
 
 nav {
-    background: $rich-black;
+    background: darken($primary, 13%);
     color: white;
 
     a {
@@ -197,10 +213,15 @@ nav {
     }
 
     .menu {
+        margin: 0;
         padding-left: 0;
 
         li {
             display: inline-block;
+        }
+
+        .active {
+            background: $primary;
         }
     }
 }
@@ -208,12 +229,61 @@ nav {
 // 4.3 Main
 
 main {
-    background: lighten($primary, 70%)
+    background: lighten($primary, 70%);
+
+    a {
+        color: darken($secondary, 25%);
+    }
+}
+
+.intro {
+    font-size: 1.125em;
+}
+
+.main {
+    padding: 0 2rem;
+}
+
+.more {
+    font-size: .875rem;
+}
+
+.page-list {
+    list-style: none;
+    padding-left: 0;
+
+    h3 {
+        margin: 0 0 .5rem 0;
+    }
+
+    li {
+        border-bottom: 1px solid darken($secondary, 25%);
+        margin: 0;
+    }
+
+    p {
+        line-height: 2;
+
+        a {
+            color: $rich-black;
+        }
+    }
 }
 
 // 4.4 Sidebar
 
 // 4.5 Footer
+
+footer {
+
+    ul, ol {
+        padding: 0;
+    }
+
+    li {
+        list-style: none;
+    }
+}
 
 // Cookies box
 
@@ -234,8 +304,8 @@ main {
 @media screen and (min-width: 640px) {
     main {
         .wrapper {
-            grid-auto-rows: minmax(150px, auto);
-            grid-template-columns: 1fr 1fr;
+            // grid-auto-rows: minmax(150px, auto);
+            // grid-template-columns: 1fr 1fr;
 
             .panel {
                 background: $secondary;
@@ -253,7 +323,7 @@ main {
 @media screen and (min-width: 768px) {
     main {
         .wrapper {
-            grid-template-columns: 1fr 1fr 1fr;
+            // grid-template-columns: 1fr 1fr 1fr;
         }
     }
 }
@@ -261,7 +331,7 @@ main {
 @media screen and (min-width: 960px) {
     main {
         .wrapper {
-            grid-template-columns: 1fr 1fr 1fr 1fr;
+            // grid-template-columns: 1fr 1fr 1fr 1fr;
         }
     }
 }
@@ -274,7 +344,7 @@ main {
 
     main {
         .wrapper {
-            grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr;
+            // grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr;
         }
     }
 }
@@ -288,7 +358,7 @@ main {
 
     .wrapper {
         display: grid;
-        grid-gap: 10px;
+        /* grid-gap: 10px; */
     }
 }
 

@@ -1,5 +1,7 @@
 {% load cms_tags compress %}
 
 {% block main_menu %}
-{% include 'cms/tags/main_menu.html' %}
+{% get_site_root as site_root %}
+{% main_menu root=site_root current_page=self %}
 {% endblock %}
+

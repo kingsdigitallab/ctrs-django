@@ -1,10 +1,17 @@
 {% if pages %}
 {% load cms_tags wagtailcore_tags %}
 
-<ul class="menu vertical subnav">
+<ul class="page-list">
     {% for page in pages %}
-    <li><a href="{% pageurl page %}">{{ page.title }}</a></li>
+    <li>
+        <h3><a href="{% pageurl page %}">{{ page.title }}</a></h3>
+        <p class="bydate">{{ page.date|date }}</p>
+        <time datetime="{{ page.date }}">{{ page.date|date:'j b Y' }}</time>
+        <p>
+            <a href="{% pageurl page %}">{{ page.search_description }}</a><br>
+            <a class="button more secondary" href="{% pageurl page %}">Read more ></a>
+        </p>
+    </li>
     {% endfor %}
 </ul>
-
 {% endif %}
