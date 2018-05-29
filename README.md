@@ -25,6 +25,12 @@ Note: This login will only work on a locally deployed virtual machine.
 * Vagrant >= 1.9
 * VirtualBox >= 5.0
 
+## Release 0.2.1
+
+* Added feed image for blog index page
+* Added feed image for index pages
+* Changed the link for Cookie and Privacy policy to a single page
+
 ## Release 0.2
 
 * Added Blog page types
