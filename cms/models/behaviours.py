@@ -8,7 +8,7 @@ from .streamfield import CMSStreamBlock
 
 class WithFeedImage(models.Model):
     feed_image = models.ForeignKey(
-        'images.Image', null=True, blank=True,
+        'wagtailimages.Image', null=True, blank=True,
         on_delete=models.SET_NULL, related_name='+'
     )
 

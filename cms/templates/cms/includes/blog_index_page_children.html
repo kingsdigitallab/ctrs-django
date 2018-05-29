@@ -5,6 +5,7 @@
     {% for page in pages %}
     <li>
         <h3><a href="{% pageurl page %}">{{ page.title }}</a></h3>
+        <p class="bydate">by {{ page.owner.first_name }} {{ page.owner.last_name }}, <time datetime="{{ page.first_published_at }}">{{ page.first_published_at|date:"j M Y" }}</time></p>
         <p>
             <a href="{% pageurl page %}">{{ page.search_description }}</a>
             <a class="more secondary" href="{% pageurl page %}"><strong>Read more &raquo;</strong></a>

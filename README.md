@@ -25,6 +25,10 @@ Note: This login will only work on a locally deployed virtual machine.
 * Vagrant >= 1.9
 * VirtualBox >= 5.0
 
+## Release 0.2
+
+* Added Blog page types
+
 ## Release 0.1
 
 First release of the basic site.

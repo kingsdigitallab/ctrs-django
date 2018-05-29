@@ -339,12 +339,33 @@ footer {
         }
     }
 
+    .float-left,
     .left {
         float: left;
     }
 
+    .float-right,
     .right {
         float: right;
+    }
+
+    .img-wrapper {
+        max-width: 300px;
+    }
+
+    .richtext-image {
+        display: inline-block;
+        height: auto;
+        max-width: 300px;
+        padding: 0 20px 20px;
+
+        &.left {
+            padding-left: 0;
+        }
+
+        &.right {
+            padding-right: 0;
+        }
     }
 }
 
