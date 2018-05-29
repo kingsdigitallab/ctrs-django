@@ -266,7 +266,9 @@ main {
 
     li {
         border-bottom: 1px solid darken($secondary, 25%);
+        display: block;
         margin: 0;
+        overflow: hidden;
     }
 
     p {
@@ -365,6 +367,10 @@ footer {
 
         &.right {
             padding-right: 0;
+        }
+
+        &.small {
+            max-width: 150px;
         }
     }
 }

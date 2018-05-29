@@ -1,11 +1,17 @@
 {% if pages %}
-{% load cms_tags wagtailcore_tags %}
+{% load cms_tags wagtailimages_tags wagtailcore_tags %}
 
 <ul class="page-list">
     {% for page in pages %}
     <li>
         <h3><a href="{% pageurl page %}">{{ page.title }}</a></h3>
         <p class="bydate">by {{ page.owner.first_name }} {{ page.owner.last_name }}, <time datetime="{{ page.first_published_at }}">{{ page.first_published_at|date:"j M Y" }}</time></p>
+        {% if page.specific.feed_image %}
+        {% image page.specific.feed_image max-600x300 as tmp_image %}
+        <a href="{% pageurl page %}">
+            <img class="richtext-image left small" src="{{ tmp_image.url }}" alt="{{ tmp_image.alt }}">
+        </a>
+        {% endif %}
         <p>
             <a href="{% pageurl page %}">{{ page.search_description }}</a>
             <a class="more secondary" href="{% pageurl page %}"><strong>Read more &raquo;</strong></a>

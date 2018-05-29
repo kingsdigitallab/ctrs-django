@@ -124,7 +124,7 @@ BlogIndexPage.content_panels = [
 BlogIndexPage.promote_panels = Page.promote_panels
 
 
-class RichTextPage(Page, WithStreamField):
+class RichTextPage(Page, WithFeedImage, WithStreamField):
     subpage_types = []
 
 
@@ -133,7 +133,9 @@ RichTextPage.content_panels = [
     StreamFieldPanel('body'),
 ]
 
-RichTextPage.promote_panels = Page.promote_panels
+RichTextPage.promote_panels = Page.promote_panels + [
+    ImageChooserPanel('feed_image')
+]
 
 
 class BlogPostTag(TaggedItemBase):
