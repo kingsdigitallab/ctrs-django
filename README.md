@@ -24,3 +24,20 @@ Note: This login will only work on a locally deployed virtual machine.
 * NodeJS
 * Vagrant >= 1.9
 * VirtualBox >= 5.0
+
+## Release 0.1
+
+First release of the basic site.
+
+* Main templates in place:
+    * 404
+    * 500
+    * Homepage
+    * Index page
+    * Richtext page
+
+* Includes:
+    * Main navigation
+    * Index page children
+
+Basic styling (CSS) in place.
