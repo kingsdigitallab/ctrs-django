@@ -1,10 +1,10 @@
 {% load wagtailcore_tags cms_tags %}
-<ul class="menu">
+<ul class="menu left">
   <li><a href="/">Home</a></li>
   {% for page in menu_pages %}
   <li{% if page.active %} class="active"{% endif %}><a href="{% pageurl page %}">{{ page.title }}</a></li>
   {% endfor %}
-
+  
   {% if request.user.is_authenticated %}
   {% if request.user.is_staff %}
   <li class="right"><a href="/wagtail/">Wagtail</a></li>
