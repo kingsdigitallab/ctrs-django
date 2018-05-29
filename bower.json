@@ -2,8 +2,8 @@
     "name": "ctrs",
     "version": "0.1",
     "dependencies": {
-        "jquery": null
-
+        "jquery": null,
+        "js-cookie": null
     },
     "main": "assets/js/main.js",
     "ignore": [

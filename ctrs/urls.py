@@ -2,8 +2,6 @@ from django.conf import settings
 from django.urls import include, path, re_path
 from django.contrib import admin
 
-
-
 from kdl_ldap.signal_handlers import \
     register_signal_handlers as kdl_ldap_register_signal_hadlers
 
@@ -14,13 +12,13 @@ admin.autodiscover()
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    
+
     path('digger/', include('activecollab_digger.urls')),
 
     path('wagtail/', include('wagtail.admin.urls')),
     path('documents/', include('wagtail.documents.urls')),
     path('', include('wagtail.core.urls')),
-    
+
 ]
 
 # -----------------------------------------------------------------------------

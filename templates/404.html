@@ -4,7 +4,7 @@
 <head>
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <title>{% block meta_title %}{% endblock %} | Community of the Realm of Scotland</title>
+  <title>{% block meta_title %}404 Page not found{% endblock %} | Community of the Realm of Scotland</title>
   <meta name="author" content="King's Digital Lab">
   <meta name="description" content="">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -28,10 +28,11 @@
   </nav>
 
   <main>
-    <div class="wrapper main">
-      {% block title %}{% endblock %}
-      {% block main %}
-      {% endblock %}
+    <div class="wrapper">
+        {% block title %}<h1>404 Page not found</h1>{% endblock %}
+        {% block main %}
+        <p>Sorry, we couldn't find what you're looking for.</p>
+        {% endblock %}
     </div>
   </main>
 
@@ -40,17 +41,11 @@
       {% block footer %}
       {% include 'includes/footer.html' %}
       {% endblock %}
-      {# Cookies #}
-      <div class="cookies-box hide" id="cookie-disclaimer">
-        <p>We use cookies to track usage and preferences.</p>
-        <p><a href="/cookie-policy/" class="button secondary">Cookie Policy</a> <button class="button success close" aria-label="Dismiss alert" type="button">I understand</button></p>
-      </div>
     </div>
   </footer>
 
   {% compress js %}
   <script src="{% static 'vendor/jquery/dist/jquery.min.js' %}"></script>
-  <script src="{% static 'vendor/js-cookie/src/js.cookie.js' %}" type="text/javascript"></script>
   <script src="{% static 'js/main.js' %}"></script>
   {% endcompress %}
 
