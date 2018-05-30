@@ -30,6 +30,7 @@ Note: This login will only work on a locally deployed virtual machine.
 * Added funders and partners
 * Typography styling
 * Added description field display for team members pages
+* Menu collapses on small screens (css only)
 
 ## Release 0.2.1
 
