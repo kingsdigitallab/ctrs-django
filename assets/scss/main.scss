@@ -225,6 +225,11 @@ nav {
             background: $primary;
         }
     }
+
+    input[type="checkbox"] {
+        position: absolute;
+        visibility: hidden;
+    }
 }
 
 // 4.3 Main
@@ -242,14 +247,16 @@ main {
     font-style: italic;
 }
 
+.richtext-image {
+    display: block;
+    margin: 1rem 0;
+    width: 100%;
+}
+
 .intro {
     color: lighten(black, 40%);
     font-size: 1.125rem;
     line-height: 1.75;
-}
-
-.main {
-    padding: 0 2rem;
 }
 
 .more {
@@ -330,6 +337,57 @@ footer {
 
 /* 5. Media queries */
 
+@media screen and (max-width: 639px) {
+    // navigation collapse
+    nav {
+        /* Hide the toggle checkbox */
+        #expand-toggle {
+            display: none;
+        }
+
+        /* Hide expandable content by default */
+        .expandable {
+            display: none;
+            visibility: collapse;
+        }
+
+        /* Style the button */
+        #expand-btn {
+            color: white;
+            cursor: pointer;
+            display: inline-block;
+            margin: 0;
+            padding: 1rem;
+
+            &:before {
+                background: #fff;
+                box-shadow: 0px -5px 0px 0px  #fff,
+                            0px -10px 0px 0px #fff;
+                content: "";
+                display: inline-block;
+                height: 2px;
+                opacity: 1;
+                position: relative;
+                width: 20px;
+            }
+        }
+
+        /* Show hidden content when the checkbox is checked */
+        #expand-toggle:checked ~ .expandable {
+            visibility: visible;
+        }
+
+        /* Style the button when the checkbox is checked */
+        #expand-toggle:checked ~ .expandable {
+            display: block;
+
+            li {
+                display: block;
+            }
+        }
+    }
+}
+
 @media screen and (min-width: 640px) {
     main {
         .wrapper {
@@ -352,6 +410,10 @@ footer {
     .right {
         float: none;
         text-align: left;
+    }
+
+    .richtext-image {
+        margin: 0;
     }
 }
 
