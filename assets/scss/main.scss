@@ -242,14 +242,16 @@ main {
     font-style: italic;
 }
 
+.richtext-image {
+    display: block;
+    margin: 1rem 0;
+    width: 100%;
+}
+
 .intro {
     color: lighten(black, 40%);
     font-size: 1.125rem;
     line-height: 1.75;
-}
-
-.main {
-    padding: 0 2rem;
 }
 
 .more {
@@ -352,6 +354,10 @@ footer {
     .right {
         float: none;
         text-align: left;
+    }
+
+    .richtext-image {
+        margin: 0;
     }
 }
 
