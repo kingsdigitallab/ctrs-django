@@ -36,6 +36,13 @@
   </main>
 
   <footer>
+    <div class="partners-funders">
+      <div class="container">
+        {% block partners_funders %}
+        {% include 'includes/partners-funders.html' %}
+        {% endblock %}
+      </div>
+    </div>
     <div class="wrapper">
       {% block footer %}
       {% include 'includes/footer.html' %}

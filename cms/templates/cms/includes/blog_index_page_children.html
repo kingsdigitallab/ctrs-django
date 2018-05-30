@@ -5,7 +5,7 @@
     {% for page in pages %}
     <li>
         <h3><a href="{% pageurl page %}">{{ page.title }}</a></h3>
-        <p class="bydate">by {{ page.owner.first_name }} {{ page.owner.last_name }}, <time datetime="{{ page.first_published_at }}">{{ page.first_published_at|date:"j M Y" }}</time></p>
+        <p class="bydate">by {{ page.owner.first_name }} {{ page.owner.last_name }}, <time datetime="{{ page.specific.data }}">{{ page.specific.date|date:"j M Y" }}</time></p>
         {% if page.specific.feed_image %}
         {% image page.specific.feed_image max-600x300 as tmp_image %}
         <a href="{% pageurl page %}">

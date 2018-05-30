@@ -25,6 +25,12 @@ Note: This login will only work on a locally deployed virtual machine.
 * Vagrant >= 1.9
 * VirtualBox >= 5.0
 
+## Release 0.2.2
+
+* Added funders and partners
+* Typography styling
+* Added description field display for team members pages
+
 ## Release 0.2.1
 
 * Added feed image for blog index page
