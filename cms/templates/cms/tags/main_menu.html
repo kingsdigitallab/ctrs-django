@@ -1,5 +1,9 @@
-{% load wagtailcore_tags cms_tags %}
-<ul class="menu left">
+{% load wagtailcore_tags cms_tags %} 
+
+<input type="checkbox" id="expand-toggle">
+<label for="expand-toggle" id="expand-btn"></label>
+
+<ul class="menu left expandable">
   <li><a href="/">Home</a></li>
   {% for page in menu_pages %}
   <li{% if page.active %} class="active"{% endif %}><a href="{% pageurl page %}">{{ page.title }}</a></li>
@@ -12,4 +16,3 @@
   <li class="right"><a href="/admin/logout/">Logout <strong>{{ request.user.first_name }}</strong></a></li>
   {% endif %}
 </ul>
-
