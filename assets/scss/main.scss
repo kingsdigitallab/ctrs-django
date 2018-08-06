@@ -27,32 +27,35 @@
 
 /* 1. Imports / Settings / Variables */
 @import 'typography';
-@import 'foundation';
+@import 'settings';
+@import '../vendor/foundation-sites/scss/foundation';
 
-$base-font-size: 16px;
+@include foundation-everything;
+
+// $base-font-size: 16px;
 
 $text-font-family: 'Martel', serif;
 $headings-font-family: 'Open Sans Condensed', sans-serif;
 
 // 1.1 Breakpoints
 
-$break-small: 767px;
-$break-medium: 768px;
-$break-large: 1199px;
+// $break-small: 767px;
+// $break-medium: 768px;
+// $break-large: 1199px;
 
 // 1.2 Colours
 
 // https://coolors.co/55dde0-33658a-2f4858-f6ae2d-f26419
 
-$primary: #2f4858;
-// $secondary: #f26419;
-$secondary: #cab7a2;
+// $primary-color: #2f4858;
+// // $secondary-color: #f26419;
+// $secondary-color: #cab7a2;
 
-$error: #a63d40;
-$success: #54af68;
-$warning: #f6ae2d;
+// $error: #a63d40;
+// $success-color: #54af68;
+// $warning: #f6ae2d;
 
-$rich-black: #06070e;
+// $rich-black: #06070e;
 
 // $dark: #122c34;
 
@@ -65,7 +68,7 @@ $rich-black: #06070e;
 }
 
 body {
-    background: $primary;
+    background: $primary-color;
     color: $rich-black;
     font-family: $text-font-family;
     font-size: $base-font-size;
@@ -86,7 +89,7 @@ p {
 
 button,
 .button {
-    background: $primary;
+    background: $primary-color;
     border: none;
     color: white;
     cursor: pointer;
@@ -94,12 +97,12 @@ button,
     padding: 5px 10px;
 
     &.secondary {
-        background: lighten($secondary, 15%);
-        color: $primary
+        background: lighten($secondary-color, 15%);
+        color: $primary-color
     }
 
     &.success {
-        background: $success;
+        background: $success-color;
     }
 }
 
@@ -130,7 +133,7 @@ h3 {
 // 2.4 Links
 
 a {
-    color: $secondary;
+    color: $secondary-color;
     text-decoration: none;
 
     &:hover {
@@ -162,7 +165,7 @@ a {
     }
 
     .panel {
-        background: $secondary;
+        background: $secondary-color;
         border: 1px solid #666;
         display: block;
         float: left;
@@ -200,7 +203,7 @@ header {
 // 4.2 Navigation
 
 nav {
-    background: darken($primary, 13%);
+    background: darken($primary-color, 13%);
     color: white;
 
     a {
@@ -209,7 +212,7 @@ nav {
         padding: 16px;
 
         &:hover {
-            background: $primary;
+            background: $primary-color;
             text-decoration: none;
         }
     }
@@ -223,7 +226,7 @@ nav {
         }
 
         .active {
-            background: $primary;
+            background: $primary-color;
         }
     }
 
@@ -236,10 +239,10 @@ nav {
 // 4.3 Main
 
 main {
-    background: lighten($primary, 70%);
+    background: lighten($primary-color, 70%);
 
     a {
-        color: darken($secondary, 25%);
+        color: darken($secondary-color, 25%);
     }
 }
 
@@ -273,7 +276,7 @@ main {
     }
 
     li {
-        border-bottom: 1px solid lighten($primary, 60%);
+        border-bottom: 1px solid lighten($primary-color, 60%);
         display: block;
         margin: 0;
         overflow: hidden;
@@ -303,7 +306,7 @@ footer {
 
     .partners-funders {
         background: white;
-        color: $primary;
+        color: $primary-color;
         text-align: center;
 
         img {
@@ -325,7 +328,7 @@ footer {
 // Cookies box
 
 .cookies-box {
-    background: $primary;
+    background: $primary-color;
     bottom: 0;
     color: white;
     left: 0;
@@ -396,7 +399,7 @@ footer {
             // grid-template-columns: 1fr 1fr;
 
             .panel {
-                background: $secondary;
+                background: $secondary-color;
                 margin: 0;
             }
         
