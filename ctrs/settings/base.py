@@ -21,7 +21,7 @@ from django_auth_ldap.config import LDAPGroupQuery
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.dirname(__file__)))
 
 PROJECT_NAME = 'ctrs'
-PROJECT_TITLE = 'Community of the Realm of Scotland'
+PROJECT_TITLE = 'The community of the realm in Scotland'
 
 # -----------------------------------------------------------------------------
 # Core Settings

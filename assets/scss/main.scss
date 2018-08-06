@@ -27,11 +27,12 @@
 
 /* 1. Imports / Settings / Variables */
 @import 'typography';
+@import 'foundation';
 
 $base-font-size: 16px;
 
 $text-font-family: 'Martel', serif;
-$headings-font-family: 'Open Sans Condensed', serif;
+$headings-font-family: 'Open Sans Condensed', sans-serif;
 
 // 1.1 Breakpoints
 
