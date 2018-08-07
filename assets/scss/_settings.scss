@@ -69,7 +69,7 @@
 // https://coolors.co/55dde0-33658a-2f4858-f6ae2d-f26419
 
 $global-font-size: 100%;
-$global-width: rem-calc(1200);
+$global-width: rem-calc(1920);
 $global-lineheight: 1.5;
 $foundation-palette: (
   primary: #2f4858,
@@ -134,12 +134,12 @@ $block-grid-max: 8;
 // 4. Base Typography
 // ------------------
 
-$header-font-family: $body-font-family;
+$header-font-family: 'Open Sans Condensed', sans-serif;
 $header-font-weight: $global-weight-normal;
 $header-font-style: normal;
 $font-family-monospace: Consolas, 'Liberation Mono', Courier, monospace;
 $header-color: inherit;
-$header-lineheight: 1.4;
+$header-lineheight: 1;
 $header-margin-bottom: 0.5rem;
 $header-styles: (
   small: (
@@ -477,7 +477,7 @@ $menu-nested-margin: $global-menu-nested-margin;
 $menu-items-padding: $global-menu-padding;
 $menu-simple-margin: 1rem;
 $menu-item-color-active: $white;
-$menu-item-background-active: get-color(primary);
+$menu-item-background-active: lighten($primary-color, 30%);;
 $menu-icon-spacing: 0.25rem;
 $menu-item-background-hover: $light-gray;
 $menu-state-back-compat: true;
@@ -823,7 +823,7 @@ $thumbnail-radius: $global-radius;
 // 53. Title Bar
 // -------------
 
-$titlebar-background: $black;
+$titlebar-background: darken($primary-color, 13%);
 $titlebar-color: $white;
 $titlebar-padding: 0.5rem;
 $titlebar-text-font-weight: bold;
@@ -850,7 +850,7 @@ $tooltip-radius: $global-radius;
 // -----------
 
 $topbar-padding: 0.5rem;
-$topbar-background: $light-gray;
+$topbar-background: darken($primary-color, 13%);
 $topbar-submenu-background: $topbar-background;
 $topbar-title-spacing: 0.5rem 1rem 0.5rem 0;
 $topbar-input-width: 200px;

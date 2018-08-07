@@ -1,8 +1,6 @@
 /** CTRS
  *
- *  1.  Imports / Settings / Variables
- *          1.1 Breakpoints
- *          1.2 Colours
+ *  1.  Imports
  *  2.  Globals
  *          2.1 Buttons
  *          2.2 Forms
@@ -32,33 +30,6 @@
 
 @include foundation-everything;
 
-// $base-font-size: 16px;
-
-$text-font-family: 'Martel', serif;
-$headings-font-family: 'Open Sans Condensed', sans-serif;
-
-// 1.1 Breakpoints
-
-// $break-small: 767px;
-// $break-medium: 768px;
-// $break-large: 1199px;
-
-// 1.2 Colours
-
-// https://coolors.co/55dde0-33658a-2f4858-f6ae2d-f26419
-
-// $primary-color: #2f4858;
-// // $secondary-color: #f26419;
-// $secondary-color: #cab7a2;
-
-// $error: #a63d40;
-// $success-color: #54af68;
-// $warning: #f6ae2d;
-
-// $rich-black: #06070e;
-
-// $dark: #122c34;
-
 /* 2. Globals */
 
 *,
@@ -70,7 +41,6 @@ $headings-font-family: 'Open Sans Condensed', sans-serif;
 body {
     background: $primary-color;
     color: $rich-black;
-    font-family: $text-font-family;
     font-size: $base-font-size;
     font-weight: 400;
     line-height: 1.5;
@@ -81,8 +51,15 @@ body {
     display: none;
 }
 
-p {
-    font-family: $text-font-family;
+hr {
+    border: 0;
+    height: 0;
+    border-top: 1px solid rgba(0, 0, 0, 0.1);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.3);
+}
+
+small {
+    font-size: .625em;
 }
 
 // 2.1 Buttons
@@ -111,14 +88,13 @@ button,
 // 2.3 Headings
 
 h1, h2, h3, h4, h5, h6 {
-    font-family: $headings-font-family;
-    font-weight: normal;
-    line-height: 1;
-    margin: .75em 0 .25em;
+    padding: .5em 0 .25em;
 }
 
-h1 {
-    margin: 1.25em 0 1em;
+h1 {    
+    small {
+        font-style: italic;
+    }
 }
 
 h2 {
@@ -128,7 +104,6 @@ h2 {
 h3 {
     font-size: 30px;
 }
-
 
 // 2.4 Links
 
@@ -163,78 +138,61 @@ a {
         clear: both;
         display: table;
     }
-
-    .panel {
-        background: $secondary-color;
-        border: 1px solid #666;
-        display: block;
-        float: left;
-        max-width: 620px;
-        min-width: 200px;
-        padding: 16px;
-    }
 }
 
 /* 4. Layout */
 
 footer,
-header,
-main,
-nav {
-    clear: both;
-    display: block;
-    width: 100%;
-}
-
-footer,
 header {
     color: white;
-    grid-column: 1 / -1;
+
+    a {
+        &:hover {
+            color: $secondary-color;
+        }
+    }
 }
 
 // 4.1 Header
 
 header {
+    position: relative;
+
     a {
         color: white;
+    }
+
+    &.top-header::after {
+        background: url("/static/images/header-bg.jpg") center center;
+        content: "";
+        height: 100%;
+        opacity: 0.1;
+        position: absolute;
+        top: 0;
+        width: 100%;
     }
 }
 
 // 4.2 Navigation
 
-nav {
-    background: darken($primary-color, 13%);
+.menu {
+    font-family: $header-font-family;
+
+    a {
+        &:hover {
+            background: lighten($primary-color, 5%);
+        }
+    }
+}
+
+.top-bar {
     color: white;
 
     a {
         color: white;
-        display: block;
-        padding: 16px;
-
-        &:hover {
-            background: $primary-color;
-            text-decoration: none;
-        }
-    }
-
-    .menu {
-        margin: 0;
-        padding-left: 0;
-
-        li {
-            display: inline-block;
-        }
-
-        .active {
-            background: $primary-color;
-        }
-    }
-
-    input[type="checkbox"] {
-        position: absolute;
-        visibility: hidden;
     }
 }
+
 
 // 4.3 Main
 
@@ -342,78 +300,18 @@ footer {
 /* 5. Media queries */
 
 @media screen and (max-width: 639px) {
-    // navigation collapse
-    nav {
-        /* Hide the toggle checkbox */
-        #expand-toggle {
-            display: none;
-        }
+    .menu {
+        font-size: 1.25rem;
 
-        /* Hide expandable content by default */
-        .expandable {
-            display: none;
-            visibility: collapse;
-        }
-
-        /* Style the button */
-        #expand-btn {
-            color: white;
-            cursor: pointer;
-            display: inline-block;
-            margin: 0;
-            padding: 1rem;
-
-            &:before {
-                background: #fff;
-                box-shadow: 0px -5px 0px 0px  #fff,
-                            0px -10px 0px 0px #fff;
-                content: "";
-                display: inline-block;
-                height: 2px;
-                opacity: 1;
-                position: relative;
-                width: 20px;
-            }
-        }
-
-        /* Show hidden content when the checkbox is checked */
-        #expand-toggle:checked ~ .expandable {
-            visibility: visible;
-        }
-
-        /* Style the button when the checkbox is checked */
-        #expand-toggle:checked ~ .expandable {
-            display: block;
-
-            li {
-                display: block;
-            }
+        li {
+            width: 100%;
         }
     }
 }
 
 @media screen and (min-width: 640px) {
-    main {
-        .wrapper {
-            // grid-auto-rows: minmax(150px, auto);
-            // grid-template-columns: 1fr 1fr;
-
-            .panel {
-                background: $secondary-color;
-                margin: 0;
-            }
-        
-            .tall-panel {
-                grid-row-end: span 2;
-                min-height: 100px;
-            }
-        }
-    }
-
-    .left,
-    .right {
-        float: none;
-        text-align: left;
+    .menu {
+        font-size: 1.5rem;
     }
 
     .richtext-image {
@@ -422,22 +320,6 @@ footer {
 }
 
 @media screen and (min-width: 768px) {
-    main {
-        .wrapper {
-            // grid-template-columns: 1fr 1fr 1fr;
-        }
-    }
-
-    .float-left,
-    .left {
-        float: left;
-    }
-
-    .float-right,
-    .right {
-        float: right;
-    }
-
     .img-wrapper {
         max-width: 300px;
     }
@@ -462,39 +344,12 @@ footer {
     }
 }
 
-@media screen and (min-width: 960px) {
-    main {
-        .wrapper {
-            // grid-template-columns: 1fr 1fr 1fr 1fr;
-        }
-    }
-}
-
-@media screen and (min-width: 1280px) {
-    .container,
-    .wrapper {
-        margin: 0 auto;
-        max-width: 1920px;
-    }
-
-    main {
-        .wrapper {
-            // grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr;
-        }
-    }
-}
-
-/* 6. @supports */
-
-@supports (display: grid) {
-    main > div.panel {
-        display: grid;
-    }
-
-    .wrapper {
-        display: grid;
-        /* grid-gap: 10px; */
-    }
-}
+// @media screen and (min-width: 1280px) {
+//     .container,
+//     .wrapper {
+//         margin: 0 auto;
+//         max-width: 1920px;
+//     }
+// }
 
 /* 7. Print */
