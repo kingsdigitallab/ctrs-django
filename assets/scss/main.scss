@@ -215,12 +215,19 @@ header {
         h1 {
             padding-left: 1rem;
             padding-right: 1rem;
-            z-index: 10;
         }
     }
 
+    .grid-container {
+        position: relative;
+    }
+
     .avatar {
-        border: 10px solid lighten($primary-color, 70%);
+        border-radius: 50%;
+
+        img {
+            border-radius: 50%;
+        }
     }
 }
 
@@ -253,6 +260,7 @@ header {
 
 main {
     background: lighten($primary-color, 70%);
+    padding-top: 52px;
 
     a {
         color: darken($secondary-color, 25%);
@@ -345,6 +353,19 @@ footer {
 /* 5. Media queries */
 
 @media screen and (max-width: 640px) {
+
+    .avatar {
+        border: 5px solid lighten($primary-color, 70%);
+        height: 120px;
+        margin: 0 auto -70px;
+        text-align: center;
+        width: 120px;
+    }
+
+    main {
+        padding-top: 40px;
+    }
+
     .menu {
         font-size: 1.25rem;
 
@@ -361,15 +382,39 @@ footer {
             }
         }
     }
+
+    .top-header {
+        text-align: center;
+    }
 }
 
 @media screen and (min-width: 641px) {
+
+    .avatar {
+        border: 10px solid lighten($primary-color, 70%);
+        height: 250px;
+        left: -180px;
+        position: absolute;
+        top: 30px;
+        width: 250px;
+    }
+
     .menu {
         font-size: 1.5rem;
     }
 
     .richtext-image {
         margin: 0;
+    }
+
+    .top-header {
+        h1 {
+            margin-left: 50px;
+        }
+    }
+
+    .top-bar-left {
+        padding-left: 50px;
     }
 }
 
