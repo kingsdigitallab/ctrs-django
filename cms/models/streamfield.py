@@ -21,11 +21,27 @@ class AlignedHTMLBlock(StructBlock):
     alignment = HTMLAlignmentChoiceBlock()
 
 
+class IconChoiceBlock(FieldBlock):
+    field = forms.ChoiceField(choices=(
+        ('ext-link', 'External link'),
+        ('book', 'Declaration of Arbroath'),
+        ('video', 'Video'),
+        ('image', 'Images'),
+        ('gavel', 'Robert I\'s Law'),
+        ('document', 'Regiam Majestatem'),
+        ('pencil', 'Blog/Podcasts'),
+        ('newspaper', 'New sources'),
+        ('graduation-cap', 'Resources for teachers')
+    ))
+
+
 class HomePageBlock(StructBlock):
     url = URLBlock(required=False)
     page = PageChooserBlock(required=False)
     title = CharBlock()
-    description = RichTextBlock()
+    image = ImageChooserBlock()
+    description = TextBlock()
+    icon = IconChoiceBlock()
 
     class Meta:
         template = 'cms/blocks/home_page_block.html'
@@ -93,6 +109,7 @@ class CMSStreamBlock(StreamBlock):
     h4 = CharBlock(icon='title', classname='title')
     h5 = CharBlock(icon='title', classname='title')
 
+    home_page_block = HomePageBlock(icon='placeholder')
     intro = RichTextBlock(icon='pilcrow')
     paragraph = RichTextBlock(icon='pilcrow')
     pullquote = PullQuoteBlock(icon='openquote')

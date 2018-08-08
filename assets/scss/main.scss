@@ -153,6 +153,10 @@ header {
     }
 }
 
+main {
+    padding: 1rem 1rem .5rem;
+}
+
 // 4.1 Header
 
 header {
@@ -162,14 +166,22 @@ header {
         color: white;
     }
 
-    &.top-header::after {
-        background: url("/static/images/header-bg.jpg") center center;
-        content: "";
-        height: 100%;
-        opacity: 0.1;
-        position: absolute;
-        top: 0;
-        width: 100%;
+    &.top-header {
+
+        &::after {
+            background: url("/static/images/header-bg.jpg") center center;
+            content: "";
+            height: 100%;
+            opacity: 0.1;
+            position: absolute;
+            top: 0;
+            width: 100%;
+        }
+
+        h1 {
+            padding-left: 1rem;
+            padding-right: 1rem;
+        }
     }
 }
 
@@ -191,6 +203,10 @@ header {
     a {
         color: white;
     }
+}
+
+.top-nav {
+    background: $topbar-background;
 }
 
 
@@ -269,16 +285,6 @@ footer {
 
         img {
             max-height: 120px;
-            max-width: 300px;
-            padding: 1rem;
-            vertical-align: middle;
-        }
-
-        h4 {
-            font-size: 1.5rem;
-            margin: 0;
-            padding: 1rem;
-            text-align: center;
         }
     }
 }
@@ -299,7 +305,7 @@ footer {
 
 /* 5. Media queries */
 
-@media screen and (max-width: 639px) {
+@media screen and (max-width: 640px) {
     .menu {
         font-size: 1.25rem;
 
@@ -307,9 +313,18 @@ footer {
             width: 100%;
         }
     }
+
+    footer {
+        .partners-funders {
+            img {
+                max-width: 300px;
+                padding-bottom: 1rem;
+            }
+        }
+    }
 }
 
-@media screen and (min-width: 640px) {
+@media screen and (min-width: 641px) {
     .menu {
         font-size: 1.5rem;
     }
@@ -343,13 +358,5 @@ footer {
         }
     }
 }
-
-// @media screen and (min-width: 1280px) {
-//     .container,
-//     .wrapper {
-//         margin: 0 auto;
-//         max-width: 1920px;
-//     }
-// }
 
 /* 7. Print */
