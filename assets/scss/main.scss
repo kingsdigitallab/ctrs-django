@@ -126,19 +126,19 @@ a {
  * This style doesn't need a grid, it's a single column, our base layout.
  */
 
-.wrapper {
-    display: block;
-    // for now
-    padding: 0 1rem;
-    width: 100%;
+// .wrapper {
+//     display: block;
+//     // for now
+//     padding: 0 1rem;
+//     width: 100%;
 
-    // clearfix
-    &::after {
-        content: "";
-        clear: both;
-        display: table;
-    }
-}
+//     // clearfix
+//     &::after {
+//         content: "";
+//         clear: both;
+//         display: table;
+//     }
+// }
 
 /* 4. Layout */
 
@@ -177,10 +177,11 @@ main {
 
     .img-wrapper {
         height: rem-calc(150);
-        max-width: rem-calc(600);
+        max-width: rem-calc(700);
     }
 
     p {
+        font-size: rem-calc(14px);
         padding: .5rem rem-calc(18) 0;
     }
 
@@ -208,12 +209,18 @@ header {
             position: absolute;
             top: 0;
             width: 100%;
+            z-index: -1; // Otherwise it disables active areas
         }
 
         h1 {
             padding-left: 1rem;
             padding-right: 1rem;
+            z-index: 10;
         }
+    }
+
+    .avatar {
+        border: 10px solid lighten($primary-color, 70%);
     }
 }
 
