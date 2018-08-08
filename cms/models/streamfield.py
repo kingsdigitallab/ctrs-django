@@ -23,13 +23,15 @@ class AlignedHTMLBlock(StructBlock):
 
 class IconChoiceBlock(FieldBlock):
     field = forms.ChoiceField(choices=(
-        ('ext-link', 'External link'),
+        ('external-link-square', 'External link'),
         ('book', 'Declaration of Arbroath'),
         ('video', 'Video'),
         ('image', 'Images'),
         ('gavel', 'Robert I\'s Law'),
-        ('document', 'Regiam Majestatem'),
-        ('pencil', 'Blog/Podcasts'),
+        ('file-alt', 'Regiam Majestatem'),
+        ('pencil-podcast', 'Blog and podcasts'),
+        ('pencil', 'Blog'),
+        ('podcast', 'Podcast'),
         ('newspaper', 'New sources'),
         ('graduation-cap', 'Resources for teachers')
     ))

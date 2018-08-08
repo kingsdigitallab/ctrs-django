@@ -17,7 +17,7 @@
 <div class="iframe-container block.value.alignment">
     {{ block.value.bound_blocks.html.render }}
 </div>
-{% else %}
+{% elif block.block_type != 'home_page_block' %}
 {% include_block block %}
 {% endif %}
 {% endfor %}
