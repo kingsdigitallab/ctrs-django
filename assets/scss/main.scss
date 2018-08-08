@@ -126,19 +126,9 @@ a {
  * This style doesn't need a grid, it's a single column, our base layout.
  */
 
-// .wrapper {
-//     display: block;
-//     // for now
-//     padding: 0 1rem;
-//     width: 100%;
-
-//     // clearfix
-//     &::after {
-//         content: "";
-//         clear: both;
-//         display: table;
-//     }
-// }
+.container {
+    max-width: 960px;
+}
 
 /* 4. Layout */
 
