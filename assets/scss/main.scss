@@ -126,19 +126,19 @@ a {
  * This style doesn't need a grid, it's a single column, our base layout.
  */
 
-.wrapper {
-    display: block;
-    // for now
-    padding: 0 1rem;
-    width: 100%;
+// .wrapper {
+//     display: block;
+//     // for now
+//     padding: 0 1rem;
+//     width: 100%;
 
-    // clearfix
-    &::after {
-        content: "";
-        clear: both;
-        display: table;
-    }
-}
+//     // clearfix
+//     &::after {
+//         content: "";
+//         clear: both;
+//         display: table;
+//     }
+// }
 
 /* 4. Layout */
 
@@ -153,6 +153,43 @@ header {
     }
 }
 
+main {
+    padding: 1rem 1rem .5rem;
+}
+
+.hp-box {
+    background: white;
+
+    a {
+        color: $rich-black;
+    }
+
+    h3 {
+        border-left: 10px solid lighten($primary-color, 60%);
+        padding: .5rem .5rem 0;
+    }
+
+    img {
+        object-fit: cover;
+        height: 100%;
+        width: 100%;
+    }
+
+    .img-wrapper {
+        height: rem-calc(150);
+        max-width: rem-calc(700);
+    }
+
+    p {
+        font-size: rem-calc(14px);
+        padding: .5rem rem-calc(18) 0;
+    }
+
+    path {
+        fill: lighten($primary-color, 60%);
+    }
+}
+
 // 4.1 Header
 
 header {
@@ -162,14 +199,35 @@ header {
         color: white;
     }
 
-    &.top-header::after {
-        background: url("/static/images/header-bg.jpg") center center;
-        content: "";
-        height: 100%;
-        opacity: 0.1;
-        position: absolute;
-        top: 0;
-        width: 100%;
+    &.top-header {
+
+        &::after {
+            background: url("/static/images/header-bg.jpg") center center;
+            content: "";
+            height: 100%;
+            opacity: 0.1;
+            position: absolute;
+            top: 0;
+            width: 100%;
+            z-index: -1; // Otherwise it disables active areas
+        }
+
+        h1 {
+            padding-left: 1rem;
+            padding-right: 1rem;
+        }
+    }
+
+    .grid-container {
+        position: relative;
+    }
+
+    .avatar {
+        border-radius: 50%;
+
+        img {
+            border-radius: 50%;
+        }
     }
 }
 
@@ -193,11 +251,16 @@ header {
     }
 }
 
+.top-nav {
+    background: $topbar-background;
+}
+
 
 // 4.3 Main
 
 main {
     background: lighten($primary-color, 70%);
+    padding-top: 52px;
 
     a {
         color: darken($secondary-color, 25%);
@@ -269,16 +332,6 @@ footer {
 
         img {
             max-height: 120px;
-            max-width: 300px;
-            padding: 1rem;
-            vertical-align: middle;
-        }
-
-        h4 {
-            font-size: 1.5rem;
-            margin: 0;
-            padding: 1rem;
-            text-align: center;
         }
     }
 }
@@ -299,7 +352,20 @@ footer {
 
 /* 5. Media queries */
 
-@media screen and (max-width: 639px) {
+@media screen and (max-width: 640px) {
+
+    .avatar {
+        border: 5px solid lighten($primary-color, 70%);
+        height: 120px;
+        margin: 0 auto -70px;
+        text-align: center;
+        width: 120px;
+    }
+
+    main {
+        padding-top: 40px;
+    }
+
     .menu {
         font-size: 1.25rem;
 
@@ -307,15 +373,48 @@ footer {
             width: 100%;
         }
     }
+
+    footer {
+        .partners-funders {
+            img {
+                max-width: 300px;
+                padding-bottom: 1rem;
+            }
+        }
+    }
+
+    .top-header {
+        text-align: center;
+    }
 }
 
-@media screen and (min-width: 640px) {
+@media screen and (min-width: 641px) {
+
+    .avatar {
+        border: 10px solid lighten($primary-color, 70%);
+        height: 250px;
+        left: -180px;
+        position: absolute;
+        top: 30px;
+        width: 250px;
+    }
+
     .menu {
         font-size: 1.5rem;
     }
 
     .richtext-image {
         margin: 0;
+    }
+
+    .top-header {
+        h1 {
+            margin-left: 50px;
+        }
+    }
+
+    .top-bar-left {
+        padding-left: 50px;
     }
 }
 
@@ -343,13 +442,5 @@ footer {
         }
     }
 }
-
-// @media screen and (min-width: 1280px) {
-//     .container,
-//     .wrapper {
-//         margin: 0 auto;
-//         max-width: 1920px;
-//     }
-// }
 
 /* 7. Print */

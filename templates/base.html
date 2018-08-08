@@ -1,6 +1,6 @@
 {% load staticfiles compress %}
 <!DOCTYPE html>
-<html lang="en-GB">
+<html lang="en-GB" class="no-js">
 <head>
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -22,29 +22,35 @@
 </head>
 <body>
   <header class="top-header">
-    {% include 'includes/header.html' %}
+    <div class="grid-container">
+      {% include 'includes/header.html' %}
+    </div>
   </header>
 
-  <nav>
-    {% include 'includes/navigation.html' %}
+  <nav class="top-nav">
+    <div class="grid-container">
+      {% include 'includes/navigation.html' %}
+    </div>
   </nav>
 
   <main>
-    {% block title %}{% endblock %}
-    {% block main %}
-    {% endblock %}
+    <div class="grid-container">
+      {% block title %}{% endblock %}
+      {% block main %}
+      {% endblock %}
+    </div>
   </main>
 
   <footer>
     <div class="partners-funders">
-      <div class="container">
-        {% block partners_funders %}
-        {% include 'includes/partners-funders.html' %}
-        {% endblock %}
-      </div>
+      {% block partners_funders %}
+      {% include 'includes/partners-funders.html' %}
+      {% endblock %}
     </div>
     {% block footer %}
-    {% include 'includes/footer.html' %}
+    <div class="grid-container">
+      {% include 'includes/footer.html' %}
+    </div>
     {% endblock %}
     {# Cookies #}
     <div class="cookies-box hide" id="cookie-disclaimer">
