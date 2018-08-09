@@ -118,7 +118,7 @@ class BlogIndexPage(Page, WithStreamField):
 
 BlogIndexPage.content_panels = [
     FieldPanel('title', classname='full title'),
-    StreamFieldPanel('body'),
+    StreamFieldPanel('body')
 ]
 
 BlogIndexPage.promote_panels = Page.promote_panels

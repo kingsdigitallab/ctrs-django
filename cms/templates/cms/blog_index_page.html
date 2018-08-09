@@ -6,14 +6,13 @@
     <h2>{{ self.title }}</h2>
 </div>
 {% endblock %}
+
 {% block main %}
 <div class="container">
     {{ block.super }}
 </div>
 
 {% block index_page_children %}
-<div class="container">
-    {% include "cms/includes/blog_index_page_children.html" with pages=self.get_children %}
-</div>
+{% include "cms/includes/blog_index_page_children.html" with pages=self.get_children %}
 {% endblock %}
 {% endblock %}
