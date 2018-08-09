@@ -14,21 +14,6 @@
     font-weight: bold;
 }
 
-// @font-face {
-//     font-family: 'Martel';
-//     src: url('/static/fonts/Martel/Martel-Italic.ttf') format('truetype');
-
-//     font-style: italic;
-// }
-
-// @font-face {
-//     font-family: 'Martel';
-//     src: url('/static/fonts/Martel/Martel-BoldItalic.ttf') format('truetype');
-
-//     font-style: italic;
-//     font-weight: bold;
-// }
-
 
 // Playfair Display
 
@@ -81,4 +66,18 @@
 
     font-style: italic;
     font-weight: 300;
+}
+
+// Wagtail
+
+@font-face{
+    font-family: 'wagtail';
+    src:    url('/static/fonts/wagtail/wagtail.eot');
+    src:    url('/static/fonts/wagtail/wagtail.eot?#iefix') format('embedded-opentype'),
+            url('/static/fonts/wagtail/wagtail.ttf') format('truetype'),
+            url('/static/fonts/wagtail/wagtail.svg#wagtail') format('svg'),
+            url('/static/fonts/wagtail/wagtail.woff') format('woff');
+
+    font-weight: 400;
+    font-style: normal;
 }
