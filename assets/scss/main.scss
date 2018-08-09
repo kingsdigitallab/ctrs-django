@@ -58,6 +58,22 @@ hr {
     border-bottom: 1px solid rgba(255, 255, 255, 0.3);
 }
 
+
+// Using it to display the Wagtail icon
+
+i.icon {
+    font-family: "wagtail";
+    font-size: 1.25em;
+}
+
+.icon-wagtail:before {
+    content:"V";
+}
+
+.icon-wagtail-inverse:before {
+    content: "0";
+}
+
 small {
     font-size: .625em;
 }
@@ -224,6 +240,16 @@ header {
 
 // 4.2 Navigation
 
+.dropdown {
+    &.menu {
+        margin-left: 1rem;
+
+        a {
+            padding: .75rem .625rem;
+        }
+    }
+}
+
 .menu {
     font-family: $header-font-family;
 
@@ -239,6 +265,7 @@ header {
 
     a {
         color: white;
+        padding: .75rem .25rem;
     }
 }
 
@@ -251,7 +278,7 @@ header {
 
 main {
     background: lighten($primary-color, 70%);
-    padding-top: 52px;
+    // padding-top: 52px;
 
     a {
         color: darken($secondary-color, 25%);
@@ -343,7 +370,7 @@ footer {
 
 /* 5. Media queries */
 
-@media screen and (max-width: 640px) {
+@media screen and (max-width: 639px) {
 
     .avatar {
         border: 5px solid lighten($primary-color, 70%);
@@ -354,7 +381,7 @@ footer {
     }
 
     main {
-        padding-top: 40px;
+        padding-top: 42px;
     }
 
     .menu {
@@ -379,33 +406,52 @@ footer {
     }
 }
 
-@media screen and (min-width: 641px) {
+@media screen and (min-width: 640px) {
 
     .avatar {
         border: 10px solid lighten($primary-color, 70%);
-        height: 250px;
-        left: -180px;
+        height: 200px;
+        left: -105px;
         position: absolute;
-        top: 30px;
-        width: 250px;
+        top: 15px;
+        width: 200px;
+    }
+
+    header {
+        h1 {
+            font-size: rem-calc(32);
+        }
+    }
+
+    main {
+        padding-top: 66px;
     }
 
     .menu {
-        font-size: 1.5rem;
+        font-size: 1.25rem;
     }
 
     .richtext-image {
         margin: 0;
     }
 
-    .top-header {
-        h1 {
-            margin-left: 50px;
+    .top-bar-left {
+        padding-left: 70px;
+    }
+
+    .top-bar-right,
+    .top-bar-right .menu {
+        font-size: 1rem;
+
+        .fa-user {
+            font-size: .75rem;
         }
     }
 
-    .top-bar-left {
-        padding-left: 50px;
+    .top-header {
+        h1 {
+            margin-left: 70px;
+        }
     }
 }
 
@@ -431,6 +477,40 @@ footer {
         &.small {
             max-width: 150px;
         }
+    }
+}
+
+@media screen and (min-width: 800px) {
+
+    .avatar {
+        border: 10px solid lighten($primary-color, 70%);
+        height: 250px;
+        left: -130px;
+        position: absolute;
+        top: 10px;
+        width: 250px;
+    }
+
+    header {
+        h1 {
+            font-size: rem-calc(48);
+        }
+    }
+
+    .top-bar-left {
+        padding-left: 100px;
+    }
+
+    .top-header {
+        h1 {
+            margin-left: 100px;
+        }
+    }
+}
+
+@media screen and (min-width: 1080px) {
+    main {
+        padding-top: rem-calc(36);
     }
 }
 

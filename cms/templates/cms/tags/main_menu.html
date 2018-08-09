@@ -18,9 +18,9 @@
     <ul class="menu">
       {% if request.user.is_authenticated %}
       {% if request.user.is_staff %}
-      <li class="right"><a href="/wagtail/">Wagtail</a></li>
+      <li class="right"><a href="/wagtail/"><i class="icon icon-wagtail"></i></a></li>
       {% endif %}
-      <li class="right"><a href="/admin/logout/">Logout <strong>{{ request.user.first_name }}</strong></a></li>
+      <li class="right"><a href="/admin/logout/">Logout <strong>{{ request.user.first_name }}</strong> <i class="fas fa-user"></i></a></li>
       {% endif %}
     </ul>
   </div>
