@@ -2,16 +2,14 @@
 {% load cms_tags wagtailimages_tags wagtailcore_tags %}
 
 {% block title %}
-<h2>
-{% if page.specific.feed_image %}
-{% image page.specific.feed_image max-600x300 as tmp_image %}
-<img class="richtext-image left small" src="{{ tmp_image.url }}" alt="{{ tmp_image.alt }}">
-{% endif %}
-{{ self.title }}
-{% if self.search_description %}<br>
-<small>{{ self.search_description }}</small>
-{% endif %}
-</h2>
+<div class="container">
+    <h2>
+        {{ self.title }}
+        {% if self.search_description %}<br>
+        <small>{{ self.search_description }}</small>
+        {% endif %}
+    </h2>
+</div>
 {% endblock %}
 
 {% block main %}
