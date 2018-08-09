@@ -331,9 +331,17 @@ main {
 
 // 4.4 Sidebar
 
+.sidebar {
+    background: lighten($primary-color, 85%);
+}
+
 // 4.5 Footer
 
 footer {
+
+    a {
+        color: lighten($secondary-color, 15%);
+    }
 
     ul, ol {
         padding: 0;
@@ -341,6 +349,10 @@ footer {
 
     li {
         list-style: none;
+    }
+
+    .menu {
+        padding-top: 1rem;
     }
 
     .partners-funders {
