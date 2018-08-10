@@ -283,6 +283,10 @@ main {
     a {
         color: darken($secondary-color, 25%);
     }
+
+    small {
+        color: scale-color($rich-black, $lightness: 20%);
+    }
 }
 
 .bydate {
@@ -307,10 +311,6 @@ main {
 
     img {
         border: 8px solid white;
-    }
-
-    small {
-        color: scale-color($rich-black, $lightness: 20%);
     }
 }
 
