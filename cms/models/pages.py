@@ -140,12 +140,12 @@ PeopleIndexPage.promote_panels = Page.promote_panels
 class PeoplePage(Page, WithFeedImage, WithStreamField):
     subpage_types = []
 
-    name = models.CharField(max_length=255)
+    job_title = models.CharField(max_length=255)
 
 
 PeoplePage.content_panels = [
     FieldPanel('title', classname='full title'),
-    FieldPanel('name'),
+    FieldPanel('job_title'),
     StreamFieldPanel('body')
 ]
 

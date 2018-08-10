@@ -1,8 +1,8 @@
 {% if pages %}
 {% load cms_tags wagtailimages_tags wagtailcore_tags %}
 
-  <div class="grid-x grid-margin-x people">
-    {% for page in pages %}
+{% for page in pages %}
+<div class="grid-x grid-margin-x people">
     <div class="cell medium-auto large-shrink">
         {% if page.specific.feed_image %}
         {% image page.specific.feed_image max-600x300 as tmp_image %}
@@ -22,5 +22,6 @@
             {% endif %}
         </p>
     </div>
-    {% endfor %}
+</div>
+{% endfor %}
 {% endif %}
