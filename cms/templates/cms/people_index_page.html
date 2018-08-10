@@ -20,6 +20,7 @@
     </div>
     <div class="cell medium-9" data-equalizer-watch="sidebar">
         {{ block.super }}
+        {% include "cms/includes/people_index_page_children.html" with pages=self.get_children.live.in_menu %}
     </div>
 </div>
 {% endblock %}

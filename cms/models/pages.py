@@ -38,6 +38,7 @@ class HomePage(Page, WithStreamField):
     subpage_types = [
         'BlogIndexPage',
         'IndexPage',
+        'PeopleIndexPage',
         'RichTextPage'
     ]
 
@@ -122,6 +123,35 @@ BlogIndexPage.content_panels = [
 ]
 
 BlogIndexPage.promote_panels = Page.promote_panels
+
+
+class PeopleIndexPage(Page, WithFeedImage, WithStreamField):
+    subpage_types = ['IndexPage', 'PeoplePage', 'RichTextPage']
+
+
+PeopleIndexPage.content_panels = [
+    FieldPanel('title', classname='full title'),
+    StreamFieldPanel('body')
+]
+
+PeopleIndexPage.promote_panels = Page.promote_panels
+
+
+class PeoplePage(Page, WithFeedImage, WithStreamField):
+    subpage_types = []
+
+    name = models.CharField(max_length=255)
+
+
+PeoplePage.content_panels = [
+    FieldPanel('title', classname='full title'),
+    FieldPanel('name'),
+    StreamFieldPanel('body')
+]
+
+PeoplePage.promote_panels = Page.promote_panels + [
+    ImageChooserPanel('feed_image')
+]
 
 
 class RichTextPage(Page, WithFeedImage, WithStreamField):
