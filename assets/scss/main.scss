@@ -308,6 +308,10 @@ main {
     img {
         border: 8px solid white;
     }
+
+    small {
+        color: scale-color($rich-black, $lightness: 20%);
+    }
 }
 
 // 4.4 Sidebar
