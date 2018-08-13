@@ -25,6 +25,18 @@ Note: This login will only work on a locally deployed virtual machine.
 * Vagrant >= 1.9
 * VirtualBox >= 5.0
 
+## Release 0.5 Beta
+* Design applied
+* Design implemented:
+  * Model for home page boxes
+  * Model for people index pages
+  * Model for peopl page
+  * Style blog index and blog post pages
+  * Style index pages
+  * Added sidebar
+* Added Foundation Zurb framework
+* Added FontAwesome
+
 ## Release 0.2.2
 
 * Added funders and partners
