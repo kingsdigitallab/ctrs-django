@@ -2,7 +2,7 @@
 
 <h3 class="{{ block.value.icon }} clearfix">
     {% if block.value.url or block.value.page %}
-    <a href="{% if block.value.url %}{{ block.value.url }}{% else %}{% pageurl block.value.page %}{% endif %}">
+    <a href="{% if block.value.url %}{{ block.value.url }}{% else %}{% pageurl block.value.page %}{% endif %}" class="inline">
     {% endif %}
         {{ block.value.title }}
     {% if block.value.url or block.value.page %}
