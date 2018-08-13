@@ -1,7 +1,9 @@
 {% load wagtailcore_tags %}
 
 {% for block in blocks %}
-    {% if block.block_type == 'home' %}
+    {% if block.block_type == 'home_page_block' %}
+    <div class="cell hp-box">
         {% include_block block %}
+    </div>
     {% endif %}
 {% endfor %}

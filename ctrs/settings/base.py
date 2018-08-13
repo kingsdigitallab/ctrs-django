@@ -21,7 +21,7 @@ from django_auth_ldap.config import LDAPGroupQuery
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.dirname(__file__)))
 
 PROJECT_NAME = 'ctrs'
-PROJECT_TITLE = 'Community of the Realm of Scotland'
+PROJECT_TITLE = 'The community of the realm in Scotland, 1249–1424'
 
 # -----------------------------------------------------------------------------
 # Core Settings
@@ -100,6 +100,7 @@ INSTALLED_APPS += [    # your project apps here
     'wagtail.sites',
     'wagtail.contrib.routable_page',
     'wagtail.contrib.table_block',
+    'wagtail.contrib.styleguide',
     'taggit',
     'modelcluster',
 ]

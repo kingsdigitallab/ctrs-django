@@ -2,11 +2,15 @@
 {% load cms_tags wagtailcore_tags %}
 
 {% block title %}
+<div class="container">
     <h2>{{ page.title }}</h2>
 
     <p class="bydate">by {{ page.owner.first_name }} {{ page.owner.last_name }}, <time datetime="{{ page.first_published_at }}">{{ page.first_published_at|date:"j M Y" }}</time></p>
+</div>
 {% endblock %}
 
 {% block main %}
-{{ block.super }}
+<div class="container">
+    {{ block.super }}
+</div>
 {% endblock %}

@@ -1,0 +1,27 @@
+{% if pages %}
+{% load cms_tags wagtailimages_tags wagtailcore_tags %}
+
+{% for page in pages %}
+<div class="grid-x grid-margin-x people">
+    {% if page.specific.feed_image %}
+    <div class="cell medium-auto large-shrink">
+        {% image page.specific.feed_image max-600x300 as tmp_image %}
+        <a href="{% pageurl page %}">
+            <img src="{{ tmp_image.url }}" alt="{{ tmp_image.alt }}">
+        </a>
+    </div>
+    {% endif %}
+    <div class="cell{% if page.specific.feed_image %} medium-shrink large-auto{% endif %}">
+        <h3>
+            <a href="{% pageurl page %}">{{ page.title }}<br>
+            <small>{{ page.specific.job_title }}</small></a>
+        </h3>
+        <p>
+            {% if page.search_description %}
+            <a href="{% pageurl page %}">{{ page.search_description }}</a>
+            {% endif %}
+        </p>
+    </div>
+</div>
+{% endfor %}
+{% endif %}

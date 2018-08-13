@@ -3,6 +3,8 @@
     "version": "0.1",
     "dependencies": {
         "jquery": null,
+        "foundation-sites": null,
+        "font-awesome": null,
         "js-cookie": null
     },
     "main": "assets/js/main.js",
