@@ -12,7 +12,7 @@
 {% endblock %}
 
 {% block main %}
-<div class="grid-x grid-margin-x data-equalizer" data-equalize-on="medium" id="sidebar">
+<div class="grid-x grid-margin-x grid-margin-y data-equalizer" data-equalize-on="medium" id="sidebar">
     <div class="cell medium-3 sidebar" data-equalizer-watch="sidebar">
         <ul class="vertical menu">
             {% include "cms/includes/index_page_children.html" with pages=self.get_children.live %}
