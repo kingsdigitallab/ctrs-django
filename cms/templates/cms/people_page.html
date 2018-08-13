@@ -1,1 +1,17 @@
 {% extends "cms/rich_text_page.html" %}
+{% load cms_tags wagtailimages_tags wagtailcore_tags %}
+
+{% block title %}
+<div class="container">
+    <h2>
+        {{ self.title }}<br>
+        <small>{{ self.specific.job_title }}</small>
+    </h2>
+</div>
+{% endblock %}
+
+{% block main %}
+<div class="container">
+    {{ block.super }}
+</div>
+{% endblock %}
