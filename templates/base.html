@@ -72,11 +72,25 @@
 
   {% block footer_scripts %}{% endblock %}
 
+  {% comment %}
   {% compress js %}
   <script src="{% static 'js/google_analytics.js' %}"></script>
   <script>
     ga('create', '{{ GA_ID }}', 'auto');
     ga('send', 'pageview');
+  </script>
+  {% endcompress %}
+  {% endcomment %}
+  
+  {% compress js %}
+  <!-- Global site tag (gtag.js) - Google Analytics -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=UA-67707155-4"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+
+    gtag('config', 'UA-67707155-4');
   </script>
   {% endcompress %}
 </body>
