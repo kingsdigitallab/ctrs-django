@@ -28,9 +28,9 @@
         <div class="media-object-section main-section">
             <h4>
                 {% if tweet.retweeted_status %}
-                {{ tweet.retweeted_status.user.name }}
+                <i class="fab fa-twitter"></i> {{ tweet.retweeted_status.user.name }}
                 {% else %}
-                {{ tweet.user.name }}
+                <i class="fab fa-twitter"></i> {{ tweet.user.name }}
                 {% endif %}
             </h4>
             {% if tweet.retweeted_status %}
@@ -40,11 +40,11 @@
                 </a>
             </h5>
             {% else %}
-            <h4>
+            <h5>
                 <a href="//twitter.com/{{ tweet.user.screen_name }}">
                     @{{ tweet.user.screen_name }}
                 </a>
-            </h4>
+            </h5>
             {% endif %}
 
             <p>{{ tweet|tweet_to_html }}</p>
