@@ -410,6 +410,14 @@ footer {
     .media-object {
         margin-bottom: 0;
     }
+
+    svg {
+        &.fa-twitter {
+            path {
+                fill: $primary-color;                
+            }
+        }
+    }
 }
 
 /* 6. Media queries */
