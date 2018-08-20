@@ -15,6 +15,7 @@ import os
 
 from kdl_ldap.settings import * # noqa
 from django_auth_ldap.config import LDAPGroupQuery
+from twitterhut.settings import *  # noqa
 
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
@@ -88,6 +89,7 @@ INSTALLED_APPS += [    # your project apps here
     'ctrs',
     'kdl_ldap',
     'rest_framework',
+    'twitterhut',
     'wagtail.core',
     'wagtail.admin',
     'wagtail.documents',
@@ -274,6 +276,12 @@ COMPRESS_PRECOMPILERS = (
 # -----------------------------------------------------------------------------
 
 FABRIC_USER = getpass.getuser()
+
+# -----------------------------------------------------------------------------
+# Twitter
+# -----------------------------------------------------------------------------
+
+TWITTER_SCREEN_NAME = 'cotr2020'
 
 # -----------------------------------------------------------------------------
 # GLOBALS FOR JS
