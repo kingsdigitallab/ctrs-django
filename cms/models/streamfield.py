@@ -1,6 +1,7 @@
 from __future__ import unicode_literals
 
 from django import forms
+from wagtail.contrib.table_block.blocks import TableBlock
 from wagtail.core.blocks import (
     CharBlock, FieldBlock, PageChooserBlock, RawHTMLBlock, RichTextBlock,
     StreamBlock, StructBlock, TextBlock, URLBlock
@@ -104,6 +105,22 @@ class PullQuoteBlock(StructBlock):
         template = 'cms/blocks/pull_quote_block.html'
 
 
+custom_table_options = {
+    'minSpareRows': 0,
+    'startRows': 3,
+    'startCols': 3,
+    'colHeaders': False,
+    'rowHeaders': False,
+    'contextMenu': True,
+    'editor': 'text',
+    'stretchH': 'all',
+    'height': 108,
+    'language': 'en',
+    'renderer': 'html',
+    'autoColumnSize': False,
+}
+
+
 class CMSStreamBlock(StreamBlock):
     # home = HomePageBlock(icon='grip', label='Homepage Block')
 
@@ -123,3 +140,5 @@ class CMSStreamBlock(StreamBlock):
     embed = EmbedBlock(icon='media')
 
     html = AlignedHTMLBlock(icon='code', label='Raw HTML')
+
+    table = TableBlock(custom_table_options)
