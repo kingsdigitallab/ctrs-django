@@ -148,6 +148,18 @@ a {
 
 // 2.5 Tables
 
+table {
+    text-align: left;
+
+    td, th {
+        border: 1px solid lighten($primary-color, 50%);
+    }
+
+    th {
+        background: lighten($primary-color, 65%);
+    }
+}
+
 /* 3. Grid */
 
 /*

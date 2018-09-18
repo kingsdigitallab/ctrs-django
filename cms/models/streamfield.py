@@ -105,22 +105,6 @@ class PullQuoteBlock(StructBlock):
         template = 'cms/blocks/pull_quote_block.html'
 
 
-custom_table_options = {
-    'minSpareRows': 0,
-    'startRows': 3,
-    'startCols': 3,
-    'colHeaders': False,
-    'rowHeaders': False,
-    'contextMenu': True,
-    'editor': 'text',
-    'stretchH': 'all',
-    'height': 108,
-    'language': 'en',
-    'renderer': 'html',
-    'autoColumnSize': False,
-}
-
-
 class CMSStreamBlock(StreamBlock):
     # home = HomePageBlock(icon='grip', label='Homepage Block')
 
@@ -141,4 +125,4 @@ class CMSStreamBlock(StreamBlock):
 
     html = AlignedHTMLBlock(icon='code', label='Raw HTML')
 
-    table = TableBlock(custom_table_options)
+    table = TableBlock(icon='table', label='Table')
