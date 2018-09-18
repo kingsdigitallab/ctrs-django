@@ -71,16 +71,6 @@
   {% endcompress %}
 
   {% block footer_scripts %}{% endblock %}
-
-  {% comment %}
-  {% compress js %}
-  <script src="{% static 'js/google_analytics.js' %}"></script>
-  <script>
-    ga('create', '{{ GA_ID }}', 'auto');
-    ga('send', 'pageview');
-  </script>
-  {% endcompress %}
-  {% endcomment %}
   
   <!-- Global site tag (gtag.js) - Google Analytics -->
   <script async src="https://www.googletagmanager.com/gtag/js?id=UA-67707155-4"></script>
