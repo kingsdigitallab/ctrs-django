@@ -101,8 +101,8 @@ INSTALLED_APPS += [    # your project apps here
     'wagtail.contrib.forms',
     'wagtail.sites',
     'wagtail.contrib.routable_page',
-    'wagtail.contrib.table_block',
     'wagtail.contrib.styleguide',
+    'wagtail.contrib.table_block',
     'taggit',
     'modelcluster',
 ]
