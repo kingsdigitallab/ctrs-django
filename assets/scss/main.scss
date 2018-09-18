@@ -14,8 +14,8 @@
  *          4.3 Main
  *          4.4 Sidebar
  *          4.5 Footer
- *  5.  Media queries
- *  6.  @supports
+ *  5.  Social media
+ *  6.  Media queries
  *  7.  Print
  *
  *  TODO - Add:
@@ -147,6 +147,18 @@ a {
 }
 
 // 2.5 Tables
+
+table {
+    text-align: left;
+
+    td, th {
+        border: 1px solid lighten($primary-color, 50%);
+    }
+
+    th {
+        background: lighten($primary-color, 65%);
+    }
+}
 
 /* 3. Grid */
 
@@ -396,6 +408,31 @@ footer {
 }
 
 /* 5. Media queries */
+
+.social {
+    border: 1px solid scale-color($primary-color, $lightness: 70%);
+    border-left: 10px solid scale-color($primary-color, $lightness: 70%);
+    font-size: .9125rem;
+    padding: rem-calc(24);
+
+    h4, h5 {
+        padding: 0;
+    }
+
+    .media-object {
+        margin-bottom: 0;
+    }
+
+    svg {
+        &.fa-twitter {
+            path {
+                fill: $primary-color;                
+            }
+        }
+    }
+}
+
+/* 6. Media queries */
 
 @media screen and (max-width: 639px) {
 

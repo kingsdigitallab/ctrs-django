@@ -1,6 +1,7 @@
 from __future__ import unicode_literals
 
 from django import forms
+from wagtail.contrib.table_block.blocks import TableBlock
 from wagtail.core.blocks import (
     CharBlock, FieldBlock, PageChooserBlock, RawHTMLBlock, RichTextBlock,
     StreamBlock, StructBlock, TextBlock, URLBlock
@@ -123,3 +124,5 @@ class CMSStreamBlock(StreamBlock):
     embed = EmbedBlock(icon='media')
 
     html = AlignedHTMLBlock(icon='code', label='Raw HTML')
+
+    table = TableBlock(icon='table', label='Table')

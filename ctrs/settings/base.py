@@ -15,6 +15,7 @@ import os
 
 from kdl_ldap.settings import * # noqa
 from django_auth_ldap.config import LDAPGroupQuery
+from twitterhut.settings import *  # noqa
 
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
@@ -88,6 +89,7 @@ INSTALLED_APPS += [    # your project apps here
     'ctrs',
     'kdl_ldap',
     'rest_framework',
+    'twitterhut',
     'wagtail.core',
     'wagtail.admin',
     'wagtail.documents',
@@ -99,8 +101,8 @@ INSTALLED_APPS += [    # your project apps here
     'wagtail.contrib.forms',
     'wagtail.sites',
     'wagtail.contrib.routable_page',
-    'wagtail.contrib.table_block',
     'wagtail.contrib.styleguide',
+    'wagtail.contrib.table_block',
     'taggit',
     'modelcluster',
 ]
@@ -276,6 +278,12 @@ COMPRESS_PRECOMPILERS = (
 FABRIC_USER = getpass.getuser()
 
 # -----------------------------------------------------------------------------
+# Twitter
+# -----------------------------------------------------------------------------
+
+TWITTER_SCREEN_NAME = 'cotr2020'
+
+# -----------------------------------------------------------------------------
 # GLOBALS FOR JS
 # -----------------------------------------------------------------------------
 
@@ -296,7 +304,7 @@ AC_BASE_URL = 'https://app.activecollab.com/148987'
 AC_API_URL = AC_BASE_URL + '/api/v1/'
 AC_PROJECT_ID = 759
 AC_USER = 36
-AC_TOKEN = '36-iujn8hZ9sbfdQmHX1ksp1gweXRY5NYseAWA7JzVP'
+AC_TOKEN = ''
 AUTH_LDAP_REQUIRE_GROUP = (
     (
         LDAPGroupQuery('cn=kdl-staff,' + LDAP_BASE_OU) |
