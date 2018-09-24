@@ -25,6 +25,13 @@ Note: This login will only work on a locally deployed virtual machine.
 * Vagrant >= 1.9
 * VirtualBox >= 5.0
 
+## Release 0.5.3 Beta
+* Added TableBlock to Streamfield components
+
+## Release 0.5.2 Beta
+* Fixed overflow text issue
+* Fixed Google Analytics tracking code
+
 ## Release 0.5.1 Beta
 * Fixed child page of type 'People page'
 
