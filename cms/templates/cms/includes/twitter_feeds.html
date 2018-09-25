@@ -1,10 +1,5 @@
 {% load twitterhut_tags %}
 
-{% comment %}
-<a class="twitter-timeline" href="https://twitter.com/cotr2020?ref_src=twsrc%5Etfw">Tweets by cotr2020</a>
-<script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
-{% endcomment %}
-
 {% user_timeline screen_name as timeline %}
 {% for tweet in timeline %}
 <div class="cell social">
