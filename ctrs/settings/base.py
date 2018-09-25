@@ -201,6 +201,7 @@ TEMPLATES = [
                 'django.template.context_processors.static',
                 'django.contrib.messages.context_processors.messages',
                 'activecollab_digger.context_processors.activecollab_digger',
+                'ctrs.context_processors.settings',
             ],
         },
     },
