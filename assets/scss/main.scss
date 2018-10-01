@@ -410,16 +410,33 @@ footer {
 /* 5. Social media */
 
 .social {
-    border: 1px solid scale-color($primary-color, $lightness: 70%);
-    border-left: 10px solid scale-color($primary-color, $lightness: 70%);
+    border: 1px solid scale-color($primary-color, $lightness: 80%);
+    border-left: 10px solid scale-color($primary-color, $lightness: 80%);
     font-size: .9125rem;
-    padding: rem-calc(24);
+    padding: rem-calc(16 16 8);
 
     h4, h5 {
         padding: 0;
     }
 
+    .content,
+    .tweet-datetime {
+        font-size: .875rem;
+    }
+
     .media-object {
+        h4 {
+            font-size: 1.25rem;
+            line-height: 1.25;
+            patting-top: .25rem;
+
+            small {
+                font-size: 1rem;
+            }
+        }
+    }
+
+    .tweet-datetime {
         margin-bottom: 0;
     }
 
@@ -493,6 +510,22 @@ footer {
 
     .menu {
         font-size: 1.25rem;
+    }
+
+    .social {
+        .media-object {
+            // margin-bottom: 0;
+
+            h4 {
+                font-size: 1.25rem;
+                line-height: 1.25;
+                patting-top: .25rem;
+
+                small {
+                    font-size: 1rem;
+                }
+            }
+        }
     }
 
     // .richtext-image {
