@@ -27,34 +27,35 @@
                 {% else %}
                 <i class="fab fa-twitter"></i> {{ tweet.user.name }}
                 {% endif %}
-            </h4>
-            {% if tweet.retweeted_status %}
-            <h5>
-                <a href="//twitter.com/{{ tweet.retweeted_status.user.screen_name }}">
-                    @{{ tweet.retweeted_status.user.name }}
-                </a>
-            </h5>
-            {% else %}
-            <h5>
-                <a href="//twitter.com/{{ tweet.user.screen_name }}">
-                    @{{ tweet.user.screen_name }}
-                </a>
-            </h5>
-            {% endif %}
 
-            <p>{{ tweet|tweet_to_html }}</p>
-            <p class="tweet-datetime clearfix">
-                <a href="//twitter.com/intent/like?tweet_id={{ tweet.id_str }}" class="like">
-                    <i class="fa fa-heart"></i>
-                </a>
-                <a href="//twitter.com/intent/retweet?tweet_id={{ tweet.id_str }}" class="retweet" target="_blank">
-                    <i class="fa fa-retweet"></i>
-                </a>
-                <a href="//twitter.com/{{ screen_name }}/status/{{ tweet.id_str }}" class="float-right">
-                    {{ tweet.created_at|tweet_date:'d M Y' }}
-                </a>
-            </p>
+                {% if tweet.retweeted_status %}
+                <small>
+                    <a href="//twitter.com/{{ tweet.retweeted_status.user.screen_name }}">
+                        @{{ tweet.retweeted_status.user.screen_name }}
+                    </a>
+                </small>
+                {% else %}
+                <small>
+                    <a href="//twitter.com/{{ tweet.user.screen_name }}">
+                        @{{ tweet.user.screen_name }}
+                    </a>
+                </small>
+                {% endif %}
+            </h4>
         </div>
     </div>
+
+    <p class="content">{{ tweet|tweet_to_html }}</p>
+    <p class="tweet-datetime clearfix">
+        <a href="//twitter.com/intent/like?tweet_id={{ tweet.id_str }}" class="like">
+            <i class="fa fa-heart"></i>
+        </a>
+        <a href="//twitter.com/intent/retweet?tweet_id={{ tweet.id_str }}" class="retweet" target="_blank">
+            <i class="fa fa-retweet"></i>
+        </a>
+        <a href="//twitter.com/{{ screen_name }}/status/{{ tweet.id_str }}" class="float-right">
+            {{ tweet.created_at|tweet_date:'d M Y' }}
+        </a>
+    </p>
 </div>
 {% endfor %}
