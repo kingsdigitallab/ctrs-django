@@ -21,6 +21,9 @@ var/
 *.egg-info/
 .installed.cfg
 *.egg
+/.vagrant_provisioning/playbook.retry
+/node_modules
+/.venv
 
 # PyInstaller
 #  Usually these files are written by a python script from a template
@@ -48,7 +51,6 @@ coverage.xml
 
 # Django stuff:
 *.log
-local_settings.py
 
 # Sphinx documentation
 docs/_build/
@@ -60,7 +62,8 @@ target/
 .DS_Store
 .babelrc
 .vagrant
+.vscode
 local.py
-#local_*.py
 logs/
 static/
+local_*

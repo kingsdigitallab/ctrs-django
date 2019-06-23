@@ -13,7 +13,7 @@ admin.autodiscover()
 urlpatterns = [
     path('admin/', admin.site.urls),
 
-    path('digger/', include('activecollab_digger.urls')),
+    # path('digger/', include('activecollab_digger.urls')),
 
     path('wagtail/', include('wagtail.admin.urls')),
     path('documents/', include('wagtail.documents.urls')),
