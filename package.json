@@ -1,0 +1,28 @@
+{
+  "name": "vagrant",
+  "version": "1.0.0",
+  "description": "This is the repository for the ctrs project at [Kings Digital Lab](https://kdl.kcl.ac.uk)",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/kingsdigitallab/ctrs-django.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/kingsdigitallab/ctrs-django/issues"
+  },
+  "homepage": "https://github.com/kingsdigitallab/ctrs-django#readme",
+  "dependencies": {
+    "font-awesome": "^4.7.0",
+    "foundation-sites": "^6.5.3",
+    "jquery": "^3.4.1",
+    "js-cookie": "^2.2.0",
+    "vue": "^2.6.10",
+    "what-input": "^5.2.3"
+  }
+}

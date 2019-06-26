@@ -1,12 +1,12 @@
 from .base import *  # noqa
 
 ALLOWED_HOSTS = ['127.0.0.1',
-                 'localhost'
+                 'localhost',
                  '[::1]',
                  'ctrs-dev.kdl.kcl.ac.uk']
 
 CACHE_REDIS_DATABASE = '2'
-CACHES['default']['LOCATION'] = '127.0.0.1:6379:' + CACHE_REDIS_DATABASE
+CACHES['default']['LOCATION'] = 'redis://127.0.0.1:6379/' + CACHE_REDIS_DATABASE  # noqa
 
 DEBUG = True
 
