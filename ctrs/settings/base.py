@@ -12,11 +12,9 @@ import getpass
 import logging
 import os
 
-
-from kdl_ldap.settings import * # noqa
 from django_auth_ldap.config import LDAPGroupQuery
+from kdl_ldap.settings import *  # noqa
 from twitterhut.settings import *  # noqa
-
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.dirname(__file__)))
@@ -62,7 +60,7 @@ DEBUG = False
 # -----------------------------------------------------------------------------
 
 DEFAULT_FROM_EMAIL = 'noreply@kcl.ac.uk'
-EMAIL_HOST = 'smtp.kcl.ac.uk'
+EMAIL_HOST = 'smtp.cch.kcl.ac.uk'
 EMAIL_PORT = 25
 EMAIL_HOST_USER = ''
 EMAIL_HOST_PASSWORD = ''
@@ -84,12 +82,13 @@ INSTALLED_APPS = [
 ]
 
 INSTALLED_APPS += [    # your project apps here
-    'activecollab_digger',
+    'twitterhut',
     'cms',
     'ctrs',
+    'wagtail.contrib.styleguide',
+
     'kdl_ldap',
     'rest_framework',
-    'twitterhut',
     'wagtail.core',
     'wagtail.admin',
     'wagtail.documents',
@@ -101,10 +100,10 @@ INSTALLED_APPS += [    # your project apps here
     'wagtail.contrib.forms',
     'wagtail.sites',
     'wagtail.contrib.routable_page',
-    'wagtail.contrib.styleguide',
     'wagtail.contrib.table_block',
     'taggit',
     'modelcluster',
+    'haystack',
 ]
 
 INTERNAL_IPS = ['127.0.0.1']
@@ -178,6 +177,7 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+
     'wagtail.core.middleware.SiteMiddleware',
     'wagtail.contrib.redirects.middleware.RedirectMiddleware',
 ]
@@ -200,7 +200,7 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.template.context_processors.static',
                 'django.contrib.messages.context_processors.messages',
-                'activecollab_digger.context_processors.activecollab_digger',
+
                 'ctrs.context_processors.settings',
             ],
         },
@@ -238,7 +238,10 @@ STATIC_ROOT = os.path.join(BASE_DIR, STATIC_URL.strip('/'))
 if not os.path.exists(STATIC_ROOT):
     os.makedirs(STATIC_ROOT)
 
-STATICFILES_DIRS = (os.path.join(BASE_DIR, 'assets'),)
+STATICFILES_DIRS = (
+    os.path.join(BASE_DIR, 'assets'),
+    os.path.join(BASE_DIR, 'node_modules'),
+)
 
 STATICFILES_FINDERS = (
     'django.contrib.staticfiles.finders.FileSystemFinder',
@@ -246,7 +249,7 @@ STATICFILES_FINDERS = (
     'compressor.finders.CompressorFinder',
 )
 
-MEDIA_URL = STATIC_URL + 'media/'
+MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, MEDIA_URL.strip('/'))
 
 if not os.path.exists(MEDIA_ROOT):
@@ -301,16 +304,30 @@ if 'django.contrib.gis' in INSTALLED_APPS:
     db_engine = 'django.contrib.gis.db.backends.postgis'
 
 
+# DIGGER
 AC_BASE_URL = 'https://app.activecollab.com/148987'
 AC_API_URL = AC_BASE_URL + '/api/v1/'
 AC_PROJECT_ID = 759
 AC_USER = 36
 AC_TOKEN = ''
+
 AUTH_LDAP_REQUIRE_GROUP = (
     (
-        LDAPGroupQuery('cn=kdl-staff,' + LDAP_BASE_OU) |
-        LDAPGroupQuery('cn=ctrs,' + LDAP_BASE_OU)
+        LDAPGroupQuery(
+            'cn=kdl-staff,' + LDAP_BASE_OU
+        ) | LDAPGroupQuery(
+            'cn=ctrs,' + LDAP_BASE_OU
+        )
     )
 )
 WAGTAIL_SITE_NAME = PROJECT_TITLE
 ITEMS_PER_PAGE = 10
+# Change as required
+HAYSTACK_CONNECTIONS = {
+    'default': {
+        'ENGINE':
+        'haystack.backends.elasticsearch_backend.ElasticsearchSearchEngine',
+        'URL': 'http://127.0.0.1:9200/',
+        'INDEX_NAME': 'ctrs_haystack',
+    },
+}
