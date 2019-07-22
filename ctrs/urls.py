@@ -17,8 +17,8 @@ urlpatterns = [
 
     path('wagtail/', include('wagtail.admin.urls')),
     path('documents/', include('wagtail.documents.urls')),
+    path('', include('ctrs_texts.urls')),
     path('', include('wagtail.core.urls')),
-
 ]
 
 # -----------------------------------------------------------------------------

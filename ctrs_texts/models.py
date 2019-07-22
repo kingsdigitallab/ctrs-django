@@ -79,7 +79,9 @@ class EncodedText(index.Indexed, TimestampedModel):
         return rec, created
 
     def __str__(self):
-        return '{} - {}'.format(self.abstracted_text, self.type)
+        return '{} - {} [{}]'.format(
+            self.abstracted_text, self.type, self.status
+        )
 
     search_fields = [
         index.SearchField('abstracted_text__slug', partial_match=True),
@@ -151,23 +153,31 @@ class AbstractedText(AbstractNamedModel):
     )
 
     @classmethod
-    def update_or_create(cls, manuscript_text=None, type=None):
+    def update_or_create(cls, manuscript_text=None, type=None, name=None):
         rec = None
         created = False
 
+        assert manuscript_text or name
+
         if manuscript_text:
             rec = manuscript_text.abstracted_text
-
-        if rec is None:
-            created = True
-            rec = cls()
-
-        rec.manuscript_text = manuscript_text
-        if manuscript_text:
-            rec.name = str(manuscript_text)
-        rec.type = type
-        rec.slug = slugify(str(rec))
-        rec.save()
+            if rec is None:
+                created = True
+                rec = cls()
+            if name is None:
+                name = str(manuscript_text)
+            rec.name = name
+            rec.type = type
+            rec.slug = slugify(str(rec))
+            rec.save()
+        else:
+            rec, created = cls.objects.update_or_create(
+                slug=slugify(name),
+                defaults={
+                    'name': name,
+                    'type': type
+                }
+            )
 
         if manuscript_text:
             manuscript_text.abstracted_text = rec

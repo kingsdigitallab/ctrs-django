@@ -28,15 +28,25 @@ class Command(BaseCommand):
         if action == 'import':
             valid = self.handle_import()
 
+        if action == 'delete':
+            for m in [
+                Repository, Manuscript, ManuscriptText,
+                AbstractedText, EncodedText, AbstractedTextType,
+                EncodedTextStatus
+            ]:
+                m.objects.all().delete()
+            valid = True
+
         if not valid:
             self.show_help()
         else:
             self.log('done')
 
     def handle_import(self):
-        '''
-        http://localhost:8001/digipal/api/textcontentxml/?@select=*status,id,str,content,*text_content,*item_part,*text,type,*current_item,locus,shelfmark,*repository,place
-        '''
+        # http://localhost:8001/digipal/api/textcontentxml/?@select=*status,id,str,content,*text_content,*item_part,*text,type,*current_item,locus,shelfmark,*repository,place
+        # curl
+        # "http://localhost:8001/digipal/api/textcontentxml/?@select=*status,id,str,content,*text_content,*item_part,group,type,*current_item,locus,shelfmark,*repository,place&@limit=1000"
+        # > arch-content.json
         ret = False
 
         if len(self.options) != 1:
@@ -68,12 +78,19 @@ class Command(BaseCommand):
         ab_types = AbstractedTextType.get_or_create_default_types()
         statuses = {}
 
+        # mapping
+        arch_ipid_to_ab_txt = {}
+
         for jtcxml in data['results']:
             print(jtcxml['str'])
             jtc = jtcxml['text_content']
             jip = jtc['item_part']
             jci = jip['current_item']
             jrepo = jci['repository']
+
+            if jip['type'] is None:
+                continue
+            ip_type = slugify(jip['type'])
 
             status_name = jtcxml['status']['str']
             status_slug = slugify(status_name)
@@ -85,17 +102,37 @@ class Command(BaseCommand):
                 )
                 statuses[status_slug] = status
 
-            repo, _ = Repository.update_or_create(jrepo['place'], jrepo['str'])
-            ms, _ = Manuscript.update_or_create(repo, jci['shelfmark'])
-            ms_txt, _ = ManuscriptText.update_or_create(ms, jip['locus'])
-            ab_txt, _ = AbstractedText.update_or_create(
-                manuscript_text=ms_txt, type=ab_types['manuscript']
-            )
+            ms_txt = None
+            if ip_type in ['manuscript']:
+                repo, _ = Repository.update_or_create(
+                    jrepo['place'], jrepo['str'])
+                ms, _ = Manuscript.update_or_create(repo, jci['shelfmark'])
+                ms_txt, _ = ManuscriptText.update_or_create(ms, jip['locus'])
+                ab_txt, _ = AbstractedText.update_or_create(
+                    manuscript_text=ms_txt, type=ab_types[ip_type],
+                )
+            else:
+                ab_txt, _ = AbstractedText.update_or_create(
+                    name=jip['str'], type=ab_types[ip_type],
+                )
+
             en_txt, _ = EncodedText.update_or_create(
                 ab_txt, jtc['type'], jtcxml['content'], status
             )
 
-            # version
+            arch_ipid_to_ab_txt[jip['id']] = ab_txt
+
+        # relationship among the abstracted texts
+        for jtcxml in data['results']:
+            jtc = jtcxml['text_content']
+            jip = jtc['item_part']
+            ab_text = arch_ipid_to_ab_txt.get(jip['id'], None)
+            if ab_text:
+                ab_text_group = arch_ipid_to_ab_txt.get(
+                    jip.get('group__id', None), None
+                )
+                ab_text.group = ab_text_group
+                ab_text.save()
 
         return True
 
