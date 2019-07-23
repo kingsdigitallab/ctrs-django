@@ -2,6 +2,9 @@ from django.db import models
 from django.utils.text import slugify
 from wagtail.snippets.models import register_snippet
 from wagtail.search import index
+import re
+import lxml.etree as ET
+from lxml import etree
 
 
 class TimestampedModel(models.Model):
@@ -20,6 +23,7 @@ class AbstractNamedModel(index.Indexed, TimestampedModel):
 
     class Meta:
         abstract = True
+        ordering = ['name']
 
     def __str__(self):
         return self.short_name or self.name
@@ -82,6 +86,77 @@ class EncodedText(index.Indexed, TimestampedModel):
         return '{} - {} [{}]'.format(
             self.abstracted_text, self.type, self.status
         )
+
+    def content_variants(self):
+        ret = self.content
+
+        ab_text = self.abstracted_text
+        members = list(ab_text.members.all())
+        if not members:
+            return ret
+
+        regions = []
+        for mi, member in enumerate(members):
+            other_content = member.encoded_texts.filter(type=self.type).first()
+            if not other_content:
+                continue
+            for ri, region in enumerate(other_content.get_regions()):
+                if len(regions) <= ri:
+                    regions.append(['?'] * len(members))
+                regions[ri][mi] = region
+
+        #
+        xml = get_xml_from_unicode(self.content, ishtml=True, add_root=True)
+        ri = 0
+        for region in xml.findall('.//span[@data-dpt-type="unsettled"]'):
+            # _Element
+            if ri >= len(regions):
+                break
+            tail = region.tail
+            attribs = {k: v for k, v in region.attrib.items()}
+            region.clear()
+            for k, v in attribs.items():
+                region.attrib[k] = v
+            region.tail = tail
+            # region.text = ' | '.join('<span>{}</span>'.format(regions[ri]))
+
+            variants = etree.Element('span')
+            variants.attrib['class'] = 'variants'
+            region.append(variants)
+
+            for mi, r in enumerate(regions[ri]):
+
+                child = etree.Element('span')
+                child.attrib['class'] = 'variant'
+
+                ms = etree.Element('span')
+                ms.attrib['class'] = 'ms'
+                ms.text = chr(65 + mi)
+                child.append(ms)
+
+                reading = etree.Element('span')
+                reading.attrib['class'] = 'reading'
+                reading.text = r
+                child.append(reading)
+
+                # child.text = r
+                variants.append(child)
+
+            ri += 1
+
+        print(regions)
+
+        return get_unicode_from_xml(xml, remove_root=True)
+
+    def get_regions(self):
+        ret = []
+
+        xml = get_xml_from_unicode(self.content, ishtml=True, add_root=True)
+
+        for region in xml.findall('.//span[@data-dpt-type="unsettled"]'):
+            ret.append(get_unicode_from_xml(region, text_only=True))
+
+        return ret
 
     search_fields = [
         index.SearchField('abstracted_text__slug', partial_match=True),
@@ -212,3 +287,67 @@ class ManuscriptText(models.Model):
 
     def __str__(self):
         return '{}, {}'.format(self.manuscript, self.locus)
+
+
+def get_xml_from_unicode(document, ishtml=False, add_root=False):
+    # document = a unicode object containing the document
+    # ishtml = True will be more lenient about the XML format
+    #          and won't complain about named entities (&nbsp;)
+    # add_root = True to surround the given document string with
+    #         <root> element before parsing. In case there is no
+    #        single containing element.
+
+    if document and add_root:
+        document = r'<root>%s</root>' % document
+
+    parser = None
+    if ishtml:
+        from io import StringIO
+        parser = ET.HTMLParser()
+        # we use StringIO otherwise we'll have encoding issues
+        d = StringIO(document)
+    else:
+        from io import BytesIO
+        d = BytesIO(document.encode('utf-8'))
+    ret = ET.parse(d, parser)
+
+    return ret
+
+
+def get_unicode_from_xml(xmltree, encoding='utf-8',
+                         text_only=False, remove_root=False):
+    # if text_only = True => strip all XML tags
+    # EXCLUDE the TAIL
+    if text_only:
+        return get_xml_element_text(xmltree)
+    else:
+        # import regex as re
+
+        if hasattr(xmltree, 'getroot'):
+            xmltree = xmltree.getroot()
+        ret = ET.tostring(xmltree, encoding=encoding).decode('utf-8')
+        if xmltree.tail is not None and ret[0] == '<':
+            # remove the tail
+            ret = re.sub(r'[^>]+$', '', ret)
+
+        if remove_root:
+            ret = re.sub('(?musi).*<root>', '', ret)
+            ret = re.sub('(?musi)</root>.*', '', ret)
+            # ret.replace('<root>', '').replace('</root>', '')
+
+        return ret
+
+
+def get_xml_element_text(element):
+    # returns all the text within element and its descendants
+    # WITHOUT the TAIL.
+    #
+    # element is etree Element object
+    #
+    # '<r>t0<e1>t1<e2>t2</e2>t3</e1>t4</r>'
+    # e = (xml.findall(el))[0]
+    # e.text => t1
+    # e.tail => t4 (! part of e1)
+    # get_xml_element_text(element) => 't1t2t3'
+
+    return ''.join(element.itertext())

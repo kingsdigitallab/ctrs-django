@@ -1,14 +1,24 @@
 {% extends 'base.html' %}
 
-{% block title %}<h2>Texts</h2{% endblock %}
+{% block title %}
+<div class="container">
+  <h2>Texts</h2>
+</div>
+{% endblock %}
 {% block main %}
   <div class="container">
-    <ul>
-      {% for text in texts %}
-        <li>
-          <a href="{% url 'text_view' text.slug %}">{{ text.name }}</a>
-        </li>
+    {% for work in works %}
+      <h3><a href="{% url 'text_view' work.slug %}">{{ work.name }}</a></h3>
+      {% for version in work.members.all %}
+        <h4><a href="{% url 'text_view' version.slug %}">{{ version.name }}</a></h4>
+        <ul>
+          {% for text in version.members.all %}
+            <li>
+              <a href="{% url 'text_view' text.slug %}">{{ text.name }}</a>
+            </li>
+          {% endfor %}
+        </ul>
       {% endfor %}
-    <ul>
+    {% endfor %}
   </div>
 {% endblock %}

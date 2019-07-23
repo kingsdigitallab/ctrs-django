@@ -17,8 +17,9 @@ def view_text_viewer(request, slug):
 
 def view_texts(request):
     context = {
-        'texts': AbstractedText.objects.filter(
-            encoded_texts__status__slug='to-be-reviewed',
+        'works': AbstractedText.objects.filter(
+            # encoded_texts__status__slug='to-be-reviewed'
+            type__slug='work',
         )
     }
     return render(request, 'ctrs_texts/texts.html', context)

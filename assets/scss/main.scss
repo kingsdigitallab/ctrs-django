@@ -121,7 +121,7 @@ h1, h2, h3, h4, h5, h6 {
     padding: .5em 0 .25em;
 }
 
-h1 {    
+h1 {
     small {
         font-style: italic;
     }
@@ -443,7 +443,7 @@ footer {
     svg {
         &.fa-twitter {
             path {
-                fill: $primary-color;                
+                fill: $primary-color;
             }
         }
     }
@@ -587,3 +587,84 @@ footer {
 }
 
 /* 7. Print */
+
+/* X. Text Viewer (GN) */
+
+// GN: Temporary rules for demo page
+// Both html structure and styles will be improve at a later stage
+
+.container.legend {
+  ul {
+    list-style-type: upper-alpha;
+  }
+}
+
+.text-view {
+  p {
+    line-height: 2.5rem;
+    font-family: "Lora", serif;
+    font-size: 1.2rem;
+  }
+
+  span[data-dpt=head]:before {
+    font-weight: 700;
+    content: '(Title)';
+  }
+
+  span[data-dpt=sn] {
+    font-weight: 700;
+    &:before {
+      content: '(';
+    }
+    &:after {
+      content: ')';
+    }
+  }
+  span[data-dpt-type=unsettled] {
+    &:before, &:after {
+      font-size: 1.3em;
+      font-weight: 700;
+    }
+    &:before {
+      content: '[';
+    }
+    &:after {
+      content: ']';
+    }
+  }
+  span[data-dpt-lang=vernacular] {
+    font-style: italic;
+  }
+
+
+
+  &.version {
+    span[data-dpt-type=unsettled] {
+      position: relative;
+      span.ms:after {
+        content: ': ';
+      }
+      span.variants {
+        display: none;
+        position: absolute;
+        opacity: 0.9;
+        border: 1px solid grey;
+        background-color: lightgrey;
+        padding: 0.3em;
+        line-height: 1.2em;
+
+        .variant {
+          display: block;
+          white-space: nowrap;
+        }
+      }
+    }
+    span[data-dpt-type=unsettled]:hover {
+      span.variants {
+        display: inline-block;
+        position: absolute;
+      }
+    }
+  }
+
+}
