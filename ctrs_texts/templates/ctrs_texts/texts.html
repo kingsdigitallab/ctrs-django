@@ -1,20 +1,24 @@
 {% extends 'base.html' %}
 
+{% block meta_title %}Texts{% endblock %}
+
 {% block title %}
-<div class="container">
-  <h2>Texts</h2>
-</div>
+  <div class="container">
+    <h2>Texts</h2>
+  </div>
 {% endblock %}
+
 {% block main %}
   <div class="container">
     {% for work in works %}
-      <h3><a href="{% url 'text_view' work.slug %}">{{ work.name }}</a></h3>
+      {% if not forloop.first %}<hr>{% endif %}
+      <h3><a class="status-{{work.get_status.slug}}" href="{% url 'text_view' work.slug view_default %}">{{ work.name }}</a></h3>
       {% for version in work.members.all %}
-        <h4><a href="{% url 'text_view' version.slug %}">{{ version.name }}</a></h4>
+        <h4><a class="status-{{version.get_status.slug}}" href="{% url 'text_view' version.slug view_default %}">{{ version.name }}</a></h4>
         <ul>
           {% for text in version.members.all %}
             <li>
-              <a href="{% url 'text_view' text.slug %}">{{ text.name }}</a>
+              <a class="status-{{text.get_status.slug}}" href="{% url 'text_view' text.slug view_default %}">{{ text.name }}</a>
             </li>
           {% endfor %}
         </ul>

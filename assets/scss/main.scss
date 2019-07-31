@@ -593,10 +593,21 @@ footer {
 // GN: Temporary rules for demo page
 // Both html structure and styles will be improve at a later stage
 
-.container.legend {
+.container.text-members {
   ul {
     list-style-type: upper-alpha;
   }
+}
+
+.legend {
+  font-size: 0.6em;
+}
+
+.status-draft {
+  color: grey;
+}
+.status-empty {
+  color: darkgrey;
 }
 
 .text-view {
@@ -632,6 +643,7 @@ footer {
       content: ']';
     }
   }
+
   span[data-dpt-lang=vernacular] {
     font-style: italic;
   }
@@ -641,6 +653,9 @@ footer {
   &.version {
     span[data-dpt-type=unsettled] {
       position: relative;
+      &:after {
+        content: '...]';
+      }
       span.ms:after {
         content: ': ';
       }
@@ -663,6 +678,7 @@ footer {
       span.variants {
         display: inline-block;
         position: absolute;
+        z-index: 10;
       }
     }
   }

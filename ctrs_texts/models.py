@@ -28,6 +28,15 @@ class AbstractNamedModel(index.Indexed, TimestampedModel):
     def __str__(self):
         return self.short_name or self.name
 
+    @classmethod
+    def get_all(cls):
+        '''Returns all instances as a dictionary {slug: instance}'''
+        return {
+            r.slug: r
+            for r
+            in cls.objects.all()
+        }
+
     search_fields = [
         index.SearchField('name', partial_match=True),
     ]
@@ -144,9 +153,11 @@ class EncodedText(index.Indexed, TimestampedModel):
 
             ri += 1
 
-        print(regions)
+        # print(regions)
 
-        return get_unicode_from_xml(xml, remove_root=True)
+        ret = get_unicode_from_xml(xml, remove_root=True)
+
+        return ret
 
     def get_regions(self):
         ret = []
@@ -226,6 +237,14 @@ class AbstractedText(AbstractNamedModel):
         related_name='members',
         on_delete=models.SET_NULL
     )
+
+    def get_status(self):
+        ret = None
+        transc = self.encoded_texts.filter(
+            type__slug='transcription').only('status').first()
+        if transc:
+            ret = transc.status
+        return ret
 
     @classmethod
     def update_or_create(cls, manuscript_text=None, type=None, name=None):
@@ -331,9 +350,17 @@ def get_unicode_from_xml(xmltree, encoding='utf-8',
             ret = re.sub(r'[^>]+$', '', ret)
 
         if remove_root:
-            ret = re.sub('(?musi).*<root>', '', ret)
-            ret = re.sub('(?musi)</root>.*', '', ret)
-            # ret.replace('<root>', '').replace('</root>', '')
+            if 0:
+                ret = re.sub('(?msi).*<root>', '', ret)
+                # GN: why so slow? 40k string with easy regexp, 10s?
+                ret = re.sub('(?msi)</root>.*', '', ret)
+            else:
+                r = [
+                    ret.find('<root>'),
+                    ret.rfind('</root>')
+                ]
+                if r[0] > 0 and r[1] > r[0]:
+                    ret = ret[r[0] + len('<root>'):r[1]]
 
         return ret
 

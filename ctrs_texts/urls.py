@@ -7,6 +7,6 @@ admin.autodiscover()
 
 urlpatterns = [
     path(r'texts/', view_texts, name="texts"),
-    re_path(r'texts/(?P<slug>[^/]+)/content/',
+    re_path(r'texts/(?P<text_slug>[^/]+)/(?P<view_slug>[^/]+)/',
             view_text_viewer, name='text_view'),
 ]
