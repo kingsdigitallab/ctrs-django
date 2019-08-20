@@ -6,7 +6,7 @@ from django.conf import settings
 from django.core.paginator import EmptyPage, PageNotAnInteger, Paginator
 from django.db import models
 from django.shortcuts import render
-from modelcluster.fields import ParentalKey
+from modelcluster.fields import ParentalKey, ParentalManyToManyField
 from modelcluster.tags import ClusterTaggableManager
 from taggit.models import TaggedItemBase
 from wagtail.admin.edit_handlers import FieldPanel, StreamFieldPanel
@@ -15,6 +15,8 @@ from wagtail.core.models import Page
 from wagtail.images.edit_handlers import ImageChooserPanel
 
 from .behaviours import WithFeedImage, WithStreamField
+from django import forms
+from django.contrib.auth.models import User
 
 logger = logging.getLogger(__name__)
 
@@ -176,21 +178,39 @@ class BlogPost(Page, WithFeedImage, WithStreamField):
     tags = ClusterTaggableManager(through=BlogPostTag, blank=True)
     date = models.DateField('Post date')
 
+    authors = ParentalManyToManyField(
+        User,
+        verbose_name='authors',
+        null=True,
+        blank=True,
+        editable=True,
+        related_name='authored_blogposts',
+        # help_text=''
+    )
+
     subpage_types = []
+
+    def get_authors(self):
+        ret = self.authors.all()
+        if not ret:
+            ret = []
+            if self.owner:
+                ret.append(self.owner)
+        return ret
 
     @property
     def blog_index(self):
         # finds closest ancestor which is a blog index
         return self.get_ancestors().type(BlogIndexPage).last()
 
+    content_panels = [
+        FieldPanel('title', classname='full title'),
+        FieldPanel('date'),
+        StreamFieldPanel('body')
+    ]
 
-BlogPost.content_panels = [
-    FieldPanel('title', classname='full title'),
-    FieldPanel('date'),
-    StreamFieldPanel('body')
-]
-
-BlogPost.promote_panels = Page.promote_panels + [
-    ImageChooserPanel('feed_image'),
-    FieldPanel('tags')
-]
+    promote_panels = Page.promote_panels + [
+        ImageChooserPanel('feed_image'),
+        FieldPanel('authors', widget=forms.CheckboxSelectMultiple),
+        FieldPanel('tags'),
+    ]
