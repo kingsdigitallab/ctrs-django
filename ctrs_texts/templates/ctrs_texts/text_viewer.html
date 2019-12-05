@@ -1,0 +1,38 @@
+{% extends 'base.html' %}
+
+{% block meta_title %}{{ encoded_text.abstracted_text.name }} ({{ encoded_text.type.name }}){% endblock %}
+
+{% block main %}
+
+  <div class="container">
+    <nav class="breadcrumb">
+      <a href="{% url 'texts' %}">Texts</a>
+      &gt;
+      <h2>
+        {{ encoded_text.abstracted_text.name }}
+        <span class="legend">
+          (<a href="{% url 'text_view' encoded_text.abstracted_text.slug view_alternative.slug %}">
+            Switch to {{view_alternative.name}}
+          </a>)
+        </span>
+      </h2>
+    </nav>
+  </div>
+
+  {% with encoded_text.abstracted_text.members.all as members %}
+    {% if members.count %}
+      <div class="container text-members">
+        <ul>
+          {% for m in members %}
+            <li>{{ m.name }}</li>
+          {% endfor %}
+        </ul>
+      </div>
+    {% endif %}
+  {% endwith %}
+
+  <div class="container text-view {{ encoded_text.abstracted_text.type.slug}}">
+    {{ encoded_text.content_variants|safe }}
+  </div>
+
+{% endblock %}

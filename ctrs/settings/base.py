@@ -82,6 +82,7 @@ INSTALLED_APPS = [
 ]
 
 INSTALLED_APPS += [    # your project apps here
+    'ctrs_texts',
     'twitterhut',
     'cms',
     'ctrs',
