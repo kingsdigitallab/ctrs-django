@@ -275,6 +275,7 @@ def update(version=None):
         to_version = 'master'
 
     with cd(env.path):
+        run('git fetch')
         run('git checkout {}'.format(to_version))
         run('git pull')
 
