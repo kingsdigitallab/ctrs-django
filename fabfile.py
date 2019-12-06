@@ -277,7 +277,7 @@ def update(version=None):
     with cd(env.path):
         run('git fetch')
         run('git checkout {}'.format(to_version))
-        run('git pull')
+        run('git merge')
 
     update_dev_packages()
 
