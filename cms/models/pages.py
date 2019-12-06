@@ -181,7 +181,6 @@ class BlogPost(Page, WithFeedImage, WithStreamField):
     authors = ParentalManyToManyField(
         User,
         verbose_name='authors',
-        null=True,
         blank=True,
         editable=True,
         related_name='authored_blogposts',
