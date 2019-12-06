@@ -275,6 +275,8 @@ def update(version=None):
         to_version = 'master'
 
     with cd(env.path):
+        # keep this sequence as it will cope well with change of branch
+        # during deployment.
         run('git fetch')
         run('git checkout {}'.format(to_version))
         run('git merge')
