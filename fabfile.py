@@ -275,8 +275,8 @@ def update(version=None):
         to_version = 'master'
 
     with cd(env.path):
-        run('git pull')
         run('git checkout {}'.format(to_version))
+        run('git pull')
 
     update_dev_packages()
 
