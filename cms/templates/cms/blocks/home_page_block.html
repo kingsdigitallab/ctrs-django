@@ -9,11 +9,13 @@
     </a>
     {% endif %}
     <span class="float-right">
-        {% if block.value.icon == "pencil-podcast" %}
-        <i class="fas fa-pencil text-right"></i> <i class="fas fa-podcast text-right"></i>
-        {% else %}
-        <i class="fas fa-{{ block.value.icon }} text-right"></i>
-        {% endif %}
+        <a href="{% if block.value.url %}{{ block.value.url }}{% else %}{% pageurl block.value.page %}{% endif %}" class="inline icon">
+            {% if block.value.icon == "pencil-podcast" %}
+            <i class="fas fa-pencil text-right"></i> <i class="fas fa-podcast text-right"></i>
+            {% else %}
+            <i class="fas fa-{{ block.value.icon }} text-right"></i>
+            {% endif %}
+        </a>
     </span>
 </h2>
 

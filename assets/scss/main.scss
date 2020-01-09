@@ -86,6 +86,16 @@ i.icon {
 .inline {
     display: inline-block;
     max-width: 87%;
+
+    &.icon {
+        border-bottom: 0;
+
+        &:hover {
+            path {
+                fill: $secondary-color;
+            }
+        }
+    }
 }
 
 small {
@@ -471,6 +481,11 @@ footer {
             }
         }
     }
+}
+
+.like,
+.retweet {
+    border-bottom: 0;
 }
 
 /* 6. Media queries */
