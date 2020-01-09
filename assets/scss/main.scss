@@ -14,6 +14,7 @@
  *          4.3 Main
  *          4.4 Sidebar
  *          4.5 Footer
+ *          4.6 Images
  *  5.  Social media
  *  6.  Media queries
  *  7.  Print
@@ -86,6 +87,16 @@ i.icon {
 .inline {
     display: inline-block;
     max-width: 87%;
+
+    &.icon {
+        border-bottom: 0;
+
+        &:hover {
+            path {
+                fill: $secondary-color;
+            }
+        }
+    }
 }
 
 small {
@@ -426,6 +437,11 @@ footer {
     width: 100%;
 }
 
+
+// 4.6 Images
+
+// See media queries
+
 /* 5. Social media */
 
 .social {
@@ -471,6 +487,11 @@ footer {
             }
         }
     }
+}
+
+.like,
+.retweet {
+    border-bottom: 0;
 }
 
 /* 6. Media queries */
@@ -538,6 +559,38 @@ footer {
 
     .menu {
         font-size: 1.25rem;
+    }
+
+    .richtext-image {
+        &.left,
+        &.right {
+            margin-bottom: 1rem;
+            max-width: 50%;
+        }
+
+        &.center {
+            margin: 0 auto;
+            max-width: 70%;
+        }
+
+        &.full-width {
+            width: 100%;
+        }
+
+        &.left {
+            float: left;
+            margin-right: 1rem;
+        }
+
+        &.right {
+            float: right;
+            margin-left: 1rem;
+        }
+    }
+
+    .left + p + *,
+    .right + p + * {
+        clear: both;
     }
 
     .social {
