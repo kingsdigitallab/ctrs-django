@@ -67,6 +67,7 @@
 
 // Colours
 // https://coolors.co/55dde0-33658a-2f4858-f6ae2d-f26419
+// https://coolors.co/2f4858-8e5c3e-754e72-cab7a2-cdcdcd
 
 $global-font-size: 100%;
 $global-width: rem-calc(1920);
@@ -81,6 +82,7 @@ $foundation-palette: (
 $light-gray: #e6e6e6;
 $medium-gray: #cacaca;
 $dark-gray: #8a8a8a;
+$tertiary-color: #7c3b1e;
 $rich-black: #06070e;
 $black: #0a0a0a;
 $white: #fefefe;
@@ -161,8 +163,8 @@ $header-styles: (
 );
 $header-text-rendering: optimizeLegibility;
 $small-font-size: 80%;
-$header-small-font-color: $medium-gray;
-$paragraph-lineheight: 1.6;
+$header-small-font-color: $light-gray;
+$paragraph-lineheight: 1.8;
 $paragraph-margin-bottom: 1rem;
 $paragraph-text-rendering: optimizeLegibility;
 $code-color: $black;
@@ -171,7 +173,7 @@ $code-font-weight: $global-weight-normal;
 $code-background: $light-gray;
 $code-border: 1px solid $medium-gray;
 $code-padding: rem-calc(2 5 1);
-$anchor-color: $primary-color;
+$anchor-color: $tertiary-color;
 $anchor-color-hover: scale-color($anchor-color, $lightness: -14%);
 $anchor-text-decoration: none;
 $anchor-text-decoration-hover: none;
