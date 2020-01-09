@@ -43,10 +43,12 @@ class Command(BaseCommand):
             self.log('done')
 
     def handle_import(self):
+        '''
         # http://localhost:8001/digipal/api/textcontentxml/?@select=*status,id,str,content,*text_content,*item_part,*text,type,*current_item,locus,shelfmark,*repository,place
-        # curl
-        # "http://localhost:8001/digipal/api/textcontentxml/?@select=*status,id,str,content,*text_content,*item_part,group,type,*current_item,locus,shelfmark,*repository,place&@limit=1000"
-        # > arch-content.json
+        curl
+        "http://localhost:8001/digipal/api/textcontentxml/?@select=*status,id,str,content,*text_content,*item_part,group,group_locus,type,*current_item,locus,shelfmark,*repository,place&@limit=1000"
+        > arch-content.json
+        '''
         ret = False
 
         if len(self.options) != 1:
@@ -132,6 +134,7 @@ class Command(BaseCommand):
                     jip.get('group__id', None), None
                 )
                 ab_text.group = ab_text_group
+                ab_text.short_name = jip.get('group_locus', None)
                 ab_text.save()
 
         return True

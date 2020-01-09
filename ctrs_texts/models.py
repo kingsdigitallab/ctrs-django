@@ -59,17 +59,24 @@ class EncodedTextType(AbstractNamedModel):
 
 @register_snippet
 class EncodedText(index.Indexed, TimestampedModel):
+    '''
+    An XML-encoded text.
+    '''
+    # e.g. draft, to-be-reviewed, live
     status = models.ForeignKey(
         'EncodedTextStatus', blank=True, null=True,
         related_name='encoded_texts',
         on_delete=models.SET_NULL
     )
+    # e.g. translation or transcription
     type = models.ForeignKey(
         'EncodedTextType', blank=True, null=True,
         related_name='encoded_texts',
         on_delete=models.SET_NULL
     )
+    # The XML content
     content = models.TextField(blank=True, null=True)
+
     abstracted_text = models.ForeignKey(
         'AbstractedText', blank=False, null=False,
         related_name='encoded_texts',
@@ -140,7 +147,8 @@ class EncodedText(index.Indexed, TimestampedModel):
 
                 ms = etree.Element('span')
                 ms.attrib['class'] = 'ms'
-                ms.text = chr(65 + mi)
+                # ms.text = chr(65 + mi)
+                ms.text = members[mi].short_name
                 child.append(ms)
 
                 reading = etree.Element('span')
@@ -230,11 +238,16 @@ class AbstractedTextType(AbstractNamedModel):
 
 @register_snippet
 class AbstractedText(AbstractNamedModel):
+    '''
+    A Text: either a MS Text, a Version Text or a Work Text
+    '''
+    # E.g. manuscript, version, work
     type = models.ForeignKey(
         'AbstractedTextType', blank=True, null=True,
         related_name='abstracted_texts',
         on_delete=models.SET_NULL
     )
+    # Optional link to the 'parent'
     group = models.ForeignKey(
         'self', blank=True, null=True,
         related_name='members',
@@ -285,8 +298,21 @@ class AbstractedText(AbstractNamedModel):
     def __str__(self):
         return '{} ({})'.format(self.name, self.type)
 
+    def full_name_with_siglum(self):
+        ret = format(self.name)
+        ms_text = self.manuscript_texts.first()
+        if ms_text:
+            ret = ms_text.manuscript.repository.city + ', ' + ret
+        if self.short_name:
+            ret = self.short_name + ': ' + ret
+        return ret
+
 
 class ManuscriptText(models.Model):
+    '''
+    Essentially a m2m relationship
+    between a Manuscript and the Texts it contains.
+    '''
     manuscript = models.ForeignKey(
         'Manuscript', blank=True, null=True,
         related_name='manuscript_texts',
@@ -297,6 +323,7 @@ class ManuscriptText(models.Model):
         related_name='manuscript_texts',
         on_delete=models.SET_NULL
     )
+    # the folio/page range for that text in the manuscript
     locus = models.CharField(max_length=200, null=True, blank=True)
 
     @classmethod
@@ -353,17 +380,12 @@ def get_unicode_from_xml(xmltree, encoding='utf-8',
             ret = re.sub(r'[^>]+$', '', ret)
 
         if remove_root:
-            if 0:
-                ret = re.sub('(?msi).*<root>', '', ret)
-                # GN: why so slow? 40k string with easy regexp, 10s?
-                ret = re.sub('(?msi)</root>.*', '', ret)
-            else:
-                r = [
-                    ret.find('<root>'),
-                    ret.rfind('</root>')
-                ]
-                if r[0] > 0 and r[1] > r[0]:
-                    ret = ret[r[0] + len('<root>'):r[1]]
+            r = [
+                ret.find('<root>'),
+                ret.rfind('</root>')
+            ]
+            if r[0] > 0 and r[1] > r[0]:
+                ret = ret[r[0] + len('<root>'):r[1]]
 
         return ret
 

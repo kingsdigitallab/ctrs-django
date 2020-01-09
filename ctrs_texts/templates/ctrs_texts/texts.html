@@ -18,7 +18,9 @@
         <ul>
           {% for text in version.members.all %}
             <li>
-              <a class="status-{{text.get_status.slug}}" href="{% url 'text_view' text.slug view_default %}">{{ text.name }}</a>
+              <a class="status-{{text.get_status.slug}}" href="{% url 'text_view' text.slug view_default %}">
+                {{ text.full_name_with_siglum }}
+              </a>
             </li>
           {% endfor %}
         </ul>
