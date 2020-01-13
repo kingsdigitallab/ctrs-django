@@ -442,6 +442,20 @@ footer {
 
 // See media queries
 
+.caption {
+    font-size: rem-calc(14);
+    font-style: italic;
+    margin-top: .5rem;
+}
+
+.image-block {
+    width: 100%;
+
+    img {
+        width: 100%;
+    }
+}
+
 /* 5. Social media */
 
 .social {
@@ -550,6 +564,26 @@ footer {
     header {
         h1 {
             font-size: rem-calc(32);
+        }
+    }
+
+    .image-block {
+
+        &.float-left {
+            margin-right: 1rem;
+        }
+
+        &.float-right {
+            margin-left: 1rem;
+        }
+
+        &.float-left,
+        &.float-right {
+            width: 50%;
+
+            img {
+                width: 100%; 
+            }
         }
     }
 
