@@ -456,6 +456,10 @@ footer {
     }
 }
 
+.richtext-image {
+    margin-bottom: 1rem;
+}
+
 /* 5. Social media */
 
 .social {
@@ -598,7 +602,6 @@ footer {
     .richtext-image {
         &.left,
         &.right {
-            margin-bottom: 1rem;
             max-width: 50%;
         }
 
