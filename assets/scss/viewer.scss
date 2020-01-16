@@ -1,0 +1,16 @@
+/* Style for the side by side viewer */
+
+@import 'settings';
+
+.settings-toggler {
+    font-family: $header-font-family;
+    font-weight: 700;
+    text-transform: uppercase;
+}
+
+.label {
+    &.tertiary {
+        background: white;
+        color: $primary-color;
+    }
+}
