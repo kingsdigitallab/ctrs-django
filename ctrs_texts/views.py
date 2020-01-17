@@ -2,10 +2,11 @@
 from django.shortcuts import render
 from ctrs_texts.models import AbstractedText, EncodedText, EncodedTextType
 
-# Create your views here.
-
 
 def view_text_viewer(request, text_slug, view_slug='transcription'):
+    '''
+    Deprecated: early version of text viewer.
+    '''
     text_views = EncodedTextType.get_all()
     for k, v in text_views.items():
         if k != view_slug:
@@ -24,6 +25,10 @@ def view_text_viewer(request, text_slug, view_slug='transcription'):
 
 
 def view_texts(request):
+    '''
+    The list of all Works, Versions and Texts
+    with links to the Text Viewer.
+    '''
     context = {
         'works': AbstractedText.objects.filter(
             # encoded_texts__status__slug='to-be-reviewed'
