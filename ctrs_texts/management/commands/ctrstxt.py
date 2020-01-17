@@ -151,4 +151,6 @@ ACTION:
     import all the text content and metadata from FILE
     FILE: a json file obtained from archetype API,
           see inline comment (handle_import)
+  delete
+    delete all the text concent records from the DB
 '''.format(self.help))

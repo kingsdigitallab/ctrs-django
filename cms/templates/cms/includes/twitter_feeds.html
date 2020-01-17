@@ -1,6 +1,6 @@
 {% load twitterhut_tags %}
 
-{% user_timeline screen_name as timeline %}
+{% user_timeline TWITTER_SCREEN_NAME as timeline %}
 {% for tweet in timeline %}
 <div class="cell social">
     {% if tweet.retweeted_status %}
@@ -53,7 +53,7 @@
         <a href="//twitter.com/intent/retweet?tweet_id={{ tweet.id_str }}" class="retweet" target="_blank">
             <i class="fa fa-retweet"></i>
         </a>
-        <a href="//twitter.com/{{ screen_name }}/status/{{ tweet.id_str }}" class="float-right">
+        <a href="//twitter.com/{{ TWITTER_SCREEN_NAME }}/status/{{ tweet.id_str }}" class="float-right">
             {{ tweet.created_at|tweet_date:'d M Y' }}
         </a>
     </p>

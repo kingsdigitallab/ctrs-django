@@ -23,7 +23,7 @@ class AbstractNamedModel(index.Indexed, TimestampedModel):
 
     class Meta:
         abstract = True
-        ordering = ['name']
+        ordering = ['short_name', 'name']
 
     def __str__(self):
         return self.short_name or self.name
@@ -312,6 +312,8 @@ class ManuscriptText(models.Model):
     '''
     Essentially a m2m relationship
     between a Manuscript and the Texts it contains.
+
+    TODO: convert to 12m => move manuscript & locus fields to abstracted_text
     '''
     manuscript = models.ForeignKey(
         'Manuscript', blank=True, null=True,
