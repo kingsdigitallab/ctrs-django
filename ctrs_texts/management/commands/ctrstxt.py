@@ -44,7 +44,6 @@ class Command(BaseCommand):
 
     def handle_import(self):
         '''
-        # http://localhost:8001/digipal/api/textcontentxml/?@select=*status,id,str,content,*text_content,*item_part,*text,type,*current_item,locus,shelfmark,*repository,place
         curl
         "http://localhost:8001/digipal/api/textcontentxml/?@select=*status,id,str,content,*text_content,*item_part,group,group_locus,type,*current_item,locus,shelfmark,*repository,place&@limit=1000"
         > arch-content.json
