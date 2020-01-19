@@ -80,7 +80,7 @@ def append_xml_element(parent_element, tag_name, text=None, **attributes):
     if attributes:
         attributes = {k.rstrip('_'): v for k, v in attributes.items()}
 
-    ret = ET.SubElement(parent_element, tag_name, *attributes)
+    ret = ET.SubElement(parent_element, tag_name, attributes)
     if text is not None:
         ret.text = text
     return ret

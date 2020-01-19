@@ -48,16 +48,22 @@ class EncodedText(index.Indexed, TimestampedModel, ImportedModel):
     )
 
     @classmethod
-    def update_or_create(cls, abstracted_text, type_name, content, status):
+    def update_or_create(
+        cls, imported_id, abstracted_text, type_name, content, status
+    ):
         encoded_type, _ = EncodedTextType.objects.get_or_create(
             slug=slugify(type_name),
             defaults={'name': type_name}
         )
 
         rec, created = cls.objects.update_or_create(
-            abstracted_text=abstracted_text,
-            type=encoded_type,
-            defaults={'content': content, 'status': status}
+            imported_id=imported_id,
+            defaults={
+                'content': content,
+                'status': status,
+                'abstracted_text': abstracted_text,
+                'type': encoded_type,
+            }
         )
 
         return rec, created
@@ -153,10 +159,13 @@ class Repository(NamedModel, ImportedModel):
     city = models.CharField(max_length=200, null=False, blank=False)
 
     @classmethod
-    def update_or_create(cls, place, name):
+    def update_or_create(cls, imported_id, place, name):
         rec, created = cls.objects.update_or_create(
-            city=place, name=name,
-            defaults={'slug': slugify('{}-{}'.format(place, name))}
+            imported_id=imported_id,
+            defaults={
+                'slug': slugify('{}-{}'.format(place, name)),
+                'city': place, 'name': name,
+            }
         )
 
         return rec, created
@@ -175,9 +184,12 @@ class Manuscript(TimestampedModel, ImportedModel):
     shelfmark = models.CharField(max_length=200, null=True, blank=True)
 
     @classmethod
-    def update_or_create(cls, repository, shelfmark):
+    def update_or_create(cls, imported_id, repository, shelfmark):
         rec, created = cls.objects.update_or_create(
-            repository=repository, shelfmark=shelfmark,
+            imported_id=imported_id,
+            defaults={
+                'repository': repository, 'shelfmark': shelfmark,
+            }
         )
 
         return rec, created
@@ -204,6 +216,15 @@ class AbstractedText(NamedModel, ImportedModel):
     '''
     A Text: either a MS Text, a Version Text or a Work Text
     '''
+    # Optional link to a MS. Not used for Version or Work.
+    manuscript = models.ForeignKey(
+        'Manuscript', blank=True, null=True,
+        related_name='manuscript_texts',
+        on_delete=models.SET_NULL
+    )
+    # the folio/page range for that text in the manuscript
+    locus = models.CharField(max_length=200, null=True, blank=True)
+
     # E.g. manuscript, version, work
     type = models.ForeignKey(
         'AbstractedTextType', blank=True, null=True,
@@ -226,78 +247,35 @@ class AbstractedText(NamedModel, ImportedModel):
         return ret
 
     @classmethod
-    def update_or_create(cls, manuscript_text=None, type=None, name=None):
-        rec = None
-        created = False
+    def update_or_create(
+        cls, imported_id, type, name=None, manuscript=None, locus=None
+    ):
+        assert manuscript or name
 
-        assert manuscript_text or name
+        if name is None:
+            name = '{}, {}'.format(manuscript, locus)
 
-        if manuscript_text:
-            rec = manuscript_text.abstracted_text
-            if rec is None:
-                created = True
-                rec = cls()
-            if name is None:
-                name = str(manuscript_text)
-            rec.name = name
-            rec.type = type
-            rec.slug = slugify(str(rec))
-            rec.save()
-        else:
-            rec, created = cls.objects.update_or_create(
-                slug=slugify(name),
-                defaults={
-                    'name': name,
-                    'type': type
-                }
-            )
+        defaults = {
+            'name': name,
+            'type': type,
+            'locus': locus,
+            'manuscript': manuscript,
+            'slug': slugify(name),
+        }
 
-        if manuscript_text:
-            manuscript_text.abstracted_text = rec
-            manuscript_text.save()
-
-        return rec, created
+        return cls.objects.update_or_create(
+            imported_id=imported_id,
+            defaults=defaults
+        )
 
     def __str__(self):
         return '{} ({})'.format(self.name, self.type)
 
     def full_name_with_siglum(self):
         ret = format(self.name)
-        ms_text = self.manuscript_texts.first()
-        if ms_text:
-            ret = ms_text.manuscript.repository.city + ', ' + ret
+        ms = self.manuscript
+        if ms:
+            ret = ms.repository.city + ', ' + ret
         if self.short_name:
             ret = self.short_name + ': ' + ret
         return ret
-
-
-class ManuscriptText(models.Model):
-    '''
-    Essentially a m2m relationship
-    between a Manuscript and the Texts it contains.
-
-    TODO: convert to 12m => move manuscript & locus fields to abstracted_text
-    '''
-    manuscript = models.ForeignKey(
-        'Manuscript', blank=True, null=True,
-        related_name='manuscript_texts',
-        on_delete=models.SET_NULL
-    )
-    abstracted_text = models.ForeignKey(
-        'AbstractedText', blank=True, null=True,
-        related_name='manuscript_texts',
-        on_delete=models.SET_NULL
-    )
-    # the folio/page range for that text in the manuscript
-    locus = models.CharField(max_length=200, null=True, blank=True)
-
-    @classmethod
-    def update_or_create(cls, manuscript, locus):
-        rec, created = cls.objects.update_or_create(
-            manuscript=manuscript, locus=locus,
-        )
-
-        return rec, created
-
-    def __str__(self):
-        return '{}, {}'.format(self.manuscript, self.locus)
