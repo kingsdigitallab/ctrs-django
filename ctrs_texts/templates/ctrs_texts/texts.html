@@ -4,7 +4,11 @@
 
 {% block title %}
   <div class="container">
-    <h2>Texts</h2>
+    <h2>Texts
+      <a class="legend" href="{% url 'text_viewer' %}">
+        (New Text Viewer)
+      </a>
+    </h2>
   </div>
 {% endblock %}
 
@@ -13,16 +17,16 @@
     {% for work in works %}
       {% if work.slug == 'declaration' or DEBUG %}
         {% if not forloop.first %}<hr>{% endif %}
-        <h3><a class="status-{{work.get_status.slug}}" href="{% url 'text_view' work.slug view_default %}">{{ work.name }}</a></h3>
+        <h3><a class="status-{{work.get_status.slug}}" href="{% url 'text_viewer_legacy' work.slug view_default %}">{{ work.name }}</a></h3>
         {% for version in work.members.all %}
-          <h4><a class="status-{{version.get_status.slug}}" href="{% url 'text_view' version.slug view_default %}">
+          <h4><a class="status-{{version.get_status.slug}}" href="{% url 'text_viewer_legacy' version.slug view_default %}">
             {{ version.short_name}}: {{ version.name }}
           </a></h4>
           <ul>
             {% for text in version.members.all %}
               {% if text.short_name != 'HM1' and text.short_name != 'HM2' %}
                 <li>
-                  <a class="status-{{text.get_status.slug}}" href="{% url 'text_view' text.slug view_default %}">
+                  <a class="status-{{text.get_status.slug}}" href="{% url 'text_viewer_legacy' text.slug view_default %}">
                     {{ text.full_name_with_siglum }}
                   </a>
                 </li>
