@@ -33,7 +33,7 @@ def view_api_texts(request):
 
     abstracted_texts = abstracted_texts.select_related(
         'manuscript__repository', 'type'
-    ).order_by('-type__slug', 'short_name')
+    ).order_by('-type__slug', 'short_name', 'locus')
 
     texts = []
     for text in abstracted_texts:
@@ -94,7 +94,7 @@ def view_api_text_chunk(
                 ['view', view],
                 ['unit', unit],
                 ['location', location],
-                ['chunk', encoded_text.content],
+                ['chunk', encoded_text.content_variants()],
             ])],
         ])
 
