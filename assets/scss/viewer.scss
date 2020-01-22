@@ -2,15 +2,30 @@
 
 @import 'settings';
 
-.settings-toggler {
-    font-family: $header-font-family;
-    font-weight: 700;
-    text-transform: uppercase;
+.canvas-trigger {
+    padding-bottom: 0;
 }
 
 .label {
     &.tertiary {
         background: white;
         color: $primary-color;
+    }
+}
+
+.off-canvas-absolute {
+    padding-left: .5rem;
+}
+
+.text-viewer {
+    h2 {
+        font-size: 1.25rem;
+        padding-left: 1rem;
+        padding-right: 1rem;
+    }
+
+    .label {
+        border-radius: 4px;
+        padding-top: 1rem;
     }
 }

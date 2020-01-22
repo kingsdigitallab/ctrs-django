@@ -14,33 +14,16 @@
 {% block main %}
 
 <div class="grid-x grid-margin-x">
-    <div class="cell">
-        <div class="grid-x grid-margin-x">
-            <div class="cell medium-6">
-                <button class="settings-toggler button hollow small expanded" type="button" data-toggle="offCanvasLeft"><i class="fas fa-cog"></i> Settings</button>
-            </div>
-            <div class="cell medium-6">
-                <button class="settings-toggler button hollow small expanded" type="button" data-toggle="offCanvasRight"><i class="fas fa-cog"></i> Settings</button>
-            </div>
-        </div>
-    </div>
     <div class="cell medium-6">
         <div class="off-canvas-wrapper">
-            <div class="off-canvas-absolute position-right" id="offCanvasLeft" data-off-canvas>
-                <h3>Text</h3>
-                <h4><a href="#"><span class="label secondary">W</span> Work</a></h4>
-                <h4>Versions</h4>
+            <div class="off-canvas-absolute position-left" id="offCanvasLeft" data-off-canvas>
+                <h3>Texts</h3>
+                <ul class="menu vertical">
+                    <li><a href="#"><span class="label secondary">W</span> Work</a></li>
+                </ul>                <h4>Versions</h4>
                 <ul class="menu vertical">
                     <li>
                         <a href="#"><span class="label secondary">V1</span> File copy / Haldenstone</a>
-                        <div class="switch tiny">
-                            <input class="switch-input" id="language" type="checkbox" name="exampleSwitch">
-                            <label class="switch-paddle" for="language">
-                                <span class="show-for-sr">Language</span>
-                                <span class="switch-inactive" aria-hidden="true">LAT</span>
-                                <span class="switch-active" aria-hidden="true">ENG</span>
-                            </label>
-                        </div>
                     </li>
                     <li><a href="#"><span class="label secondary">V2</span> Dossier in MSS of Fordun</a></li>
                     <li><a href="#"><span class="label secondary">V3</span> Scotichronicon</a></li>
@@ -56,9 +39,16 @@
                 </ul>
             </div>
             <div class="off-canvas-content" data-off-canvas-content>
-                <div class="card">
+                <div class="card text-viewer">
                     <div class="card-divider">
-                        <h2>Object selected</h2>
+                        <div class="button-group">
+                            <a class="button hollow arrow-only canvas-trigger" data-toggle="offCanvasLeft">
+                                <i class="fas fa-caret-right fa-2x"></i>
+                                <span class="show-for-sr">List of texts</span>
+                            </a>
+                            <h2>Title of text selected</h2>
+                            <span class="label">O</span>
+                        </div>
                     </div>
                     <div class="card-section">
                         <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
@@ -87,21 +77,15 @@
     
     <div class="cell medium-6">
         <div class="off-canvas-wrapper">
-            <div class="off-canvas-absolute position-right" id="offCanvasRight" data-off-canvas>
-                <h3>Text</h3>
-                <h4><a href="#"><span class="label secondary">W</span> Work</a></h4>
+            <div class="off-canvas-absolute position-left" id="offCanvasRight" data-off-canvas>
+                <h3>Texts</h3>
+                <ul class="menu vertical">
+                    <li><a href="#"><span class="label secondary">W</span> Work</a></li>
+                </ul>
                 <h4>Versions</h4>
                 <ul class="menu vertical">
                     <li>
                         <a href="#"><span class="label secondary">V1</span> File copy / Haldenstone</a>
-                        <div class="switch tiny">
-                            <input class="switch-input" id="language" type="checkbox" name="exampleSwitch">
-                            <label class="switch-paddle" for="language">
-                                <span class="show-for-sr">Language</span>
-                                <span class="switch-inactive" aria-hidden="true">LAT</span>
-                                <span class="switch-active" aria-hidden="true">ENG</span>
-                            </label>
-                        </div>
                     </li>
                     <li><a href="#"><span class="label secondary">V2</span> Dossier in MSS of Fordun</a></li>
                     <li><a href="#"><span class="label secondary">V3</span> Scotichronicon</a></li>
@@ -117,9 +101,16 @@
                 </ul>
             </div>
             <div class="off-canvas-content" data-off-canvas-content>
-                <div class="card">
+                <div class="card text-viewer">
                     <div class="card-divider">
-                        <h2>Object selected</h2>
+                        <div class="button-group">
+                            <a class="button hollow arrow-only canvas-trigger" data-toggle="offCanvasRight">
+                                <i class="fas fa-caret-right fa-2x"></i>
+                                <span class="show-for-sr">List of texts</span>
+                            </a>
+                            <h2>Title of text selected</h2>
+                            <span class="label secondary">V4</span>
+                        </div>
                     </div>
                     <div class="card-section">
                         <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
