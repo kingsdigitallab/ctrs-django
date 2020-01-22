@@ -1,0 +1,31 @@
+/* Style for the side by side viewer */
+
+@import 'settings';
+
+.canvas-trigger {
+    padding-bottom: 0;
+}
+
+.label {
+    &.tertiary {
+        background: white;
+        color: $primary-color;
+    }
+}
+
+.off-canvas-absolute {
+    padding-left: .5rem;
+}
+
+.text-viewer {
+    h2 {
+        font-size: 1.25rem;
+        padding-left: 1rem;
+        padding-right: 1rem;
+    }
+
+    .label {
+        border-radius: 4px;
+        padding-top: 1rem;
+    }
+}

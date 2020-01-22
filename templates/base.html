@@ -12,6 +12,9 @@
   {% compress css %}
   <link rel="stylesheet" type="text/x-scss" href="{% static 'scss/normalize.css' %}">
   <link rel="stylesheet" type="text/x-scss" href="{% static 'scss/main.scss' %}">
+
+  {% block custom_css %}
+  {% endblock %}
   {% endcompress %}
 
   <link rel="shortcut icon" type="image/png" href="{% static 'images/favicon.png' %}">
@@ -38,8 +41,7 @@
   <main>
     <div class="grid-container">
       {% block title %}{% endblock %}
-      {% block main %}
-      {% endblock %}
+      {% block main %}{% endblock %}
     </div>
   </main>
 

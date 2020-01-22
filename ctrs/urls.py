@@ -1,6 +1,7 @@
 from django.conf import settings
 from django.urls import include, path, re_path
 from django.contrib import admin
+from django.views.generic import TemplateView
 
 from kdl_ldap.signal_handlers import \
     register_signal_handlers as kdl_ldap_register_signal_hadlers
@@ -11,12 +12,18 @@ kdl_ldap_register_signal_hadlers()
 admin.autodiscover()
 
 urlpatterns = [
+    path('foo/', TemplateView.as_view(template_name='foo.html'))
+]
+
+urlpatterns = [
     path('admin/', admin.site.urls),
 
     # path('digger/', include('activecollab_digger.urls')),
 
     path('wagtail/', include('wagtail.admin.urls')),
     path('documents/', include('wagtail.documents.urls')),
+    path('viewer/', TemplateView.as_view(
+        template_name='viewer/mocks/viewer.html')),
     path('', include('ctrs_texts.urls')),
     path('', include('wagtail.core.urls')),
 ]
