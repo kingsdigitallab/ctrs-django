@@ -1,5 +1,6 @@
 /*jshint esversion: 6 */
 
+// Content loading statuses
 const STATUS_INITIAL = 0;
 const STATUS_TO_FETCH = 1;
 const STATUS_FETCHING = 2;
@@ -16,7 +17,37 @@ $(() => {
   let app = new Vue({
     el: '#text-viewer',
     data: {
+      /*
+      List of all available texts. Exactly as returned by /api/texts/.
+
+      texts: [{
+        id: <TEXT_ID>,
+        type: 'manuscript'|'version'|'work',
+        list_heading: 'manuscript'|'version'|'work',
+        attributes: {
+          siglum: ,
+          name: ,
+          group: <ID_OF_A_TEXT>,
+        }
+      }, [...]]
+      */
       texts: [],
+      /*
+      List of all UI Blocks and their Views.
+      A block is a UI unit for a particular text.
+      A view is a UI unit for a view of that text.
+
+      blocks: [{
+        text: <REFERENCE TO this.texts[i]>,
+        comparative: <BOOLEAN>,
+        views: [
+          status: STATUS_XXX,
+          type: 'transcription'|'translation'|'histogram'|...
+          chunk: <HTML content for this view type of the text>
+        ]
+      }, [...]
+      ]
+      */
       blocks: [],
     },
     mounted() {
@@ -30,6 +61,8 @@ $(() => {
     watch: {
       blocks: {
         handler: function() {
+          // Something has changed in a block or view,
+          // fetch view content if needed.
           let qs = '';
           for (let block of this.blocks) {
             for (let view of block.views) {
@@ -42,8 +75,19 @@ $(() => {
         deep: true
       }
     },
+    computed: {
+      texts_list: function() {
+        let type = '';
+        for (let text of this.texts) {
+          text.list_heading = (text.type != type) ? text.type : '';
+          type = text.type;
+        }
+        return this.texts;
+      },
+    },
     methods: {
       on_view_changed: function(block, view) {
+        // a view needs its content to be fetched
         view.status = STATUS_FETCHING;
         let self = this;
         $.getJSON('/api/texts/'+block.text.id+'/'+view.type+'/whole/whole/')
@@ -56,6 +100,16 @@ $(() => {
           view.status = STATUS_ERROR;
         });
       },
+
+      on_change_text: function(block, text) {
+        // change the text of a block according to the user selection in the UI
+        block.text = text;
+        for (let view of block.views) {
+          // this will trigger a request for content
+          view.status = STATUS_TO_FETCH;
+        }
+      },
+
       update_query_string: function() {
         // update query string with current state of viewer
         // e.g. ?blocks=506:transcription,transcription;495:transcription
@@ -66,9 +120,11 @@ $(() => {
         qs = window.location.href.replace(/^([^?]+)([^#]+)(.*)$/, '$1?'+qs+'$3');
         history.pushState(null, '', qs);
       },
+
       init_blocks: function () {
-        // original copy
         let self = this;
+        // Create blocks from the 'blocks' param in the query strings
+        // e.g. ?blocks=506:transcription,transcription;495:transcription
         let query_string_blocks = window.location.href.replace(/.*blocks=([^#&]+).*/, '$1');
         if (query_string_blocks != window.location) {
           for (let block_info of query_string_blocks.split(';')) {
@@ -84,7 +140,9 @@ $(() => {
             }
           }
         }
+        // Default blocks, if needed
         if (this.blocks.length < 1) {
+          // block for the 'original copy'
           this.blocks.push({
             text: self.get_default_text(),
             views: [{type: 'transcription', chunk: null, status: STATUS_TO_FETCH}],
@@ -92,6 +150,7 @@ $(() => {
           });
         }
         if (this.blocks.length < 2) {
+          // placeholder block
           this.blocks.push({
             text: null,
             views: [{type: 'transcription', chunk: 'placeholder', status: STATUS_FETCHED}],
@@ -100,6 +159,7 @@ $(() => {
         }
 
         Vue.nextTick(function() {
+          // Fundation JS re-initialisation
           $('.off-canvas-absolute:not(.foundation-initialised)').each(function() {
             $(this).addClass('foundation-initialised');
             new window.Foundation.OffCanvas($(this));
@@ -107,6 +167,7 @@ $(() => {
 
         });
       },
+
       get_text_from_id_or_siglum: function (id_or_siglum) {
         for (let text of this.texts) {
           if (
@@ -118,15 +179,11 @@ $(() => {
         }
         return null;
       },
+
       get_default_text: function () {
         return this.get_text_from_id_or_siglum('O');
       },
-      on_change_text: function(block, text) {
-        block.text = text;
-        for (let view of block.views) {
-          view.status = STATUS_TO_FETCH;
-        }
-      }
+
     }
   });
 });
