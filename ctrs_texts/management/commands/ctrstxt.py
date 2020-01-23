@@ -138,8 +138,12 @@ class Command(BaseCommand):
                 )
                 models_imported_ids[AbstractedText].append(jip['id'])
 
+            # clean the input text
+            content = (jtcxml['content'] or '').replace(
+                '&nbsp;', '').replace('\xA0', ' ')
+
             EncodedText.update_or_create(
-                jtc['id'], ab_txt, jtc['type'], jtcxml['content'], status
+                jtc['id'], ab_txt, jtc['type'], content, status
             )
             models_imported_ids[EncodedText].append(jtc['id'])
 
