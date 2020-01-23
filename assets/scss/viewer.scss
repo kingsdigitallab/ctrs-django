@@ -11,7 +11,7 @@
     }
 
     .card-section {
-        height: 50vh;  // It doesn't really matter the value, but height needs
+        height: 0vh;  // It doesn't really matter the value, but height needs
                        // to be declared for overflow to work.
         overflow-y: auto;
     }
