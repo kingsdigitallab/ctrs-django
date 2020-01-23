@@ -11,9 +11,13 @@
     }
 
     .card-section {
-        height: 100vh;  // It doesn't really matter the value, but height needs
-                        // to be declared for overflow to work.
+        height: 50vh;  // It doesn't really matter the value, but height needs
+                       // to be declared for overflow to work.
         overflow-y: auto;
+    }
+
+    &.empty {
+        opacity: .5;
     }
 
     h2 {
