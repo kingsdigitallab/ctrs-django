@@ -58,6 +58,15 @@ $(() => {
         self.init_blocks();
       });
     },
+    computed: {
+      text_types: function() {
+        return [
+          // {label: 'Work', type: 'work'},
+          {label: 'Versions', type: 'version'},
+          {label: 'Manuscripts', type: 'manuscript'},
+        ];
+      },
+    },
     watch: {
       blocks: {
         handler: function() {
@@ -74,16 +83,6 @@ $(() => {
         },
         deep: true
       }
-    },
-    computed: {
-      texts_list: function() {
-        let type = '';
-        for (let text of this.texts) {
-          text.list_heading = (text.type != type) ? text.type : '';
-          type = text.type;
-        }
-        return this.texts;
-      },
     },
     methods: {
       on_view_changed: function(block, view) {
