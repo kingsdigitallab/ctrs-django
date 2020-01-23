@@ -23,8 +23,8 @@
 
                 <ul class="menu vertical">
                     <template v-for="text in texts">
-                      <li :class="{selected: text == block.text}" @click="on_change_text(block, text)">
-                        {{ text.attributes.siglum }}: {{ text.attributes.name }}
+                      <li :class="{selected: text == block.text} + ' text'" @click="on_change_text(block, text)">
+                        <span class="label secondary">{{ text.attributes.siglum }}</span> {{ text.attributes.name }}
                       </li>
                     </template>
                 </ul>
@@ -54,13 +54,14 @@
             </div>
 
             <div class="off-canvas-content" data-off-canvas-content>
-                <div class="card text-viewer">
+                <div class="card block-view">
                     <div class="card-divider">
                         <div class="button-group">
                             <a class="button hollow arrow-only canvas-trigger" :data-toggle="'offCanvas-'+block_index">
                                 <i class="fas fa-caret-right fa-2x"></i>
                                 <span class="show-for-sr">List of texts</span>
                             </a>
+                            <span v-if="block.text" class="label secondary">{{ block.text.attributes.siglum }}</span>
                             <h2>
                                 <template v-if="block.text">
                                     {{ block.text.attributes.name }}
@@ -69,11 +70,10 @@
                                     Placeholder
                                 </template>
                             </h2>
-                            <span v-if="block.text" class="label">{{ block.text.attributes.siglum }}</span>
                         </div>
                     </div>
 
-                    <div v-for="view in block.views" class="card-section">
+                    <div v-for="view in block.views" :class="['card-section', block.text ? block.text.type : '']">
                         <template v-if="view.status == 3">
 
                             <!-- show list of MS texts in a version -->

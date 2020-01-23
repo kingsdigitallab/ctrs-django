@@ -2,30 +2,58 @@
 
 @import 'settings';
 
-.canvas-trigger {
-    padding-bottom: 0;
-}
+.block-view {
+    height: calc(100vh - 330px);
+    margin-bottom: 0;
 
-.label {
-    &.tertiary {
-        background: white;
-        color: $primary-color;
+    .card-divider {
+        display: block;
     }
-}
 
-.off-canvas-absolute {
-    padding-left: .5rem;
-}
+    .card-section {
+        height: 100vh;  // It doesn't really matter the value, but height needs
+                        // to be declared for overflow to work.
+        overflow-y: auto;
+    }
 
-.text-viewer {
     h2 {
         font-size: 1.25rem;
-        padding-left: 1rem;
+        padding-left: .5rem;
         padding-right: 1rem;
     }
 
     .label {
-        border-radius: 4px;
+        background: scale-color($primary-color, $lightness: 80%);
+        border: 1px solid scale-color($primary-color, $lightness: 50%);
+        margin-left: 1rem;
+        margin-top: -1px;
         padding-top: 1rem;
+    }
+}
+
+.canvas-trigger {
+    padding-bottom: 0;
+}
+
+.off-canvas-absolute {
+    padding-left: .5rem;
+    padding-right: .5rem;
+}
+
+#text-viewer {
+    .menu {
+
+        li {
+            &.text {
+                border-top: 1px solid $white;
+                line-height: 1.4;
+                padding-left: 30px;
+                text-indent: -30px;
+
+                span {
+                    text-indent: 0;
+                }
+            }
+        }
     }
 }
