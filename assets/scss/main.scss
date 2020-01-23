@@ -348,6 +348,17 @@ main {
     line-height: 1.75;
 }
 
+.metadata {
+    background: scale-color($secondary-color, $lightness: 50%);
+    padding: .5rem 1rem;
+    text-align: right;
+
+    .label {
+        color: $black;
+        padding-top: 8px;
+    }
+}
+
 .more {
     font-size: .875rem;
 }

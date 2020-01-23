@@ -8,6 +8,10 @@
 
     .card-divider {
         display: block;
+
+        .label {
+            padding-top: 1rem;
+        }
     }
 
     .card-section {
@@ -17,6 +21,12 @@
     }
 
     &.empty {
+        border-color: $light-gray;
+
+        .card-divider {
+            background: scale-color($light-gray, $lightness: 20%);
+        }
+
         .card-section {
             text-align: center;
 
@@ -50,7 +60,6 @@
         border: 1px solid scale-color($primary-color, $lightness: 50%);
         margin-left: 1rem;
         margin-top: -1px;
-        padding-top: 1rem;
     }
 }
 
@@ -65,8 +74,13 @@
 
 #text-viewer {
     .menu {
-
         li {
+            padding-bottom: 6px;
+
+            &.manuscript {
+                background: scale-color($primary-color, $lightness: 94%);
+            }
+
             &.text {
                 border-top: 1px solid $white;
                 line-height: 1.4;
@@ -76,6 +90,14 @@
                 span {
                     text-indent: 0;
                 }
+            }
+
+            &.version {
+                background: scale-color($primary-color, $lightness: 87%);
+            }
+
+            &.work {
+                background: scale-color($primary-color, $lightness: 80%);
             }
         }
     }
