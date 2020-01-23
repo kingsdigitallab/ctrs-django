@@ -98,6 +98,14 @@ $(() => {
             comparative: false,
           });
         }
+
+        Vue.nextTick(function() {
+          $('.off-canvas-absolute:not(.foundation-initialised)').each(function() {
+            $(this).addClass('foundation-initialised');
+            new window.Foundation.OffCanvas($(this));
+          });
+
+        });
       },
       get_text_from_id_or_siglum: function (id_or_siglum) {
         for (let text of this.texts) {
