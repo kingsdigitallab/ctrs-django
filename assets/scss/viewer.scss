@@ -17,7 +17,26 @@
     }
 
     &.empty {
-        opacity: .5;
+        .card-section {
+            text-align: center;
+
+            &::before {
+                content: "\f055";
+                display: none;
+                font-family: "Font Awesome 5 Pro";
+                font-weight: 900;
+            }
+
+            .fa-plus-circle {
+                padding-top: 10vh;
+                height: 30vh;
+                width: 100px;
+
+                path {
+                    fill: #d8d8d8;
+                }
+            }
+        }
     }
 
     h2 {
