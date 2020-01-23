@@ -12,10 +12,6 @@ kdl_ldap_register_signal_hadlers()
 admin.autodiscover()
 
 urlpatterns = [
-    path('foo/', TemplateView.as_view(template_name='foo.html'))
-]
-
-urlpatterns = [
     path('admin/', admin.site.urls),
 
     # path('digger/', include('activecollab_digger.urls')),

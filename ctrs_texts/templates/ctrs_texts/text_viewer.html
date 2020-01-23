@@ -1,35 +1,110 @@
-{% extends 'base.html' %}
-{% load staticfiles %}
+{% extends "base.html" %}
+{% load staticfiles compress %}
 
-{% block meta_title %}Text Viewer{% endblock %}
+{% block meta_title %}Side by side viewer integrated{% endblock %}
+
+{% block custom_css %}
+<link rel="stylesheet" type="text/x-scss" href="{% static 'scss/viewer.scss' %}">
+{% endblock %}
+
+{% block title %}
+<h1>Side by side viewer</h1>
+{% endblock %}
 
 {% block main %}
+{% verbatim %}
 
-  <div class="container">
-    <nav class="breadcrumb">
-      <h2>
-        <a class="legend" href="{% url 'texts' %}">Texts</a>
-        &gt;
-        Text Viewer
-      </h2>
-    </nav>
-  </div>
+<div id="text-viewer" class="grid-x grid-margin-x">
 
-  {% verbatim %}
-    <div class="container text-viewer">
+    <div v-for="(block, block_index) in blocks" class="cell medium-6">
+        <div class="off-canvas-wrapper">
+            <div class="off-canvas-absolute position-left" :id="'offCanvas-'+block_index" data-off-canvas>
+                <h3>Texts</h3>
 
-      <div class="dashboard">
-      </div>
+                <ul class="menu vertical">
+                    <template v-for="text in texts">
+                      <li :class="{selected: text == block.text}" @click="on_change_text(block, text)">
+                        {{ text.attributes.siglum }}: {{ text.attributes.name }}
+                      </li>
+                    </template>
+                </ul>
 
-      <div class="content-area">
+                <!--
+                <ul class="menu vertical">
+                    <li><a href="#"><span class="label secondary">W</span> Work</a></li>
+                </ul>
+                <h4>Versions</h4>
+                <ul class="menu vertical">
+                    <li>
+                        <a href="#"><span class="label secondary">V1</span> File copy / Haldenstone</a>
+                    </li>
+                    <li><a href="#"><span class="label secondary">V2</span> Dossier in MSS of Fordun</a></li>
+                    <li><a href="#"><span class="label secondary">V3</span> Scotichronicon</a></li>
+                    <li><a href="#"><span class="label secondary">V4</span> Bower’s 40-work book and its derivatives</a></li>
+                    <li><a href="#"><span class="label secondary">V5</span> Book VIII of the Book of Pluscarden</a></li>
+                    <li><a href="#"><span class="label secondary">V6</span> Book IX of the Book of Pluscarden</a></li>
+                </ul>
+                <h4>Manuscripts</h4>
+                <ul class="menu vertical">
+                    <li><a class="" href="#"><span class="label secondary">B</span> Edinburgh, NRS MS GD45/26/48 <span class="label tertiary">V3</span></a></li>
+                    <li><a class="" href="#"><span class="label secondary">C</span> Cambridge, Corpus Christi College MS 171B, ff.272r–273r <span class="label tertiary">V3</span></a></li>
+                    <li><a class="" href="#"><span class="label secondary">CA</span> Edinburgh, NLS MS Adv. 35.1.7, pp.345–346 <span class="label tertiary">V4</span></a></li>
+                </ul>
+                -->
+            </div>
 
-      </div>
+            <div class="off-canvas-content" data-off-canvas-content>
+                <div class="card text-viewer">
+                    <div class="card-divider">
+                        <div class="button-group">
+                            <a class="button hollow arrow-only canvas-trigger" :data-toggle="'offCanvas-'+block_index">
+                                <i class="fas fa-caret-right fa-2x"></i>
+                                <span class="show-for-sr">List of texts</span>
+                            </a>
+                            <h2>
+                                <template v-if="block.text">
+                                    {{ block.text.attributes.name }}
+                                </template>
+                                <template v-else>
+                                    Placeholder
+                                </template>
+                            </h2>
+                            <span v-if="block.text" class="label">{{ block.text.attributes.siglum }}</span>
+                        </div>
+                    </div>
 
+                    <div v-for="view in block.views" class="card-section">
+                        <template v-if="view.status == 3">
+
+                            <!-- show list of MS texts in a version -->
+                            <ul v-if="block.text && block.text.type=='version'">
+                                <template v-for="subtext in texts">
+                                    <li v-if="subtext.attributes.group == block.text.id">
+                                        {{ subtext.attributes.siglum }}: {{ subtext.attributes.name }}
+                                    </li>
+                                </template>
+                            </ul>
+
+                            <!-- html chunk -->
+                            <div v-html="view.chunk"></div>
+                        </template>
+                        <template v-if="view.status < 3">
+                            Loading content...
+                        </template>
+                        <template v-if="view.status == 4">
+                            Error while loading content.
+                        </template>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
-  {% endverbatim %}
+</div>
+{% endverbatim %}
+{% endblock %}
 
-  {% block footer_scripts %}
-    <script src="{% static 'vue/dist/vue.min.js' %}"></script>
-  {% endblock %}
+{% block footer_scripts %}
+  <script src="{% static 'vue/dist/vue.js' %}"></script>
 
+  <script src="{% static 'ctrs_texts/text_viewer.js' %}"></script>
 {% endblock %}

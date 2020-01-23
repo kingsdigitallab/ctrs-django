@@ -253,7 +253,9 @@ class AbstractedText(NamedModel, ImportedModel):
         assert manuscript or name
 
         if name is None:
-            name = '{}, {}'.format(manuscript, locus)
+            name = str(manuscript)
+            if locus:
+                name += ', ' + locus
 
         defaults = {
             'name': name,
