@@ -738,15 +738,9 @@ footer {
 
 .card-section,
 .text-view {
-    p {
-        line-height: 2.5rem;
-        font-family: "Lora", serif;
-        font-size: 1.2rem;
-    }
-
     span[data-dpt=head]:before {
         font-weight: 700;
-        content: '(Title)';
+        content: '(Title) ';
     }
 
     span[data-dpt=sn] {
@@ -763,11 +757,13 @@ footer {
 
     span[data-dpt-type=unsettled]:not([data-dpt-group=work]) {
 
-        &:before,
-        &:after {
-            font-size: 1.3em;
-            font-weight: 700;
-        }
+        background: scale-color($light-gray, $lightness: 20%);
+
+        // &:before,
+        // &:after {
+        //     font-size: 1.3em;
+        //     font-weight: 700;
+        // }
 
         &:before {
             content: '[';
@@ -791,22 +787,32 @@ footer {
                 content: '...]';
             }
 
-            span.ms:after {
-                content: ': ';
-            }
+            // span.ms:after {
+            //     content: ': ';
+            // }
 
             span.variants {
-                display: none;
-                position: absolute;
-                opacity: 0.9;
+                background-color: scale-color($light-gray, $lightness: 20%);
                 border: 1px solid grey;
-                background-color: lightgrey;
-                padding: 0.3em;
-                line-height: 1.2em;
+                display: none;
+                font-size: .875rem;
+                opacity: .95;
+                position: absolute;
+                padding: .5em .5em .25em;
+                line-height: 2em;
 
                 .variant {
                     display: block;
                     white-space: nowrap;
+
+                    .ms {
+                        background: scale-color($secondary-color, $lightness: 20%);
+                        border: 1px solid $secondary-color;
+                        color: $black;
+                        font-size: .75rem;
+                        margin-right: 4px;
+                        padding: 4px 4px 0;
+                    }
                 }
             }
 
@@ -819,5 +825,4 @@ footer {
             }
         }
     }
-
 }
