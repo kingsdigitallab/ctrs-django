@@ -80,16 +80,15 @@
 
             &:hover {
                 background: transparent;
+                color: $black;
             }
         }
 
         li {
-            // padding-bottom: 6px;
-
             &.manuscript,
             &.version {
                 &:hover {
-                    background: scale-color($primary-color, $lightness: 60%);
+                    background: scale-color($primary-color, $lightness: 80%);
                 }    
             }
 
