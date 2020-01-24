@@ -597,7 +597,7 @@ footer {
             width: 50%;
 
             img {
-                width: 100%; 
+                width: 100%;
             }
         }
     }
@@ -761,7 +761,7 @@ footer {
         }
     }
 
-    span[data-dpt-type=unsettled] {
+    span[data-dpt-type=unsettled]:not([data-dpt-group=work]) {
 
         &:before,
         &:after {
@@ -784,7 +784,7 @@ footer {
 
 
     &.version {
-        span[data-dpt-type=unsettled] {
+        span[data-dpt-type=unsettled]:not([data-dpt-group=work]) {
             position: relative;
 
             &:after {
@@ -809,13 +809,13 @@ footer {
                     white-space: nowrap;
                 }
             }
-        }
 
-        span[data-dpt-type=unsettled]:hover {
-            span.variants {
-                display: inline-block;
-                position: absolute;
-                z-index: 10;
+            &:hover {
+                span.variants {
+                    display: inline-block;
+                    position: absolute;
+                    z-index: 10;
+                }
             }
         }
     }

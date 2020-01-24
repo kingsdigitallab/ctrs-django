@@ -81,6 +81,9 @@ class EncodedText(index.Indexed, TimestampedModel, ImportedModel):
         if not members:
             return ret
 
+        # TODO: won't work yet with Work...
+        # need to filter the type of regions
+
         regions = []
         for mi, member in enumerate(members):
             other_content = member.encoded_texts.filter(type=self.type).first()
@@ -99,13 +102,17 @@ class EncodedText(index.Indexed, TimestampedModel, ImportedModel):
             # _Element
             if ri >= len(regions):
                 break
+
+            if region.attrib.get('data-dpt-group', None) == 'work':
+                # TODO: adapt this condition when self.type == 'work'
+                continue
+
             tail = region.tail
             attribs = {k: v for k, v in region.attrib.items()}
             region.clear()
             for k, v in attribs.items():
                 region.attrib[k] = v
             region.tail = tail
-            # region.text = ' | '.join('<span>{}</span>'.format(regions[ri]))
 
             variants = utils.append_xml_element(
                 region, 'span', None, class_='variants'
@@ -132,6 +139,10 @@ class EncodedText(index.Indexed, TimestampedModel, ImportedModel):
         # print(regions)
 
         ret = utils.get_unicode_from_xml(xml, remove_root=True)
+
+        # TODO: only works for versions
+        # cleanup the empty symbol in the w-region
+        ret = ret.replace('∅', '')
 
         return ret
 
