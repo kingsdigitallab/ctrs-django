@@ -141,6 +141,11 @@ h1 {
     small {
         font-style: italic;
     }
+
+    &.no-container {
+        margin-left: 6rem;
+        margin-top: -2rem;
+    }
 }
 
 h2 {
