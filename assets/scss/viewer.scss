@@ -19,6 +19,7 @@
         height: 0;  // It doesn't really matter the value, but height needs
                     // to be declared for overflow to work.
         overflow-y: auto;
+        padding: 0;
         position: relative;
     }
 
@@ -134,7 +135,11 @@
         margin-bottom: 1rem;
         position: -webkit-sticky;
         position: sticky;
-        top: -16px;
+        top: 0;
         z-index: 11;
+    }
+
+    .text-display {
+        padding: 1rem;
     }
 }
