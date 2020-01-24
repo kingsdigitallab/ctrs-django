@@ -31,9 +31,13 @@ def view_api_texts(request):
             )
         )
 
-    abstracted_texts = abstracted_texts.select_related(
+    abstracted_texts = abstracted_texts.exclude(
+        short_name__in=['HM1', 'HM2']
+    ).select_related(
         'manuscript__repository', 'type'
-    ).order_by('-type__slug', 'short_name', 'locus')
+    ).order_by(
+        '-type__slug', 'short_name', 'locus'
+    )
 
     texts = []
     for text in abstracted_texts:
