@@ -41,12 +41,12 @@
         .card-section {
             text-align: center;
 
-            &::before {
-                content: "\f055";
-                display: none;
-                font-family: "Font Awesome 5 Pro";
-                font-weight: 900;
-            }
+            // &::before {
+            //     content: "\f055";
+            //     display: none;
+            //     font-family: "Font Awesome 5 Pro";
+            //     font-weight: 900;
+            // }
 
             .fa-plus-circle {
                 padding-top: 10vh;
