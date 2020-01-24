@@ -63,14 +63,12 @@
                         </div>
                     </div>
 
-                    <div v-if="block.text" class="metadata">
-                        <!-- GN: Shouldn't this be inside the view loop?
-                        Language is a property of each view not the whole block.
-                        -->
-                        <span class="label">{{ block.views[0].type|view_type_label }}</span>
-                    </div>
+                    <div v-if="block.text" v-for="view in block.views" :class="['card-section', block.text ? block.text.type : '']">
 
-                    <div v-for="view in block.views" :class="['card-section', block.text ? block.text.type : '']">
+                        <div v-if="block.text" class="metadata">
+                            <span class="label">{{ block.views[0].type|view_type_label }}</span>
+                        </div>
+
                         <template v-if="view.status == 3">
 
                             <!-- show list of MS texts in a version -->
@@ -93,6 +91,10 @@
                             Error while loading content.
                         </template>
                     </div>
+
+                    <a v-else class="card-section" :data-toggle="'offCanvas-'+block_index">
+                        <span class="show-for-sr">Click to add another text</span>
+                    </a>
                 </div>
             </div>
         </div>
