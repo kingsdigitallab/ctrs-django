@@ -77,7 +77,9 @@ class EncodedText(index.Indexed, TimestampedModel, ImportedModel):
         ret = self.content
 
         ab_text = self.abstracted_text
-        members = list(ab_text.members.all())
+        members = list(ab_text.members.all().exclude(
+            short_name__in=['HM1', 'HM2']
+        ))
         if not members:
             return ret
 
