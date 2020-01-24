@@ -22,12 +22,12 @@
                 <h3>Texts</h3>
 
                 <h4>Work</h4>
-                <!-- We do NOT link to work at this stage -->
+                <!-- We do NOT link to Work at this stage -->
                 <ul class="menu vertical">
                     <template v-for="text in texts">
-                      <li v-if="text.type=='work'" :class="{selected: text == block.text} + ' text ' + text.type">
-                        <span class="label secondary">{{ text.attributes.siglum }}</span> {{ text.attributes.name }}
-                      </li>
+                        <li v-if="text.type=='work'" :class="{selected: text == block.text} + ' text ' + text.type">
+                            <span class="label secondary">{{ text.attributes.siglum }}</span> {{ text.attributes.name }}
+                        </li>
                     </template>
                 </ul>
                 <!-- Versions and MSs -->
@@ -35,9 +35,9 @@
                     <h4>{{ text_type.label }}</h4>
                     <ul class="menu vertical">
                         <template v-for="text in texts">
-                          <li v-if="text.type==text_type.type" :class="{selected: text == block.text} + ' text ' + text.type" @click="on_change_text(block, text)">
-                            <span class="label secondary">{{ text.attributes.siglum }}</span> {{ text.attributes.name }}
-                          </li>
+                            <li v-if="text.type==text_type.type" :class="{selected: text == block.text} + ' text ' + text.type" @click="on_change_text(block, text)">
+                                <a href="#"><span class="label secondary">{{ text.attributes.siglum }}</span> {{ text.attributes.name }}</a>
+                            </li>
                         </template>
                     </ul>
                 </template>
@@ -64,7 +64,10 @@
                     </div>
 
                     <div v-if="block.text" class="metadata">
-                        <span class="label">LAT or ENG?</span>
+                        <!-- GN: Shouldn't this be inside the view loop?
+                        Language is a property of each view not the whole block.
+                        -->
+                        <span class="label">{{ block.views[0].type|view_type_label }}</span>
                     </div>
 
                     <div v-for="view in block.views" :class="['card-section', block.text ? block.text.type : '']">

@@ -9,6 +9,12 @@ const STATUS_ERROR = 4;
 
 const Vue = window.Vue;
 
+const TYPES_LABEL = {
+  transcription: 'Latin',
+  translation: 'English',
+  histogram: 'Histogram',
+};
+
 function clog(message) {
   window.console.log(message);
 }
@@ -82,6 +88,11 @@ $(() => {
           }
         },
         deep: true
+      }
+    },
+    filters: {
+      view_type_label: function(value) {
+        return TYPES_LABEL[value];
       }
     },
     methods: {
