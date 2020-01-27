@@ -43,8 +43,7 @@
                     <ul class="menu vertical">
                         <template v-for="text in texts">
                             <li v-if="text.type==text_type.type" :class="{selected: text == block.text} + ' text ' + text.type" @click="on_change_text(block, text)">
-                                <a href="#" :data-toggle="'offCanvas-'+block_index"><span class="label secondary">{{ text.attributes.siglum }}</span> {{ text.attributes.name }}</a>
-                                <span class="label">Version</span>
+                                <a href="#" :data-toggle="'offCanvas-'+block_index"><span class="label secondary">{{ text.attributes.siglum }}</span> {{ text.attributes.name }} <span class="label secondary version">Vx</span></a>
                             </li>
                         </template>
                     </ul>
