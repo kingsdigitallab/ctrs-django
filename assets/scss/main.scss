@@ -215,6 +215,14 @@ main {
 }
 
 .hp-box {
+
+    &::before {
+        content: "\f0d7";
+        display: none;
+        font-family: "Font Awesome 5 Pro";
+        font-weight: 900;
+    }
+
     background: white;
 
     a {
