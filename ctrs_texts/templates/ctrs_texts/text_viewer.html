@@ -1,7 +1,7 @@
 {% extends "base.html" %}
 {% load staticfiles compress %}
 
-{% block meta_title %}Side by side viewer integrated{% endblock %}
+{% block meta_title %}Side by side viewer{% endblock %}
 
 {% block custom_css %}
 <link rel="stylesheet" type="text/x-scss" href="{% static 'scss/viewer.scss' %}">
@@ -36,7 +36,7 @@
                     <ul class="menu vertical">
                         <template v-for="text in texts">
                             <li v-if="text.type==text_type.type" :class="{selected: text == block.text} + ' text ' + text.type" @click="on_change_text(block, text)">
-                                <a href="#"><span class="label secondary">{{ text.attributes.siglum }}</span> {{ text.attributes.name }}</a>
+                                <a href="#" :data-toggle="'offCanvas-'+block_index"><span class="label secondary">{{ text.attributes.siglum }}</span> {{ text.attributes.name }}</a>
                             </li>
                         </template>
                     </ul>
@@ -48,7 +48,7 @@
                     <div class="card-divider">
                         <div class="button-group">
                             <a class="button hollow arrow-only canvas-trigger" :data-toggle="'offCanvas-'+block_index">
-                                <i class="fas fa-caret-right fa-2x"></i>
+                                <!-- <i class="fas fa-caret-right fa-2x"></i> -->
                                 <span class="show-for-sr">List of texts</span>
                             </a>
                             <span v-if="block.text" class="label secondary">{{ block.text.attributes.siglum }}</span>

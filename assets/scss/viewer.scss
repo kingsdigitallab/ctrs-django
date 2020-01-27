@@ -77,11 +77,47 @@
 
 .canvas-trigger {
     padding-bottom: 0;
+    padding-top: .5rem;
+
+    &::before {
+        content: "\fd0a";
+        display: none;
+        font-family: "Font Awesome 5 Pro";
+        font-weight: 900;
+    }
+
+    &:hover {
+        // Needs important! to avoid polluting other buttons
+        background: $secondary-color !important;
+    }
 }
+
 
 .off-canvas-absolute {
     padding-left: .5rem;
     padding-right: .5rem;
+}
+
+// Repetition below due to nesting
+
+.is-closed {
+    & + .off-canvas-content {
+        .canvas-trigger {
+            &::before {
+                content: "\f0da";
+            }
+        }
+    }
+}
+
+.is-open {
+    & + .off-canvas-content {
+        .canvas-trigger {
+            &::before {
+                content: "\f0d7";
+            }
+        }
+    }
 }
 
 #text-viewer {
