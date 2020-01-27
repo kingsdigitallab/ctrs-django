@@ -728,7 +728,7 @@ footer {
 }
 
 .legend {
-    font-size: 0.6em;
+    font-size: 0.625em;
 }
 
 .status-draft {
@@ -762,21 +762,18 @@ footer {
 
     span[data-dpt-type=unsettled]:not([data-dpt-group=work]) {
 
-        background: scale-color($light-gray, $lightness: 20%);
+        background: rgba($primary-color, .2);
+        border: 1px solid scale-color($light-gray, $lightness: -20%);
 
-        // &:before,
-        // &:after {
-        //     font-size: 1.3em;
-        //     font-weight: 700;
+        padding: 0 .25rem;
+
+        // &:before {
+        //     content: '[';
         // }
 
-        &:before {
-            content: '[';
-        }
-
-        &:after {
-            content: ']';
-        }
+        // &:after {
+        //     content: ']';
+        // }
     }
 
     span[data-dpt-lang=vernacular] {
@@ -786,10 +783,20 @@ footer {
 
     &.version {
         span[data-dpt-type=unsettled]:not([data-dpt-group=work]) {
+
+            padding: .25rem;
+
+            span[data-dpt-type=unsettled]:not([data-dpt-group=work]) {
+                background: rgba($primary-color, .4);
+
+                padding-bottom: 0;
+                padding-top: 0;
+            }
+
             position: relative;
 
             &:after {
-                content: '...]';
+                content: '...';
             }
 
             // span.ms:after {
