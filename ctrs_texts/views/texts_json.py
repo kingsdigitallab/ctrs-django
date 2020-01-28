@@ -112,3 +112,34 @@ def view_api_text_chunk(
     ])
 
     return JsonResponse(ret)
+
+# -------------------------------------------------------------------
+
+
+def view_api_text_search_sentences(request):
+    '''
+    '''
+
+    text_ids = request.GET.get('texts', '') or '520'
+    text_ids = text_ids.split(',')
+
+    encoded_texts = EncodedText.objects.filter(
+        abstracted_text__id__in=text_ids,
+        type__slug='transcription'
+    )
+
+    texts = []
+    for text in encoded_texts:
+        text_data = {
+            # 'chunk': re.findall(
+            # r'<p><span data-dpt="sn">(.?*)</span>.*?</p>', '', text.content),
+            'chunk': text.id,
+        }
+        texts.append(text_data)
+
+    ret = OrderedDict([
+        ['jsonapi', '1.0'],
+        ['data', texts],
+    ])
+
+    return JsonResponse(ret)
