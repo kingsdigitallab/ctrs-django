@@ -72,16 +72,15 @@
                     <div v-if="block.text" v-for="view in block.views" :class="['card-section', block.text ? block.text.type : '']">
 
                         <div v-if="block.text" class="metadata">
-                            <span class="label">{{ block.views[0].type|view_type_label }}</span>
+                            <span class="label">{{ view.type|view_type_label }}</span>
                         </div>
 
                         <template v-if="view.status == 3">
-
                             <!-- show list of MS texts in a version -->
-                            <ul v-if="block.text && block.text.type=='version'">
+                            <ul v-if="block.text && block.text.type=='version'" class="group-members">
                                 <template v-for="subtext in texts">
                                     <li v-if="subtext.attributes.group == block.text.id">
-                                        {{ subtext.attributes.siglum }}: {{ subtext.attributes.name }}
+                                        <span class="label secondary">{{ subtext.attributes.siglum }}</span> {{ subtext.attributes.name }}
                                     </li>
                                 </template>
                             </ul>
