@@ -83,7 +83,7 @@ class EncodedText(index.Indexed, TimestampedModel, ImportedModel):
 
         ab_text = self.abstracted_text
         members = list(ab_text.members.all())
-        if not members:
+        if 0 and not members:
             return ret
 
         # TODO: won't work yet with Work...
@@ -107,38 +107,33 @@ class EncodedText(index.Indexed, TimestampedModel, ImportedModel):
 
         # Now inject the region content and info into each region of the parent
         for region in xml.findall('.//span[@data-dpt-type="unsettled"]'):
-            if ri >= len(regions):
-                break
-
             if region.attrib.get('data-dpt-group', None) == 'work':
                 # TODO: adapt this condition when self.type == 'work'
                 continue
             else:
                 region.attrib['data-dpt-group'] = 'version'
+                ri += 1
 
-            variants = utils.append_xml_element(
-                region, 'span', None, class_='variants', prepend=True
-            )
-
-            for mi, r in enumerate(regions[ri]):
-
-                variant = utils.append_xml_element(
-                    variants, 'span', None, class_='variant'
+            if ri < len(regions):
+                variants = utils.append_xml_element(
+                    region, 'span', None, class_='variants', prepend=True
                 )
 
-                utils.append_xml_element(
-                    variant, 'span', members[mi].short_name,
-                    class_='ms'
-                )
+                for mi, r in enumerate(regions[ri]):
 
-                utils.append_xml_element(
-                    variant, 'span', r,
-                    class_='reading'
-                )
+                    variant = utils.append_xml_element(
+                        variants, 'span', None, class_='variant'
+                    )
 
-            ri += 1
+                    utils.append_xml_element(
+                        variant, 'span', members[mi].short_name,
+                        class_='ms'
+                    )
 
-        # print(regions)
+                    utils.append_xml_element(
+                        variant, 'span', r,
+                        class_='reading'
+                    )
 
         ret = utils.get_unicode_from_xml(xml, remove_root=True)
 
