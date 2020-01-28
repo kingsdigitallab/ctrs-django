@@ -20,9 +20,9 @@
   <link rel="shortcut icon" type="image/png" href="{% static 'images/favicon.png' %}">
 
   {# Font Awesome js to svg #}
-  {% compress js %}
-  <script data-search-pseudo-elements defer src="{% static 'vendor/font-awesome/js/all.js' %}"></script>
-  {% endcompress %}
+  {# compress js #}
+  <script data-search-pseudo-elements defer src="{% static 'vendor/font-awesome/js/all.min.js' %}"></script>
+  {# endcompress #}
 
 </head>
 <body>
