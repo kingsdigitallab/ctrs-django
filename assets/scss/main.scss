@@ -14,6 +14,7 @@
  *          4.3 Main
  *          4.4 Sidebar
  *          4.5 Footer
+ *          4.6 Images
  *  5.  Social media
  *  6.  Media queries
  *  7.  Print
@@ -24,6 +25,7 @@
  */
 
 /* 1. Imports / Settings / Variables */
+
 @import 'typography';
 @import 'settings';
 @import '../vendor/foundation-sites/scss/foundation';
@@ -43,18 +45,17 @@ body {
     color: $rich-black;
     font-size: $base-font-size;
     font-weight: 400;
-    line-height: 1.5;
     margin: 0;
 }
 
+blockquote {
 
-// TO BE REMOVED
+}
+
 .extra-margin {
     margin-top: 1.5rem;
     margin-bottom: .75rem;
 }
-//
-
 
 .hide {
     display: none;
@@ -76,7 +77,7 @@ i.icon {
 }
 
 .icon-wagtail:before {
-    content:"V";
+    content: "V";
 }
 
 .icon-wagtail-inverse:before {
@@ -85,7 +86,17 @@ i.icon {
 
 .inline {
     display: inline-block;
-    max-width: 90%;
+    max-width: 87%;
+
+    &.icon {
+        border-bottom: 0;
+
+        &:hover {
+            path {
+                fill: $secondary-color;
+            }
+        }
+    }
 }
 
 small {
@@ -117,13 +128,23 @@ button,
 
 // 2.3 Headings
 
-h1, h2, h3, h4, h5, h6 {
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
     padding: .5em 0 .25em;
 }
 
 h1 {
     small {
         font-style: italic;
+    }
+
+    &.no-container {
+        margin-left: 6rem;
+        margin-top: -2rem;
     }
 }
 
@@ -138,11 +159,13 @@ h3 {
 // 2.4 Links
 
 a {
-    color: $secondary-color;
-    text-decoration: none;
-
     &:hover {
-        text-decoration: underline;
+        // text-decoration: underline;
+        border-bottom: 1px solid $secondary-color;
+    }
+
+    &.decorate {
+        border-bottom: 1px dotted $secondary-color;
     }
 }
 
@@ -151,7 +174,8 @@ a {
 table {
     text-align: left;
 
-    td, th {
+    td,
+    th {
         border: 1px solid lighten($primary-color, 50%);
     }
 
@@ -197,9 +221,11 @@ main {
         color: $rich-black;
     }
 
-    h3 {
+    h2 {
         border-left: 10px solid lighten($primary-color, 60%);
-        padding: .5rem .5rem 0;
+        font-size: rem-calc(30);
+        margin-bottom: 0;
+        padding: .5rem .5rem 1rem;
     }
 
     img {
@@ -283,6 +309,7 @@ header {
     a {
         &:hover {
             background: lighten($primary-color, 5%);
+            border-bottom: 0;
         }
     }
 }
@@ -307,7 +334,7 @@ main {
     background: lighten($primary-color, 70%);
 
     a {
-        color: darken($secondary-color, 25%);
+        border-bottom: 1px dotted #d8d8d8;
     }
 
     small {
@@ -321,9 +348,20 @@ main {
 }
 
 .intro {
-    color: lighten(black, 40%);
+    color: lighten(black, 31%);
     font-size: 1.125rem;
     line-height: 1.75;
+}
+
+.metadata {
+    background: scale-color($secondary-color, $lightness: 50%);
+    padding: .5rem 1rem;
+    text-align: right;
+
+    .label {
+        color: $black;
+        padding-top: 8px;
+    }
 }
 
 .more {
@@ -370,7 +408,8 @@ footer {
         color: lighten($secondary-color, 15%);
     }
 
-    ul, ol {
+    ul,
+    ol {
         padding: 0;
     }
 
@@ -393,6 +432,12 @@ footer {
     }
 }
 
+.byline {
+    color: black;
+    font-size: 12px;
+    margin: .5rem 0;
+}
+
 // Cookies box
 
 .cookies-box {
@@ -402,9 +447,33 @@ footer {
     left: 0;
     margin: 0;
     opacity: 0.95;
+    padding-top: 1rem;
     position: fixed;
     text-align: center;
     width: 100%;
+}
+
+
+// 4.6 Images
+
+// See media queries
+
+.caption {
+    font-size: rem-calc(14);
+    font-style: italic;
+    margin-top: .5rem;
+}
+
+.image-block {
+    width: 100%;
+
+    img {
+        width: 100%;
+    }
+}
+
+.richtext-image {
+    margin-bottom: 1rem;
 }
 
 /* 5. Social media */
@@ -415,7 +484,12 @@ footer {
     font-size: .9125rem;
     padding: rem-calc(16 16 8);
 
-    h4, h5 {
+    a {
+        overflow-wrap: break-word;
+    }
+
+    h4,
+    h5 {
         padding: 0;
     }
 
@@ -447,6 +521,11 @@ footer {
             }
         }
     }
+}
+
+.like,
+.retweet {
+    border-bottom: 0;
 }
 
 /* 6. Media queries */
@@ -498,9 +577,33 @@ footer {
         width: 200px;
     }
 
+    .byline {
+        text-align: left;
+    }
+
     header {
         h1 {
             font-size: rem-calc(32);
+        }
+    }
+
+    .image-block {
+
+        &.float-left {
+            margin-right: 1rem;
+        }
+
+        &.float-right {
+            margin-left: 1rem;
+        }
+
+        &.float-left,
+        &.float-right {
+            width: 50%;
+
+            img {
+                width: 100%;
+            }
         }
     }
 
@@ -512,10 +615,39 @@ footer {
         font-size: 1.25rem;
     }
 
+    .richtext-image {
+        &.left,
+        &.right {
+            max-width: 50%;
+        }
+
+        &.center {
+            margin: 0 auto;
+            max-width: 70%;
+        }
+
+        &.full-width {
+            width: 100%;
+        }
+
+        &.left {
+            float: left;
+            margin-right: 1rem;
+        }
+
+        &.right {
+            float: right;
+            margin-left: 1rem;
+        }
+    }
+
+    .left + p + *,
+    .right + p + * {
+        clear: both;
+    }
+
     .social {
         .media-object {
-            // margin-bottom: 0;
-
             h4 {
                 font-size: 1.25rem;
                 line-height: 1.25;
@@ -527,10 +659,6 @@ footer {
             }
         }
     }
-
-    // .richtext-image {
-    //     margin: 0;
-    // }
 
     .top-bar-left {
         padding-left: 70px;
@@ -594,92 +722,145 @@ footer {
 // Both html structure and styles will be improve at a later stage
 
 .container.text-members {
-  ul {
-    list-style-type: upper-alpha;
-  }
+    ul {
+        // list-style-type: upper-alpha;
+    }
 }
 
 .legend {
-  font-size: 0.6em;
+    font-size: 0.625em;
 }
 
 .status-draft {
-  color: grey;
+    color: grey;
 }
+
 .status-empty {
-  color: darkgrey;
+    color: darkgrey;
 }
 
+/* TO BE MOVED to the viewer.scss file once old viewer removed */
+
+.card-section,
 .text-view {
-  p {
-    line-height: 2.5rem;
-    font-family: "Lora", serif;
-    font-size: 1.2rem;
-  }
-
-  span[data-dpt=head]:before {
-    font-weight: 700;
-    content: '(Title)';
-  }
-
-  span[data-dpt=sn] {
-    font-weight: 700;
-    &:before {
-      content: '(';
+    span[data-dpt=head]:before {
+        font-weight: 700;
+        content: '(Title) ';
     }
-    &:after {
-      content: ')';
-    }
-  }
-  span[data-dpt-type=unsettled] {
-    &:before, &:after {
-      font-size: 1.3em;
-      font-weight: 700;
-    }
-    &:before {
-      content: '[';
-    }
-    &:after {
-      content: ']';
-    }
-  }
 
-  span[data-dpt-lang=vernacular] {
-    font-style: italic;
-  }
+    span[data-dpt=sn] {
+        font-weight: 700;
 
-
-  &.version {
-    span[data-dpt-type=unsettled] {
-      position: relative;
-      &:after {
-        content: '...]';
-      }
-      span.ms:after {
-        content: ': ';
-      }
-      span.variants {
-        display: none;
-        position: absolute;
-        opacity: 0.9;
-        border: 1px solid grey;
-        background-color: lightgrey;
-        padding: 0.3em;
-        line-height: 1.2em;
-
-        .variant {
-          display: block;
-          white-space: nowrap;
+        &:before {
+            content: '(';
         }
-      }
-    }
-    span[data-dpt-type=unsettled]:hover {
-      span.variants {
-        display: inline-block;
-        position: absolute;
-        z-index: 10;
-      }
-    }
-  }
 
+        &:after {
+            content: ') ';
+        }
+    }
+
+    span[data-dpt-type=unsettled] {
+        // GN: added some margin to prevent the box from sticking to the
+        // previous of next word.
+        margin: 0 .25rem;
+    }
+
+    span[data-dpt-type=unsettled][data-dpt-group=version] {
+
+        background: rgba($primary-color, .2);
+        border: 1px solid scale-color($light-gray, $lightness: -20%);
+
+        padding: 0 .25rem;
+
+        // &:before {
+        //     content: '[';
+        // }
+
+        // &:after {
+        //     content: ']';
+        // }
+    }
+
+    span[data-dpt-lang=vernacular] {
+        font-style: italic;
+    }
+
+
+    &.version {
+        span[data-dpt-type=unsettled][data-dpt-group=work] {
+            // GN: we hide empty-symbol IF w-regions are not highlighted
+            // TODO: depends on toggled class in the future
+            .no-text {
+                display: none;
+            }
+
+            span[data-dpt-type=unsettled][data-dpt-group=version] {
+                .no-text {
+                    display: inline;
+                }
+            }
+        }
+
+        span[data-dpt-type=unsettled][data-dpt-group=version] {
+
+            padding: .25rem;
+
+            span[data-dpt-type=unsettled][data-dpt-group=version] {
+                background: rgba($primary-color, .4);
+
+                padding-bottom: 0;
+                padding-top: 0;
+            }
+
+            position: relative;
+
+            // &:after {
+            //     content: '...';
+            // }
+
+            // span.ms:after {
+            //     content: ': ';
+            // }
+
+            span.variants {
+                background-color: scale-color($light-gray, $lightness: 20%);
+                border: 1px solid grey;
+                display: none;
+                font-size: .875rem;
+                opacity: .95;
+                position: absolute;
+                padding: .5em .5em .25em;
+                line-height: 2em;
+
+                .variant {
+                    display: block;
+                    white-space: nowrap;
+
+                    .ms {
+                        background: scale-color($secondary-color, $lightness: 20%);
+                        border: 1px solid $secondary-color;
+                        color: $black;
+                        font-size: .75rem;
+                        margin-right: 4px;
+                        padding: 4px 4px 0;
+                    }
+                }
+            }
+
+            &:hover {
+                span.variants {
+                    display: inline-block;
+                    position: absolute;
+                    z-index: 10;
+                }
+            }
+        }
+    }
+
+    .group-members {
+        padding: 1rem;
+        list-style-type: none;
+        margin-left: 0;
+    }
 }

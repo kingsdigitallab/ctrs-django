@@ -11,18 +11,27 @@
 {% block main %}
   <div class="container">
     {% for work in works %}
-      {% if not forloop.first %}<hr>{% endif %}
-      <h3><a class="status-{{work.get_status.slug}}" href="{% url 'text_view' work.slug view_default %}">{{ work.name }}</a></h3>
-      {% for version in work.members.all %}
-        <h4><a class="status-{{version.get_status.slug}}" href="{% url 'text_view' version.slug view_default %}">{{ version.name }}</a></h4>
-        <ul>
-          {% for text in version.members.all %}
-            <li>
-              <a class="status-{{text.get_status.slug}}" href="{% url 'text_view' text.slug view_default %}">{{ text.name }}</a>
-            </li>
-          {% endfor %}
-        </ul>
-      {% endfor %}
+      {% if work.slug == 'declaration' or DEBUG %}
+        {% if not forloop.first %}<hr>{% endif %}
+        {# <h3><a class="status-{{work.get_status.slug}}" href="{% url 'text_viewer' %}?blocks={{work.id}}:transcription">{{ work.name }}</a></h3> #}
+        <h3>{{ work.name }}</h3>
+        {% for version in work.members.all %}
+          <h4><a class="status-{{version.get_status.slug}}" href="{% url 'text_viewer' %}?blocks={{version.id}}:transcription">
+            {{ version.short_name}}: {{ version.name }}
+          </a></h4>
+          <ul>
+            {% for text in version.members.all %}
+              {% if text.short_name != 'HM1' and text.short_name != 'HM2' %}
+                <li>
+                  <a class="status-{{text.get_status.slug}}" href="{% url 'text_viewer' %}?blocks={{text.id}}:transcription">
+                    {{ text.full_name_with_siglum }}
+                  </a>
+                </li>
+              {% endif %}
+            {% endfor %}
+          </ul>
+        {% endfor %}
+      {% endif %}
     {% endfor %}
   </div>
 {% endblock %}

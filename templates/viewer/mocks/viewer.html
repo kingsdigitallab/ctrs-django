@@ -1,0 +1,141 @@
+{% extends "base.html" %}
+{% load staticfiles compress %}
+
+{% block meta_title %}Side by side viewer mock{% endblock %}
+
+{% block custom_css %}
+<link rel="stylesheet" type="text/x-scss" href="{% static 'scss/viewer.scss' %}">
+{% endblock %}
+
+{% block title %}
+<h1>Side by side viewer</h1>
+{% endblock %}
+
+{% block main %}
+
+<div class="grid-x grid-margin-x">
+    <div class="cell medium-6">
+        <div class="off-canvas-wrapper">
+            <div class="off-canvas-absolute position-left" id="offCanvasLeft" data-off-canvas>
+                <h3>Texts</h3>
+                <ul class="menu vertical">
+                    <li><a href="#"><span class="label secondary">W</span> Work</a></li>
+                </ul>
+                <h4>Versions</h4>
+                <ul class="menu vertical">
+                    <li>
+                        <a href="#"><span class="label secondary">V1</span> File copy / Haldenstone</a>
+                    </li>
+                    <li><a href="#"><span class="label secondary">V2</span> Dossier in MSS of Fordun</a></li>
+                    <li><a href="#"><span class="label secondary">V3</span> Scotichronicon</a></li>
+                    <li><a href="#"><span class="label secondary">V4</span> Bower’s 40-work book and its derivatives</a></li>
+                    <li><a href="#"><span class="label secondary">V5</span> Book VIII of the Book of Pluscarden</a></li>
+                    <li><a href="#"><span class="label secondary">V6</span> Book IX of the Book of Pluscarden</a></li>
+                </ul>
+                <h4>Manuscripts</h4>
+                <ul class="menu vertical">
+                    <li><a class="" href="#"><span class="label secondary">B</span> Edinburgh, NRS MS GD45/26/48 <span class="label tertiary">V3</span></a></li>
+                    <li><a class="" href="#"><span class="label secondary">C</span> Cambridge, Corpus Christi College MS 171B, ff.272r–273r <span class="label tertiary">V3</span></a></li>
+                    <li><a class="" href="#"><span class="label secondary">CA</span> Edinburgh, NLS MS Adv. 35.1.7, pp.345–346 <span class="label tertiary">V4</span></a></li>
+                </ul>
+            </div>
+            <div class="off-canvas-content" data-off-canvas-content>
+                <div class="card text-viewer">
+                    <div class="card-divider">
+                        <div class="button-group">
+                            <a class="button hollow arrow-only canvas-trigger" data-toggle="offCanvasLeft">
+                                <i class="fas fa-caret-right fa-2x"></i>
+                                <span class="show-for-sr">List of texts</span>
+                            </a>
+                            <h2>Title of text selected</h2>
+                            <span class="label">O</span>
+                        </div>
+                    </div>
+                    <div class="card-section">
+                        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
+                        tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,
+                        quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo
+                        consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse
+                        cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non
+                        proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
+                        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
+                        tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,
+                        quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo
+                        consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse
+                        cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non
+                        proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
+                        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
+                        tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,
+                        quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo
+                        consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse
+                        cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non
+                        proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="cell medium-6">
+        <div class="off-canvas-wrapper">
+            <div class="off-canvas-absolute position-left" id="offCanvasRight" data-off-canvas>
+                <h3>Texts</h3>
+                <ul class="menu vertical">
+                    <li><a href="#"><span class="label secondary">W</span> Work</a></li>
+                </ul>
+                <h4>Versions</h4>
+                <ul class="menu vertical">
+                    <li>
+                        <a href="#"><span class="label secondary">V1</span> File copy / Haldenstone</a>
+                    </li>
+                    <li><a href="#"><span class="label secondary">V2</span> Dossier in MSS of Fordun</a></li>
+                    <li><a href="#"><span class="label secondary">V3</span> Scotichronicon</a></li>
+                    <li><a href="#"><span class="label secondary">V4</span> Bower’s 40-work book and its derivatives</a></li>
+                    <li><a href="#"><span class="label secondary">V5</span> Book VIII of the Book of Pluscarden</a></li>
+                    <li><a href="#"><span class="label secondary">V6</span> Book IX of the Book of Pluscarden</a></li>
+                </ul>
+                <h4>Manuscripts</h4>
+                <ul class="menu vertical">
+                    <li><a class="" href="#"><span class="label secondary">B</span> Edinburgh, NRS MS GD45/26/48 <span class="label tertiary">V3</span></a></li>
+                    <li><a class="" href="#"><span class="label secondary">C</span> Cambridge, Corpus Christi College MS 171B, ff.272r–273r <span class="label tertiary">V3</span></a></li>
+                    <li><a class="" href="#"><span class="label secondary">CA</span> Edinburgh, NLS MS Adv. 35.1.7, pp.345–346 <span class="label tertiary">V4</span></a></li>
+                </ul>
+            </div>
+            <div class="off-canvas-content" data-off-canvas-content>
+                <div class="card text-viewer">
+                    <div class="card-divider">
+                        <div class="button-group">
+                            <a class="button hollow arrow-only canvas-trigger" data-toggle="offCanvasRight">
+                                <i class="fas fa-caret-right fa-2x"></i>
+                                <span class="show-for-sr">List of texts</span>
+                            </a>
+                            <h2>Title of text selected</h2>
+                            <span class="label secondary">V4</span>
+                        </div>
+                    </div>
+                    <div class="card-section">
+                        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
+                        tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,
+                        quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo
+                        consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse
+                        cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non
+                        proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
+                        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
+                        tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,
+                        quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo
+                        consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse
+                        cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non
+                        proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
+                        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
+                        tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,
+                        quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo
+                        consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse
+                        cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non
+                        proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

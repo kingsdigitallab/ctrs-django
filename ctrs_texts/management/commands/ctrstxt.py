@@ -1,6 +1,8 @@
 from django.core.management.base import BaseCommand
-from ctrs_texts.models import Repository, Manuscript, ManuscriptText,\
-    AbstractedText, EncodedText, AbstractedTextType, EncodedTextStatus
+from ctrs_texts.models import (
+    Repository, Manuscript, AbstractedText, EncodedText,
+    AbstractedTextType, EncodedTextStatus
+)
 from django.utils.text import slugify
 
 
@@ -30,7 +32,7 @@ class Command(BaseCommand):
 
         if action == 'delete':
             for m in [
-                Repository, Manuscript, ManuscriptText,
+                Repository, Manuscript,
                 AbstractedText, EncodedText, AbstractedTextType,
                 EncodedTextStatus
             ]:
@@ -43,10 +45,11 @@ class Command(BaseCommand):
             self.log('done')
 
     def handle_import(self):
-        # http://localhost:8001/digipal/api/textcontentxml/?@select=*status,id,str,content,*text_content,*item_part,*text,type,*current_item,locus,shelfmark,*repository,place
-        # curl
-        # "http://localhost:8001/digipal/api/textcontentxml/?@select=*status,id,str,content,*text_content,*item_part,group,type,*current_item,locus,shelfmark,*repository,place&@limit=1000"
-        # > arch-content.json
+        '''
+        curl
+        "http://localhost:8001/digipal/api/textcontentxml/?@select=*status,id,str,content,*text_content,*item_part,group,group_locus,type,*current_item,locus,shelfmark,*repository,place&@limit=1000"
+        > arch-content.json
+        '''
         ret = False
 
         if len(self.options) != 1:
@@ -75,10 +78,22 @@ class Command(BaseCommand):
 
     @classmethod
     def import_json(cls, data):
+        '''
+        Imports the text XML and metadata
+        from a json file exported from Archetype.
+
+        Insert or update.
+        Stores archetype record id in .imported_id field
+        to permanently keep track of the mapping.
+        '''
         ab_types = AbstractedTextType.get_or_create_default_types()
         statuses = {}
+        # see delete_unimported_records()
+        models_imported_ids = {m: [] for m in [
+            Repository, Manuscript, AbstractedText, EncodedText
+        ]}
 
-        # mapping
+        # mapping from itempart id to abstracted text id
         arch_ipid_to_ab_txt = {}
 
         for jtcxml in data['results']:
@@ -102,27 +117,40 @@ class Command(BaseCommand):
                 )
                 statuses[status_slug] = status
 
-            ms_txt = None
             if ip_type in ['manuscript']:
                 repo, _ = Repository.update_or_create(
-                    jrepo['place'], jrepo['str'])
-                ms, _ = Manuscript.update_or_create(repo, jci['shelfmark'])
-                ms_txt, _ = ManuscriptText.update_or_create(ms, jip['locus'])
-                ab_txt, _ = AbstractedText.update_or_create(
-                    manuscript_text=ms_txt, type=ab_types[ip_type],
+                    jrepo['id'], jrepo['place'], jrepo['str']
                 )
+                models_imported_ids[Repository].append(jrepo['id'])
+                ms, _ = Manuscript.update_or_create(
+                    jci['id'], repo, jci['shelfmark']
+                )
+                models_imported_ids[Manuscript].append(jci['id'])
+                ab_txt, _ = AbstractedText.update_or_create(
+                    jip['id'], ab_types[ip_type],
+                    manuscript=ms, locus=jip['locus']
+                )
+                models_imported_ids[AbstractedText].append(jip['id'])
             else:
                 ab_txt, _ = AbstractedText.update_or_create(
-                    name=jip['str'], type=ab_types[ip_type],
+                    jip['id'], ab_types[ip_type],
+                    name=jip['str'],
                 )
+                models_imported_ids[AbstractedText].append(jip['id'])
 
-            en_txt, _ = EncodedText.update_or_create(
-                ab_txt, jtc['type'], jtcxml['content'], status
+            # clean the input text
+            content = (jtcxml['content'] or '').replace(
+                '&nbsp;', '').replace('\xA0', ' ')
+
+            EncodedText.update_or_create(
+                jtc['id'], ab_txt, jtc['type'], content, status
             )
+            models_imported_ids[EncodedText].append(jtc['id'])
 
             arch_ipid_to_ab_txt[jip['id']] = ab_txt
 
         # relationship among the abstracted texts
+        # ms-text -> version-text -> work-text
         for jtcxml in data['results']:
             jtc = jtcxml['text_content']
             jip = jtc['item_part']
@@ -132,9 +160,26 @@ class Command(BaseCommand):
                     jip.get('group__id', None), None
                 )
                 ab_text.group = ab_text_group
+                ab_text.short_name = jip.get('group_locus', None)
                 ab_text.save()
 
+        cls.delete_unimported_records(models_imported_ids)
+
         return True
+
+    @classmethod
+    def delete_unimported_records(cls, models_imported_ids):
+        '''
+        Delete all the records with .imported_id <> None
+        which have not been imported by the import command.
+
+        models_imported_ids is a dictionary of the form
+        {ModelClass: [id1, id2, ...], }
+        '''
+        for m, ids in models_imported_ids.items():
+            res = m.objects.exclude(imported_id__in=ids).delete()
+            if res[0]:
+                print('Deleted {} {}'.format(res[0], m))
 
     def show_help(self):
         print('''ACTION OPTIONS
@@ -143,9 +188,12 @@ class Command(BaseCommand):
 
 ACTION:
   help
-    show this help
+    show this help.
   import FILE
-    import all the text content and metadata from FILE
+    import all the text content and metadata from FILE.
+    update if the record already exists.
     FILE: a json file obtained from archetype API,
           see inline comment (handle_import)
+  delete
+    delete all the text concent records from the DB
 '''.format(self.help))

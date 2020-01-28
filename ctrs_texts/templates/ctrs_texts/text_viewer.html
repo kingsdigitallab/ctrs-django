@@ -1,38 +1,116 @@
-{% extends 'base.html' %}
+{% extends "base.html" %}
+{% load staticfiles compress %}
 
-{% block meta_title %}{{ encoded_text.abstracted_text.name }} ({{ encoded_text.type.name }}){% endblock %}
+{% block meta_title %}Side by side viewer{% endblock %}
+
+{% block custom_css %}
+<link rel="stylesheet" type="text/x-scss" href="{% static 'scss/viewer.scss' %}">
+{% endblock %}
+
+{% block title %}
+<h1 class="no-container">Side by side viewer</h1>
+{% endblock %}
 
 {% block main %}
+{% verbatim %}
 
-  <div class="container">
-    <nav class="breadcrumb">
-      <a href="{% url 'texts' %}">Texts</a>
-      &gt;
-      <h2>
-        {{ encoded_text.abstracted_text.name }}
-        <span class="legend">
-          (<a href="{% url 'text_view' encoded_text.abstracted_text.slug view_alternative.slug %}">
-            Switch to {{view_alternative.name}}
-          </a>)
-        </span>
-      </h2>
-    </nav>
-  </div>
+<div id="text-viewer" class="grid-x grid-margin-x">
 
-  {% with encoded_text.abstracted_text.members.all as members %}
-    {% if members.count %}
-      <div class="container text-members">
-        <ul>
-          {% for m in members %}
-            <li>{{ m.name }}</li>
-          {% endfor %}
-        </ul>
-      </div>
-    {% endif %}
-  {% endwith %}
+    <div v-for="(block, block_index) in blocks" class="cell medium-6">
+        <div class="off-canvas-wrapper">
+            <div class="off-canvas-absolute position-left" :id="'offCanvas-'+block_index" data-off-canvas>
+                <h3>Texts</h3>
 
-  <div class="container text-view {{ encoded_text.abstracted_text.type.slug}}">
-    {{ encoded_text.content_variants|safe }}
-  </div>
+                <ul class="menu jump-menu">
+                    <li>Jump to</li>
+                    <li><a class="button secondary" href="#Work" title="Work">W</a></li>
+                    <li><a class="button secondary" href="#Versions" title="Versions">V</a></li>
+                    <li><a class="button secondary" href="#Manuscripts" title="Manuscripts">MS</a></li>
+                </ul>
 
+                <h4 id="Work">Work</h4>
+                <!-- We do NOT link to Work at this stage -->
+                <ul class="menu vertical">
+                    <template v-for="text in texts">
+                        <li v-if="text.type=='work'" :class="{selected: text == block.text} + ' text ' + text.type">
+                            <span class="label secondary">{{ text.attributes.siglum }}</span> {{ text.attributes.name }}
+                        </li>
+                    </template>
+                </ul>
+                <!-- Versions and MSs -->
+                <template v-for="text_type in text_types">
+                    <h4 :id="text_type.label">{{ text_type.label }}</h4>
+                    <ul class="menu vertical">
+                        <template v-for="text in texts">
+                            <li v-if="text.type==text_type.type" :class="{selected: text == block.text} + ' text ' + text.type" @click="on_change_text(block, text)">
+                                <a href="#" :data-toggle="'offCanvas-'+block_index"><span class="label secondary">{{ text.attributes.siglum }}</span> {{ text.attributes.name }} <span class="label secondary version">Vx</span></a>
+                            </li>
+                        </template>
+                    </ul>
+                </template>
+            </div>
+
+            <div class="off-canvas-content" data-off-canvas-content>
+                <div :class="['card block-view', block.text ? '' : 'empty']">
+                    <div class="card-divider">
+                        <div class="button-group">
+                            <a class="button hollow arrow-only canvas-trigger" :data-toggle="'offCanvas-'+block_index">
+                                <span class="show-for-sr">List of texts</span>
+                            </a>
+                            <span v-if="block.text" class="label secondary">{{ block.text.attributes.siglum }}</span>
+                            <h2>
+                                <template v-if="block.text">
+                                    {{ block.text.attributes.name }}
+                                </template>
+                                <template v-else>
+                                    Select text
+                                </template>
+                            </h2>
+                        </div>
+                    </div>
+
+                    <div v-if="block.text" v-for="view in block.views" :class="['card-section', block.text ? block.text.type : '']">
+
+                        <div v-if="block.text" class="metadata">
+                            <span class="label">{{ view.type|view_type_label }}</span>
+                        </div>
+
+                        <template v-if="view.status == 3">
+                            <!-- show list of MS texts in a version -->
+                            <ul v-if="block.text && block.text.type=='version'" class="group-members">
+                                <template v-for="subtext in texts">
+                                    <li v-if="subtext.attributes.group == block.text.id">
+                                        <span class="label secondary">{{ subtext.attributes.siglum }}</span> {{ subtext.attributes.name }}
+                                    </li>
+                                </template>
+                            </ul>
+
+                            <!-- html chunk -->
+                            <div v-html="view.chunk" :class="'text-display'"></div>
+                        </template>
+
+                        <template v-if="view.status < 3">
+                            Loading content...
+                        </template>
+                        <template v-if="view.status == 4">
+                            Error while loading content.
+                        </template>
+                    </div>
+
+                    <a v-else class="card-section" :data-toggle="'offCanvas-'+block_index">
+                        <i class="fas fa-plus-circle fa-2x"></i>
+                        <span class="show-for-sr">Click to add another text</span>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endverbatim %}
+{% endblock %}
+
+{% block footer_scripts %}
+  <script src="{% static 'vue/dist/vue.js' %}"></script>
+
+  <script src="{% static 'ctrs_texts/text_viewer.js' %}"></script>
 {% endblock %}

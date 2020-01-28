@@ -202,7 +202,7 @@ TEMPLATES = [
                 'django.template.context_processors.static',
                 'django.contrib.messages.context_processors.messages',
 
-                'ctrs.context_processors.settings',
+                'ctrs.context_processors.django_settings',
             ],
         },
     },
@@ -332,3 +332,9 @@ HAYSTACK_CONNECTIONS = {
         'INDEX_NAME': 'ctrs_haystack',
     },
 }
+
+# Which settings variables to pass to the context of all django templates
+# See ctrs.context_processors.py
+SETTINGS_VARS_IN_CONTEXT = [
+    'DEBUG', 'GA_ID', 'PROJECT_TITLE', 'TWITTER_SCREEN_NAME'
+]

@@ -1,0 +1,63 @@
+{% extends 'base.html' %}
+{% load staticfiles %}
+
+{% block meta_title %}Text Viewer{% endblock %}
+
+{% block main %}
+  {% verbatim %}
+    <div id="text-viewer" class="container">
+
+      <!-- blocks -->
+      <div v-for="block in blocks">
+        <h2>
+          <template v-if="block.text">
+            {{ block.text.attributes.name }}
+          </template>
+          <template v-else>
+            Placeholder
+          </template>
+        </h2>
+
+        <!-- views -->
+        <div v-for="view in block.views">
+          <template v-if="view.status == 3">
+
+            <!-- show list of MS texts in a version -->
+            <ul v-if="block.text && block.text.type=='version'">
+              <template v-for="subtext in texts">
+                <li v-if="subtext.attributes.group == block.text.id">
+                  {{ subtext.attributes.siglum }}: {{ subtext.attributes.name }}
+                </li>
+              </template>
+            </ul>
+
+            <!-- html chunk -->
+            <template v-html="view.chunk"></template>
+          </template>
+          <template v-if="view.status < 3">
+            Loading content...
+          </template>
+          <template v-if="view.status == 4">
+            Error while loading content.
+          </template>
+        </div>
+
+        <!-- list of texts -->
+        <div class="block-settings">
+          <template v-for="text in texts">
+            <div :class="{selected: text == block.text}" @click="on_change_text(block, text)">
+              {{ text.attributes.siglum }}: {{ text.attributes.name }}
+            </div>
+          </template>
+        </div>
+      </div>
+
+    </div>
+  {% endverbatim %}
+{% endblock %}
+
+{% block footer_scripts %}
+  <script src="{% static 'vue/dist/vue.js' %}"></script>
+
+  <script src="{% static 'ctrs_texts/text_viewer.js' %}"></script>
+{% endblock %}

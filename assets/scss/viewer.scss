@@ -1,0 +1,212 @@
+/* Style for the side by side viewer */
+
+@import 'settings';
+
+.block-view {
+    height: calc(100vh - 300px);
+    margin-bottom: 0;
+    min-height: 500px;
+
+    .card-divider {
+        display: block;
+
+        .label {
+            padding-top: 1rem;
+        }
+    }
+
+    .card-section {
+        height: 0;  // It doesn't really matter the value, but height needs
+                    // to be declared for overflow to work.
+
+        line-height: 2;
+        overflow-y: auto;
+        padding: 0;
+        position: relative;
+
+        p {
+            line-height: 2;
+        }
+    }
+
+    a.card-section {
+        border: 0;
+
+        &:hover {
+            background: scale-color($light-gray, $lightness: 60%);
+            border-bottom: 0;
+        }
+    }
+
+    &.empty {
+        border-color: $light-gray;
+
+        .card-divider {
+            background: scale-color($light-gray, $lightness: 20%);
+        }
+
+        .card-section {
+            text-align: center;
+
+            .fa-plus-circle {
+                padding-top: 10vh;
+                height: 30vh;
+                width: 100px;
+
+                path {
+                    fill: #d8d8d8;
+                }
+            }
+        }
+    }
+
+    h2 {
+        font-size: 1.25rem;
+        padding-left: .5rem;
+        padding-right: 1rem;
+    }
+
+    .label {
+        background: scale-color($primary-color, $lightness: 80%);
+        border: 1px solid scale-color($primary-color, $lightness: 50%);
+        margin-left: 1rem;
+        margin-top: -1px;
+    }
+}
+
+.canvas-trigger {
+    padding-bottom: 0;
+    padding-top: .5rem;
+
+    &::before {
+        content: "\f0da";
+        display: none;
+        font-family: "Font Awesome 5 Pro";
+        font-weight: 900;
+    }
+
+    &:hover {
+        // Needs important! to avoid polluting other buttons
+        background: $secondary-color !important;
+    }
+}
+
+.off-canvas-absolute {
+    padding-left: .5rem;
+    padding-right: .5rem;
+}
+
+.off-canvas-wrapper {
+    .menu a.button {
+        margin: 0 .5rem;
+
+        &:focus {
+            background: scale-color($secondary-color, $lightness: 47%);
+        }
+
+        &:hover {
+            background: $secondary-color !important;
+        }
+    }
+
+    .jump-menu {
+        background: scale-color($secondary-color, $lightness: 70%);
+        width: 100%;
+
+        li:first-child {
+            font-size: 1rem;
+        }
+    }
+
+
+    .label {
+        &.secondary.version {
+            background: scale-color($primary-color, $lightness: 75%);
+            border: 1px solid scale-color($primary-color, $lightness: 40%);
+        }
+    }
+}
+
+// Repetition below due to nesting
+
+.is-closed {
+    & + .off-canvas-content {
+        .canvas-trigger {
+            &::before {
+                content: "\f0da";
+            }
+        }
+    }
+}
+
+.is-open {
+    & + .off-canvas-content {
+        .canvas-trigger {
+            background: scale-color($secondary-color, $lightness: 20%);
+            &::before {
+                content: "\f0d7";
+            }
+        }
+    }
+}
+
+#text-viewer {
+    .menu {
+        a {
+            border-bottom: 0;
+            padding: .5rem;
+
+            &:hover {
+                background: transparent;
+                color: $black;
+            }
+        }
+
+        li {
+            &.manuscript,
+            &.version {
+                &:hover {
+                    background: scale-color($primary-color, $lightness: 80%);
+                }    
+            }
+
+
+            &.manuscript {
+                background: scale-color($primary-color, $lightness: 94%);
+            }
+
+            &.text {
+                border-top: 1px solid $white;
+                line-height: 1.4;
+                padding-left: 30px;
+                text-indent: -30px;
+
+                span {
+                    text-indent: 0;
+                }
+            }
+
+            &.version {
+                background: scale-color($primary-color, $lightness: 87%);
+            }
+
+            &.work {
+                background: scale-color($primary-color, $lightness: 80%);
+                padding: .25rem .5rem .5rem 38px;
+            }
+        }
+    }
+
+    .jump-menu,
+    .metadata {
+        margin-bottom: 1rem;
+        position: -webkit-sticky;
+        position: sticky;
+        top: 0;
+        z-index: 11;
+    }
+
+    .text-display {
+        padding: 1rem;
+    }
+}

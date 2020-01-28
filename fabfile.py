@@ -198,6 +198,10 @@ def install_requirements():
 
         run('npm ci')
 
+        # npm ci recreates the node_modules folder
+        # so we have to fix its permissions
+        run('chmod -R g+rwx node_modules')
+
 
 @task
 def create_virtualenv():
@@ -275,8 +279,11 @@ def update(version=None):
         to_version = 'master'
 
     with cd(env.path):
-        run('git pull')
+        # keep this sequence as it will cope well with change of branch
+        # during deployment.
+        run('git fetch')
         run('git checkout {}'.format(to_version))
+        run('git merge')
 
     update_dev_packages()
 

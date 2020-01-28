@@ -1,9 +1,12 @@
-from django.conf import settings as s
+from django.conf import settings
 
 
-def settings(request):
-    return {
-        'GA_ID': s.GA_ID,
-        'PROJECT_TITLE': s.PROJECT_TITLE,
-        'screen_name': s.TWITTER_SCREEN_NAME
+def django_settings(request):
+
+    ret = {
+        name: getattr(settings, name)
+        for name
+        in settings.SETTINGS_VARS_IN_CONTEXT
     }
+
+    return ret
