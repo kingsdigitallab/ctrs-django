@@ -1,0 +1,14 @@
+{% load cms_tags wagtailcore_tags %}
+
+<a href="{{ menu_parent.url }}"{% if menu_parent.id == self.id %} class="is-active"{% endif %}>{{ menu_parent.title }}</a>
+{% with menu_parent.get_children.live.public as menu_children %}
+{% if menu_children.count %}
+<ul>
+    {% for menu_child in menu_children %}
+    <li>
+        {% include "cms/includes/index_tree.html" with menu_parent=menu_child %}
+    </li>
+    {% endfor %}
+</ul>
+{% endif %}
+{% endwith %}
