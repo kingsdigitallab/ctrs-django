@@ -60,6 +60,15 @@
         }
     }
 
+    .group-members {
+        .label {
+            &.secondary {
+                background: $secondary-color;
+                border: 1px solid scale-color($secondary-color, $lightness: -20%);
+            }
+        }
+    }
+
     h2 {
         font-size: 1.25rem;
         padding-left: .5rem;
