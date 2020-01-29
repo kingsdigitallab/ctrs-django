@@ -1,7 +1,8 @@
 {% if pages %}
-{% load cms_tags wagtailimages_tags wagtailcore_tags %}
+{% load cms_tags wagtailcore_tags %}
 
 {% for page in pages %}
 <li><a href="{% pageurl page %}">{{ page.title }}</a></li>
 {% endfor %}
+
 {% endif %}
