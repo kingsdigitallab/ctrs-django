@@ -307,6 +307,8 @@ header {
     font-family: $header-font-family;
 
     a {
+        border-bottom: 0;
+
         &:hover {
             background: lighten($primary-color, 5%);
             border-bottom: 0;
@@ -383,6 +385,7 @@ main {
 
 .sidebar {
     background: scale-color($primary-color, $lightness: 85%);
+    border-left: 1px solid scale-color($primary-color, $lightness: 55%);
 
     .menu {
         a {
@@ -395,7 +398,23 @@ main {
         }
 
         li {
-            border-bottom: 3px solid lighten($primary-color, 70%);
+            border-top: 3px solid lighten($primary-color, 70%);
+        }
+
+        li li {
+            background: rgba($primary-color, .1);
+        }
+
+        &.accordion-menu {
+            button,
+            .button {
+                background: rgba($primary-color, .2);
+                height: 42px;
+
+                &:hover {
+                    background: scale-color($primary-color, $lightness: 70%);
+                }
+            }
         }
     }
 }
