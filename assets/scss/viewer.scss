@@ -62,6 +62,10 @@
 
     .group-members {
         .label {
+            margin-left: 0;
+            text-align: center;
+            width: 36px;
+
             &.secondary {
                 background: $secondary-color;
                 border: 1px solid scale-color($secondary-color, $lightness: -20%);

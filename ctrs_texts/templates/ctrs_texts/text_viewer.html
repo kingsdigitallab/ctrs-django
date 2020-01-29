@@ -23,12 +23,13 @@
 
                 <ul class="menu jump-menu">
                     <li>Jump to</li>
-                    <li><a class="button secondary" href="#Work" title="Work">W</a></li>
-                    <li><a class="button secondary" href="#Versions" title="Versions">V</a></li>
-                    <li><a class="button secondary" href="#Manuscripts" title="Manuscripts">MS</a></li>
+                    <li><a class="button secondary" :href="'#Work-'+block_index" title="Work">W</a></li>
+                    <li><a class="button secondary" :href="'#Versions-'+block_index" title="Versions">V</a></li>
+                    <li><a class="button secondary" :href="'#Manuscripts-'+block_index" title="Manuscripts">MS</a></li>
                 </ul>
 
-                <h4 id="Work">Work</h4>
+                <a :id="'Work-'+block_index"></a>
+                <h4>Work</h4>
                 <!-- We do NOT link to Work at this stage -->
                 <ul class="menu vertical">
                     <template v-for="text in texts">
@@ -39,7 +40,8 @@
                 </ul>
                 <!-- Versions and MSs -->
                 <template v-for="text_type in text_types">
-                    <h4 :id="text_type.label">{{ text_type.label }}</h4>
+                    <a :id="text_type.label+'-'+block_index"></a>
+                    <h4>{{ text_type.label }}</h4>
                     <ul class="menu vertical">
                         <template v-for="text in texts">
                             <li v-if="text.type==text_type.type" :class="{selected: text == block.text} + ' text ' + text.type" @click="on_change_text(block, text)">
