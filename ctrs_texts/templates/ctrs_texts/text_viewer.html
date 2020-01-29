@@ -43,7 +43,10 @@
                     <ul class="menu vertical">
                         <template v-for="text in texts">
                             <li v-if="text.type==text_type.type" :class="{selected: text == block.text} + ' text ' + text.type" @click="on_change_text(block, text)">
-                                <a href="#" :data-toggle="'offCanvas-'+block_index"><span class="label secondary">{{ text.attributes.siglum }}</span> {{ text.attributes.name }} <span class="label secondary version">Vx</span></a>
+                                <a href="#" :data-toggle="'offCanvas-'+block_index"><span class="label secondary">{{ text.attributes.siglum }}</span>
+                                  {{ text.attributes.name }}
+                                  <span v-if="text.parent" class="label secondary version">{{ text.parent.attributes.siglum }}</span>
+                                </a>
                             </li>
                         </template>
                     </ul>
@@ -78,9 +81,9 @@
                         <template v-if="view.status == 3">
                             <!-- show list of MS texts in a version -->
                             <ul v-if="block.text && block.text.type=='version'" class="group-members">
-                                <template v-for="subtext in texts">
-                                    <li v-if="subtext.attributes.group == block.text.id">
-                                        <span class="label secondary">{{ subtext.attributes.siglum }}</span> {{ subtext.attributes.name }}
+                                <template v-for="member in texts">
+                                    <li v-if="member.attributes.group == block.text.id">
+                                        <span class="label secondary">{{ member.attributes.siglum }}</span> {{ member.attributes.name }}
                                     </li>
                                 </template>
                             </ul>
