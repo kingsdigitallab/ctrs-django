@@ -69,7 +69,9 @@ def get_xml_element_text(element):
     return ''.join(element.itertext())
 
 
-def append_xml_element(parent_element, tag_name, text=None, **attributes):
+def append_xml_element(
+    parent_element, tag_name, text=None, prepend=False, **attributes
+):
     '''
     Create a new xml element and add it to parent_element.
 
@@ -80,7 +82,15 @@ def append_xml_element(parent_element, tag_name, text=None, **attributes):
     if attributes:
         attributes = {k.rstrip('_'): v for k, v in attributes.items()}
 
-    ret = ET.SubElement(parent_element, tag_name, attributes)
+    ret = ET.Element(tag_name, attrib=attributes)
+    if prepend:
+        parent_element.insert(0, ret)
+        ret.tail = parent_element.text
+        parent_element.text = None
+    else:
+        parent_element.append(ret)
+
     if text is not None:
         ret.text = text
+
     return ret

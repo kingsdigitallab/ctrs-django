@@ -756,11 +756,17 @@ footer {
         }
 
         &:after {
-            content: ')';
+            content: ') ';
         }
     }
 
-    span[data-dpt-type=unsettled]:not([data-dpt-group=work]) {
+    span[data-dpt-type=unsettled] {
+        // GN: added some margin to prevent the box from sticking to the
+        // previous of next word.
+        margin: 0 .25rem;
+    }
+
+    span[data-dpt-type=unsettled][data-dpt-group=version] {
 
         background: rgba($primary-color, .2);
         border: 1px solid scale-color($light-gray, $lightness: -20%);
@@ -782,11 +788,25 @@ footer {
 
 
     &.version {
-        span[data-dpt-type=unsettled]:not([data-dpt-group=work]) {
+        span[data-dpt-type=unsettled][data-dpt-group=work] {
+            // GN: we hide empty-symbol IF w-regions are not highlighted
+            // TODO: depends on toggled class in the future
+            .no-text {
+                display: none;
+            }
+
+            span[data-dpt-type=unsettled][data-dpt-group=version] {
+                .no-text {
+                    display: inline;
+                }
+            }
+        }
+
+        span[data-dpt-type=unsettled][data-dpt-group=version] {
 
             padding: .25rem;
 
-            span[data-dpt-type=unsettled]:not([data-dpt-group=work]) {
+            span[data-dpt-type=unsettled][data-dpt-group=version] {
                 background: rgba($primary-color, .4);
 
                 padding-bottom: 0;
@@ -795,9 +815,9 @@ footer {
 
             position: relative;
 
-            &:after {
-                content: '...';
-            }
+            // &:after {
+            //     content: '...';
+            // }
 
             // span.ms:after {
             //     content: ': ';
@@ -836,5 +856,11 @@ footer {
                 }
             }
         }
+    }
+
+    .group-members {
+        padding: 1rem;
+        list-style-type: none;
+        margin-left: 0;
     }
 }

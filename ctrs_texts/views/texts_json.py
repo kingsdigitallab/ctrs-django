@@ -54,6 +54,7 @@ def view_api_texts(request):
         text_data = OrderedDict(text_data)
         if text.manuscript:
             text_data['attributes'].update({
+                'city': text.manuscript.repository.city or '',
                 'repository': text.manuscript.repository.name,
                 'shelfmark': text.manuscript.shelfmark,
                 'locus': text.locus,

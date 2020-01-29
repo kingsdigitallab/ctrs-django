@@ -11,7 +11,7 @@ const Vue = window.Vue;
 
 const TYPES_LABEL = {
   transcription: 'Latin',
-  translation: 'English',
+  translation: 'English translation',
   histogram: 'Histogram',
 };
 

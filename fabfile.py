@@ -198,6 +198,10 @@ def install_requirements():
 
         run('npm ci')
 
+        # npm ci recreates the node_modules folder
+        # so we have to fix its permissions
+        run('chmod -R g+rwx node_modules')
+
 
 @task
 def create_virtualenv():

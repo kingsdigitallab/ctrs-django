@@ -74,16 +74,22 @@ class EncodedText(index.Indexed, TimestampedModel, ImportedModel):
         )
 
     def content_variants(self):
+        '''
+        Returns XHTML content of this encoded text.
+        Where each unsettled region contains the variant readings
+        and associated metadata from participating members (MS or V).
+        '''
         ret = self.content
 
         ab_text = self.abstracted_text
         members = list(ab_text.members.all())
-        if not members:
+        if 0 and not members:
             return ret
 
         # TODO: won't work yet with Work...
         # need to filter the type of regions
 
+        #  Collate all the regions from all the members
         regions = []
         for mi, member in enumerate(members):
             other_content = member.encoded_texts.filter(type=self.type).first()
@@ -94,55 +100,47 @@ class EncodedText(index.Indexed, TimestampedModel, ImportedModel):
                     regions.append(['?'] * len(members))
                 regions[ri][mi] = region
 
-        #
+        #  Get the content of the parent (i.e. self)
         xml = utils.get_xml_from_unicode(
             self.content, ishtml=True, add_root=True)
         ri = 0
-        for region in xml.findall('.//span[@data-dpt-type="unsettled"]'):
-            # _Element
-            if ri >= len(regions):
-                break
 
+        # Now inject the region content and info into each region of the parent
+        for region in xml.findall('.//span[@data-dpt-type="unsettled"]'):
             if region.attrib.get('data-dpt-group', None) == 'work':
                 # TODO: adapt this condition when self.type == 'work'
                 continue
+            else:
+                region.attrib['data-dpt-group'] = 'version'
+                ri += 1
 
-            tail = region.tail
-            attribs = {k: v for k, v in region.attrib.items()}
-            region.clear()
-            for k, v in attribs.items():
-                region.attrib[k] = v
-            region.tail = tail
-
-            variants = utils.append_xml_element(
-                region, 'span', None, class_='variants'
-            )
-
-            for mi, r in enumerate(regions[ri]):
-
-                variant = utils.append_xml_element(
-                    variants, 'span', None, class_='variant'
+            if ri < len(regions):
+                variants = utils.append_xml_element(
+                    region, 'span', None, class_='variants', prepend=True
                 )
 
-                utils.append_xml_element(
-                    variant, 'span', members[mi].short_name,
-                    class_='ms'
-                )
+                for mi, r in enumerate(regions[ri]):
 
-                utils.append_xml_element(
-                    variant, 'span', r,
-                    class_='reading'
-                )
+                    variant = utils.append_xml_element(
+                        variants, 'span', None, class_='variant'
+                    )
 
-            ri += 1
+                    utils.append_xml_element(
+                        variant, 'span', members[mi].short_name,
+                        class_='ms'
+                    )
 
-        # print(regions)
+                    utils.append_xml_element(
+                        variant, 'span', r,
+                        class_='reading'
+                    )
 
         ret = utils.get_unicode_from_xml(xml, remove_root=True)
 
         # TODO: only works for versions
         # cleanup the empty symbol in the w-region
-        ret = ret.replace('∅', '')
+        # ret = ret.replace('∅', '<span class="no-text">∅</span>')
+        ret = ret.replace('⊕', '<span class="no-text">⊕</span>')
 
         return ret
 
@@ -183,6 +181,12 @@ class Repository(NamedModel, ImportedModel):
 
     class Meta:
         verbose_name_plural = 'Repositories'
+
+    def __str__(self):
+        ret = self.name
+        if self.city:
+            ret = self.city + ', ' + ret
+        return ret
 
 
 @register_snippet
