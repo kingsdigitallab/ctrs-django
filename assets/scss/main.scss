@@ -388,6 +388,10 @@ main {
     border-left: 1px solid scale-color($primary-color, $lightness: 55%);
 
     .menu {
+        .active {
+            background: $secondary-color;
+        }
+
         a {
             color: $rich-black;
 
