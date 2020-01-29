@@ -1,0 +1,52 @@
+{% extends "base.html" %}
+{% load staticfiles compress %}
+
+{% block meta_title %}Side by side viewer integrated{% endblock %}
+
+{% block custom_css %}
+<link rel="stylesheet" type="text/x-scss" href="{% static 'scss/search.scss' %}">
+{% endblock %}
+
+{% block title %}
+<h1 class="no-container">Search</h1>
+{% endblock %}
+
+{% block main %}
+{% verbatim %}
+
+<div id="text-search" class="grid-x grid-margin-x">
+
+  <div class="cell medium-3">
+      <h2>Result Type</h2>
+
+      <label><input type="radio" v-model="facets.result_type" value="sentences">Sentences</label>
+      <label><input type="radio" v-model="facets.result_type" value="regions">Regions</label>
+
+      <h2>Facets</h2>
+
+      <h3>Texts</h3>
+      <ul class="menu vertical">
+          <template v-for="text in facets.texts">
+              <li :class="">
+                  <label>
+                      <input type="checkbox" v-model="text.selected">
+                      <span class="label secondary">{{ text.attributes.siglum }}</span> {{ text.attributes.name }}
+                  </label>
+              </li>
+          </template>
+      </ul>
+  </div>
+
+  <div class="cell medium-9">
+      <h2>Results</h2>
+  </div>
+
+</div>
+{% endverbatim %}
+{% endblock %}
+
+{% block footer_scripts %}
+  <script src="{% static 'vue/dist/vue.js' %}"></script>
+
+  <script src="{% static 'ctrs_texts/text_search.js' %}"></script>
+{% endblock %}
