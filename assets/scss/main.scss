@@ -389,7 +389,7 @@ main {
 
     .menu {
         .active {
-            background: $secondary-color;
+            background: scale-color($secondary-color, $lightness: 40%);
         }
 
         a {
