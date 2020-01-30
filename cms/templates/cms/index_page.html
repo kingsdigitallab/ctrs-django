@@ -14,12 +14,14 @@
 {% block main %}
 <div class="grid-x grid-margin-x data-equalizer" data-equalize-on="medium" id="sidebar">
     <div class="cell medium-3 sidebar" data-equalizer-watch="sidebar">
-        <ul class="vertical menu">
-            {% include "cms/includes/index_page_children.html" with pages=self.get_children.live %}
+        <ul class="vertical menu accordion-menu" data-accordion-menu data-submenu-toggle="true">
+            {% include "cms/includes/index_tree.html" with menu_parent=self|get_section %}
         </ul>
     </div>
     <div class="cell medium-9" data-equalizer-watch="sidebar">
         {{ block.super }}
+        {% block extra_content %}
+        {% endblock %}
     </div>
 </div>
 {% endblock %}

@@ -23,12 +23,13 @@
 
                 <ul class="menu jump-menu">
                     <li>Jump to</li>
-                    <li><a class="button secondary" href="#Work" title="Work">W</a></li>
-                    <li><a class="button secondary" href="#Versions" title="Versions">V</a></li>
-                    <li><a class="button secondary" href="#Manuscripts" title="Manuscripts">MS</a></li>
+                    <li><a class="button secondary" :href="'#Work-'+block_index" title="Work">W</a></li>
+                    <li><a class="button secondary" :href="'#Versions-'+block_index" title="Versions">V</a></li>
+                    <li><a class="button secondary" :href="'#Manuscripts-'+block_index" title="Manuscripts">MS</a></li>
                 </ul>
 
-                <h4 id="Work">Work</h4>
+                <a :id="'Work-'+block_index"></a>
+                <h4>Work</h4>
                 <!-- We do NOT link to Work at this stage -->
                 <ul class="menu vertical">
                     <template v-for="text in texts">
@@ -39,11 +40,15 @@
                 </ul>
                 <!-- Versions and MSs -->
                 <template v-for="text_type in text_types">
-                    <h4 :id="text_type.label">{{ text_type.label }}</h4>
+                    <a :id="text_type.label+'-'+block_index"></a>
+                    <h4>{{ text_type.label }}</h4>
                     <ul class="menu vertical">
                         <template v-for="text in texts">
                             <li v-if="text.type==text_type.type" :class="{selected: text == block.text} + ' text ' + text.type" @click="on_change_text(block, text)">
-                                <a href="#" :data-toggle="'offCanvas-'+block_index"><span class="label secondary">{{ text.attributes.siglum }}</span> {{ text.attributes.name }} <span class="label secondary version">Vx</span></a>
+                                <a href="#" :data-toggle="'offCanvas-'+block_index"><span class="label secondary">{{ text.attributes.siglum }}</span>
+                                  {{ text.attributes.name }}
+                                  <span v-if="text.parent" class="label secondary version">{{ text.parent.attributes.siglum }}</span>
+                                </a>
                             </li>
                         </template>
                     </ul>
@@ -57,10 +62,11 @@
                             <a class="button hollow arrow-only canvas-trigger" :data-toggle="'offCanvas-'+block_index">
                                 <span class="show-for-sr">List of texts</span>
                             </a>
-                            <span v-if="block.text" class="label secondary">{{ block.text.attributes.siglum }}</span>
+                            <span v-if="block.text" :class="'label secondary '+block.text.type">{{ block.text.attributes.siglum }}</span>
                             <h2>
                                 <template v-if="block.text">
                                     {{ block.text.attributes.name }}
+                                    <span v-if="block.text.parent" class="label secondary version nested">{{ block.text.parent.attributes.siglum }}</span>
                                 </template>
                                 <template v-else>
                                     Select text
@@ -72,15 +78,17 @@
                     <div v-if="block.text" v-for="view in block.views" :class="['card-section', block.text ? block.text.type : '']">
 
                         <div v-if="block.text" class="metadata">
-                            <span class="label">{{ view.type|view_type_label }}</span>
+                            <template v-for="(type_label, type_key) in view_types">
+                                <button :class="{'button': 1, 'hollow': 1, 'active': type_key == view.type}" @click="change_view_type(block, view, type_key)">{{ type_label }}</button>&nbsp;
+                            </template>
                         </div>
 
                         <template v-if="view.status == 3">
                             <!-- show list of MS texts in a version -->
                             <ul v-if="block.text && block.text.type=='version'" class="group-members">
-                                <template v-for="subtext in texts">
-                                    <li v-if="subtext.attributes.group == block.text.id">
-                                        <span class="label secondary">{{ subtext.attributes.siglum }}</span> {{ subtext.attributes.name }}
+                                <template v-for="member in texts">
+                                    <li v-if="member.attributes.group == block.text.id">
+                                        <span class="label secondary">{{ member.attributes.siglum }}</span> {{ member.attributes.name }}
                                     </li>
                                 </template>
                             </ul>

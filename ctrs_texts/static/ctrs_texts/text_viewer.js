@@ -12,7 +12,7 @@ const Vue = window.Vue;
 const TYPES_LABEL = {
   transcription: 'Latin',
   translation: 'English translation',
-  histogram: 'Histogram',
+//  histogram: 'Histogram',
 };
 
 function clog(message) {
@@ -60,11 +60,20 @@ $(() => {
       let self = this;
       $.getJSON('/api/texts/?group=declaration').done(res => {
         Vue.set(self, 'texts', res.data);
-        clog(res);
+
+        // add direct references to parent texts
+        // for convenience in the template.
+        for (let text of this.texts) {
+            text.parent = this.get_text_from_id_or_siglum(text.attributes.group);
+        }
+
         self.init_blocks();
       });
     },
     computed: {
+      view_types: function() {
+        return TYPES_LABEL;
+      },
       text_types: function() {
         return [
           // {label: 'Work', type: 'work'},
@@ -93,9 +102,13 @@ $(() => {
     filters: {
       view_type_label: function(value) {
         return TYPES_LABEL[value];
-      }
+      },
     },
     methods: {
+      change_view_type: function(block, view, view_type) {
+        view.type = view_type;
+        this.on_view_changed(block, view);
+      },
       on_view_changed: function(block, view) {
         // a view needs its content to be fetched
         view.status = STATUS_FETCHING;
@@ -179,6 +192,8 @@ $(() => {
       },
 
       get_text_from_id_or_siglum: function (id_or_siglum) {
+        // clog('get_text_from_x '+id_or_siglum);
+        id_or_siglum += '';
         for (let text of this.texts) {
           if (
             text.id == id_or_siglum ||
