@@ -165,11 +165,14 @@ def view_api_text_search_regions(request):
     with open(annotation_path, 'rt') as fh:
         annotations_res = json.load(fh)
 
+    for a in annotations_res['results']:
+        a['geo_json'] = json.loads(a['geo_json'])
+
     hits = [{
         'type': 'heatmap',
         'id': 0,
         'html': render_to_string('ctrs_texts/search_region.html', {}),
-        'annotations': json.load(annotations_res)['results']
+        'annotations': annotations_res['results'],
     }]
 
     ret = OrderedDict([

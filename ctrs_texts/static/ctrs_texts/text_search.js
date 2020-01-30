@@ -9,6 +9,7 @@ const STATUS_ERROR = 4;
 
 const Vue = window.Vue;
 const L = window.L;
+const ARCHETYPE_IMAGE_DIMENSIONS = [3212, 4392]
 
 // magic number... see leaflet-iiif annotation example
 // https://bl.ocks.org/mejackreed/raw/2724146adfe91233c74120b9056fba06/
@@ -147,45 +148,72 @@ $(() => {
 
   function init_leaflet(response) {
     $('[data-leaflet-iiif]').each(function() {
-      let map = L.map(this, {
-        center: [0, 0],
-        crs: L.CRS.Simple,
-        zoom: 1
-      });
-      window.map = map;
+      if (!$(this).hasClass('ctrs-initialised')) {
+        window.rectangles = [];
 
-      let image_layer = L.tileLayer.iiif(
-        this.getAttribute('data-leaflet-iiif')
-      ).addTo(map);
-      window.image_layer = image_layer;
+        $(this).addClass('ctrs-initialised');
 
-      // Unfortuantely I couldn't find an event for json loaded
-      // https://github.com/mejackreed/Leaflet-IIIF/blob/master/leaflet-iiif.js#L73
-      // so we are going through this frequent tile-related event instead
-      // but make sure we execute only once.
-      image_layer.on('load', function() {
-        if (this.annotation_loaded) return;
-        load_annotations(this);
-        this.annotation_loaded = true;
-      });
+        let map = L.map(this, {
+          center: [0, 0],
+          crs: L.CRS.Simple,
+          zoom: 0
+        });
+        window.map = map;
+        map.annotation_loaded = false;
+
+        let image_layer = L.tileLayer.iiif(
+          this.getAttribute('data-leaflet-iiif')
+        ).addTo(map);
+        window.image_layer = image_layer;
+
+        // Unfortuantely I couldn't find an event for json loaded
+        // https://github.com/mejackreed/Leaflet-IIIF/blob/master/leaflet-iiif.js#L73
+        // so we are going through this frequent tile-related event instead
+        // but make sure we execute only once.
+        image_layer.on('load', function() {
+          if (this.annotation_loaded) return;
+          load_annotations(this, response);
+          this.annotation_loaded = true;
+        });
+      } else {
+        for (let rect of window.rectangles) {
+          // TODO: update color instead of removing and adding everything again
+          window.map.removeLayer(rect);
+        }
+        window.rectangles = [];
+        load_annotations(window.image_layer, response);
+      }
     });
   }
 
-  function load_annotations(image_layer) {
+  function load_annotations(image_layer, response) {
     // iiif-image metadata is loaded, now we draw all the annotations
-    let b = [[0, 0], [image_layer.x, image_layer.y]];
     // TODO: avoid using _ property
     let map = image_layer._map;
-    L.rectangle(ps2cs(map, b), {color: "#ff0000", weight: 4}).addTo(map);
+
+    for (let an of response.data[0].annotations) {
+      let coordinates = an.geo_json.geometry.coordinates[0];
+      let bounds = ps2cs(image_layer, [coordinates[0], coordinates[2]]);
+      let rect = L.rectangle(bounds, {color: "#ff0000", weight: 1}).addTo(map);
+      window.rectangles.push(rect);
+      // break;
+    }
   }
 
-  // returns coordinates from [x, y] point
-  function p2c(map, p) {
-      return map.unproject(L.point(p[0], p[1]), LEAFLET_ZOOM_TRANFORM);
+  // returns coordinates from [x, y] point extracted from archetype geo_json
+  function p2c(image_layer, p) {
+    let map = image_layer._map;
+    return map.unproject(
+      L.point(
+        p[0] / ARCHETYPE_IMAGE_DIMENSIONS[0] * image_layer.x,
+        image_layer.y - (p[1] / ARCHETYPE_IMAGE_DIMENSIONS[1] * image_layer.y)
+      ),
+      LEAFLET_ZOOM_TRANFORM
+    );
   }
   // returns coordinate pair from [[x0, y0], [x1, y1]]
-  function ps2cs(map, b) {
-    return [p2c(map, b[0]), p2c(map, b[1])];
+  function ps2cs(image_layer, b) {
+    return [p2c(image_layer, b[0]), p2c(image_layer, b[1])];
   }
 
 });
