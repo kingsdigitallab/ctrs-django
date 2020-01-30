@@ -112,7 +112,6 @@ class EncodedText(index.Indexed, TimestampedModel, ImportedModel):
                 continue
             else:
                 region.attrib['data-dpt-group'] = 'version'
-                ri += 1
 
             if ri < len(regions):
                 variants = utils.append_xml_element(
@@ -134,6 +133,8 @@ class EncodedText(index.Indexed, TimestampedModel, ImportedModel):
                         variant, 'span', r,
                         class_='reading'
                     )
+
+            ri += 1
 
         ret = utils.get_unicode_from_xml(xml, remove_root=True)
 
