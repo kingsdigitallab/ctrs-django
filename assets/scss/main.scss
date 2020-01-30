@@ -357,8 +357,19 @@ main {
 
 .metadata {
     background: scale-color($secondary-color, $lightness: 50%);
+    font-size: .875rem;
     padding: .5rem 1rem;
     text-align: right;
+
+    button,
+    .button {
+        margin-bottom: 0;
+
+        &.active {
+            background: scale-color($primary-color, $lightness: 70%);
+            border-bottom: 3px solid $primary-color;
+        }
+    }
 
     .label {
         color: $black;
@@ -809,6 +820,17 @@ footer {
         font-style: italic;
     }
 
+    span[data-dpt-type=unsettled][data-dpt-group=version] {
+        
+        &::before {
+            color: $primary-color;
+            content: "v: ";
+            font-size: .75rem;
+            padding-left: .25rem;
+            padding-right: .125rem;
+        }
+    }
+
 
     &.version {
         span[data-dpt-type=unsettled][data-dpt-group=work] {
@@ -817,7 +839,7 @@ footer {
             // Also adding W label
 
             background: rgba($secondary-color, 0.5);
-            padding: .125rem .25rem;
+            padding: .25rem .5rem;
 
             &::before {
                 color: $primary-color;
@@ -826,6 +848,7 @@ footer {
                 padding-left: .25rem;
                 padding-right: .125rem;
             }
+
             // GN: we hide empty-symbol IF w-regions are not highlighted
             // TODO: depends on toggled class in the future
             .no-text {
@@ -840,19 +863,11 @@ footer {
         }
 
         span[data-dpt-type=unsettled][data-dpt-group=version] {
-            &::before {
-                color: $primary-color;
-                content: "v: ";
-                font-size: .75rem;
-                padding-left: .25rem;
-                padding-right: .125rem;
-            }
 
             span[data-dpt-type=unsettled][data-dpt-group=version] {
                 background: rgba($primary-color, .4);
 
-                padding-bottom: 0;
-                padding-top: 0;
+                padding: 0;
             }
 
             position: relative;
@@ -873,7 +888,7 @@ footer {
                 opacity: .95;
                 position: absolute;
                 padding: .5em .5em .25em;
-                line-height: 2em;
+                // line-height: 2em;
 
                 .variant {
                     display: block;
@@ -898,11 +913,5 @@ footer {
                 }
             }
         }
-    }
-
-    .group-members {
-        padding: 1rem;
-        list-style-type: none;
-        margin-left: 0;
     }
 }
