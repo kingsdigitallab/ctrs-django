@@ -821,7 +821,7 @@ footer {
     }
 
     span[data-dpt-type=unsettled][data-dpt-group=version] {
-        
+
         &::before {
             color: $primary-color;
             content: "v: ";
@@ -852,7 +852,7 @@ footer {
             // GN: we hide empty-symbol IF w-regions are not highlighted
             // TODO: depends on toggled class in the future
             .no-text {
-                display: none;
+                // display: none;
             }
 
             span[data-dpt-type=unsettled][data-dpt-group=version] {
