@@ -3,6 +3,9 @@ from django.http import JsonResponse
 from _collections import OrderedDict
 from django.db.models import Q
 from django.template.loader import render_to_string
+import json
+from django.conf import settings
+import os
 
 
 def view_api_texts(request):
@@ -155,10 +158,17 @@ def view_api_text_search_regions(request):
     text_ids = request.GET.get('texts', '') or '520'
     text_ids = text_ids.split(',')
 
+    annotation_path = os.path.join(
+        settings.MEDIA_ROOT, 'arch-annotations.json'
+    )
+    with open(annotation_path, 'rt') as fh:
+        annotations_res = json.load(fh)
+
     hits = [{
         'type': 'heatmap',
         'id': 0,
-        'html': render_to_string('ctrs_texts/search_region.html', {})
+        'html': render_to_string('ctrs_texts/search_region.html', {}),
+        'annotations': json.load(annotations_res)['results']
     }]
 
     ret = OrderedDict([
