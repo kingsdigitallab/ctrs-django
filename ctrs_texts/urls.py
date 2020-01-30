@@ -8,6 +8,7 @@ from .views.texts_html import (
 from .views.texts_json import (
     view_api_texts, view_api_text_chunk, view_api_text_search_sentences
 )
+from ctrs_texts.views.texts_json import view_api_text_search_regions
 
 admin.autodiscover()
 
@@ -36,6 +37,11 @@ urlpatterns = [
     path(
         'api/texts/search/sentences/',
         view_api_text_search_sentences, name='view_api_text_search_sentence'
+    ),
+
+    path(
+        'api/texts/search/regions/',
+        view_api_text_search_regions, name='view_api_text_search_regions'
     ),
 
     # Legacy Text Viewer (only one text at a time)

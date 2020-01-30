@@ -2,6 +2,7 @@ from ctrs_texts.models import AbstractedText, EncodedText
 from django.http import JsonResponse
 from _collections import OrderedDict
 from django.db.models import Q
+from django.template.loader import render_to_string
 
 
 def view_api_texts(request):
@@ -140,6 +141,29 @@ def view_api_text_search_sentences(request):
     ret = OrderedDict([
         ['jsonapi', '1.0'],
         ['data', texts],
+    ])
+
+    return JsonResponse(ret)
+
+# -------------------------------------------------------------------
+
+
+def view_api_text_search_regions(request):
+    '''
+    '''
+
+    text_ids = request.GET.get('texts', '') or '520'
+    text_ids = text_ids.split(',')
+
+    hits = [{
+        'type': 'heatmap',
+        'id': 0,
+        'html': render_to_string('ctrs_texts/search_region.html', {})
+    }]
+
+    ret = OrderedDict([
+        ['jsonapi', '1.0'],
+        ['data', hits],
     ])
 
     return JsonResponse(ret)

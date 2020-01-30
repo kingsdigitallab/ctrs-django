@@ -8,6 +8,13 @@ const STATUS_FETCHED = 3;
 const STATUS_ERROR = 4;
 
 const Vue = window.Vue;
+const L = window.L;
+
+// magic number... see leaflet-iiif annotation example
+// https://bl.ocks.org/mejackreed/raw/2724146adfe91233c74120b9056fba06/
+// https://bl.ocks.org/mejackreed/raw/2724146adfe91233c74120b9056fba06/app.js
+// https://github.com/mejackreed/Leaflet-IIIF/blob/master/leaflet-iiif.js#L45
+const LEAFLET_ZOOM_TRANFORM = 3;
 
 const TYPES_LABEL = {
   transcription: 'Latin',
@@ -16,6 +23,8 @@ const TYPES_LABEL = {
 };
 
 const PRESELECTED_TEXT_SIGLA = ['O', 'JH'];
+
+const DEFAULT_RESULT_TYPE = 'regions';
 
 function clog(message) {
   window.console.log(message);
@@ -27,7 +36,7 @@ $(() => {
     data: {
       status: STATUS_TO_FETCH,
       facets: {
-        result_type: 'sentences',
+        result_type: DEFAULT_RESULT_TYPE,
         /*
         List of all available texts. Exactly as returned by /api/texts/.
 
@@ -45,6 +54,7 @@ $(() => {
         texts: [],
       },
       blocks: [],
+      response: {},
     },
     mounted() {
       let self = this;
@@ -103,23 +113,16 @@ $(() => {
         .done(res => {
           clog(res);
           self.status = STATUS_FETCHED;
-          self.update_query_string();
+          Vue.set(self, 'response', res);
+          // self.update_query_string();
+
+          Vue.nextTick(function() {
+            init_leaflet(res);
+          });
         })
         .fail(res => {
           self.status = STATUS_ERROR;
         });
-      },
-
-      update_query_string: function() {
-        return;
-        // update query string with current state of viewer
-        // e.g. ?blocks=506:transcription,transcription;495:transcription
-        var self = this;
-        let qs = 'blocks=' + self.blocks.map(
-          b => b.text ? b.text.id + ':' + (b.views.map(v => v.type)).join(','): ''
-        ).join(';');
-        qs = window.location.href.replace(/^([^?]+)([^#]+)(.*)$/, '$1?'+qs+'$3');
-        history.pushState(null, '', qs);
       },
 
       get_text_from_id_or_siglum: function (id_or_siglum) {
@@ -140,5 +143,50 @@ $(() => {
 
     }
   });
+
+
+  function init_leaflet(response) {
+    $('[data-leaflet-iiif]').each(function() {
+      let map = L.map(this, {
+        center: [0, 0],
+        crs: L.CRS.Simple,
+        zoom: 1
+      });
+      window.map = map;
+
+      let image_layer = L.tileLayer.iiif(
+        this.getAttribute('data-leaflet-iiif')
+      ).addTo(map);
+      window.image_layer = image_layer;
+
+      // Unfortuantely I couldn't find an event for json loaded
+      // https://github.com/mejackreed/Leaflet-IIIF/blob/master/leaflet-iiif.js#L73
+      // so we are going through this frequent tile-related event instead
+      // but make sure we execute only once.
+      image_layer.on('load', function() {
+        if (this.annotation_loaded) return;
+        load_annotations(this);
+        this.annotation_loaded = true;
+      });
+    });
+  }
+
+  function load_annotations(image_layer) {
+    // iiif-image metadata is loaded, now we draw all the annotations
+    let b = [[0, 0], [image_layer.x, image_layer.y]];
+    // TODO: avoid using _ property
+    let map = image_layer._map;
+    L.rectangle(ps2cs(map, b), {color: "#ff0000", weight: 4}).addTo(map);
+  }
+
+  // returns coordinates from [x, y] point
+  function p2c(map, p) {
+      return map.unproject(L.point(p[0], p[1]), LEAFLET_ZOOM_TRANFORM);
+  }
+  // returns coordinate pair from [[x0, y0], [x1, y1]]
+  function ps2cs(map, b) {
+    return [p2c(map, b[0]), p2c(map, b[1])];
+  }
+
 });
 
