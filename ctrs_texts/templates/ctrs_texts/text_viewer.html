@@ -62,10 +62,11 @@
                             <a class="button hollow arrow-only canvas-trigger" :data-toggle="'offCanvas-'+block_index">
                                 <span class="show-for-sr">List of texts</span>
                             </a>
-                            <span v-if="block.text" class="label secondary">{{ block.text.attributes.siglum }}</span>
+                            <span v-if="block.text" :class="'label secondary '+block.text.type">{{ block.text.attributes.siglum }}</span>
                             <h2>
                                 <template v-if="block.text">
                                     {{ block.text.attributes.name }}
+                                    <span v-if="block.text.parent" class="label secondary version nested">{{ block.text.parent.attributes.siglum }}</span>
                                 </template>
                                 <template v-else>
                                     Select text
@@ -77,7 +78,7 @@
                     <div v-if="block.text" v-for="view in block.views" :class="['card-section', block.text ? block.text.type : '']">
 
                         <div v-if="block.text" class="metadata">
-                            <span class="label">{{ view.type|view_type_label }}</span>
+                            <button class="button hollow">Translation</button> <button class="button hollow active">{{ view.type|view_type_label }}</button>
                         </div>
 
                         <template v-if="view.status == 3">

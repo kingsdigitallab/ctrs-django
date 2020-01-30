@@ -19,13 +19,14 @@
         height: 0;  // It doesn't really matter the value, but height needs
                     // to be declared for overflow to work.
 
-        line-height: 2;
+        line-height: 2.25;
+
         overflow-y: auto;
         padding: 0;
         position: relative;
 
         p {
-            line-height: 2;
+            line-height: 2.25;
         }
     }
 
@@ -61,14 +62,21 @@
     }
 
     .group-members {
+        font-size: .875rem;
+        list-style-type: none;
+        margin-left: 0;
+        padding: 0 1rem;
+
         .label {
+            font-size: .75rem;
             margin-left: 0;
+            padding: .25rem;
             text-align: center;
             width: 36px;
 
             &.secondary {
-                background: $secondary-color;
-                border: 1px solid scale-color($secondary-color, $lightness: -20%);
+                background: scale-color($secondary-color, $lightness: 20%);
+                border: 1px solid $secondary-color;
             }
         }
     }
@@ -80,10 +88,21 @@
     }
 
     .label {
-        background: scale-color($primary-color, $lightness: 80%);
-        border: 1px solid scale-color($primary-color, $lightness: 50%);
-        margin-left: 1rem;
-        margin-top: -1px;
+        margin-left: .5rem;
+
+        &.manuscript {        
+            background: scale-color($secondary-color, $lightness: 20%);
+            border: 1px solid scale-color($secondary-color, $lightness: -20%);
+        }
+
+        &.nested {
+            padding-top: .25rem;
+        }
+
+        &.version {        
+            background: scale-color($primary-color, $lightness: 80%);
+            border: 1px solid scale-color($primary-color, $lightness: 50%);
+        }
     }
 }
 
