@@ -18,9 +18,15 @@
     .card-section {
         height: 0;  // It doesn't really matter the value, but height needs
                     // to be declared for overflow to work.
+
+        line-height: 2;
         overflow-y: auto;
         padding: 0;
         position: relative;
+
+        p {
+            line-height: 2;
+        }
     }
 
     a.card-section {
@@ -41,13 +47,6 @@
 
         .card-section {
             text-align: center;
-
-            // &::before {
-            //     content: "\f055";
-            //     display: none;
-            //     font-family: "Font Awesome 5 Pro";
-            //     font-weight: 900;
-            // }
 
             .fa-plus-circle {
                 padding-top: 10vh;
@@ -77,11 +76,78 @@
 
 .canvas-trigger {
     padding-bottom: 0;
+    padding-top: .5rem;
+
+    &::before {
+        content: "\f0da";
+        display: none;
+        font-family: "Font Awesome 5 Pro";
+        font-weight: 900;
+    }
+
+    &:hover {
+        // Needs important! to avoid polluting other buttons
+        background: $secondary-color !important;
+    }
 }
 
 .off-canvas-absolute {
     padding-left: .5rem;
     padding-right: .5rem;
+}
+
+.off-canvas-wrapper {
+    .menu a.button {
+        margin: 0 .5rem;
+
+        &:focus {
+            background: scale-color($secondary-color, $lightness: 47%);
+        }
+
+        &:hover {
+            background: $secondary-color !important;
+        }
+    }
+
+    .jump-menu {
+        background: scale-color($secondary-color, $lightness: 70%);
+        width: 100%;
+
+        li:first-child {
+            font-size: 1rem;
+        }
+    }
+
+
+    .label {
+        &.secondary.version {
+            background: scale-color($primary-color, $lightness: 75%);
+            border: 1px solid scale-color($primary-color, $lightness: 40%);
+        }
+    }
+}
+
+// Repetition below due to nesting
+
+.is-closed {
+    & + .off-canvas-content {
+        .canvas-trigger {
+            &::before {
+                content: "\f0da";
+            }
+        }
+    }
+}
+
+.is-open {
+    & + .off-canvas-content {
+        .canvas-trigger {
+            background: scale-color($secondary-color, $lightness: 20%);
+            &::before {
+                content: "\f0d7";
+            }
+        }
+    }
 }
 
 #text-viewer {
@@ -131,6 +197,7 @@
         }
     }
 
+    .jump-menu,
     .metadata {
         margin-bottom: 1rem;
         position: -webkit-sticky;

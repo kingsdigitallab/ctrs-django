@@ -11,7 +11,7 @@ const Vue = window.Vue;
 
 const TYPES_LABEL = {
   transcription: 'Latin',
-  translation: 'English',
+  translation: 'English translation',
   histogram: 'Histogram',
 };
 
@@ -60,7 +60,13 @@ $(() => {
       let self = this;
       $.getJSON('/api/texts/?group=declaration').done(res => {
         Vue.set(self, 'texts', res.data);
-        clog(res);
+
+        // add direct references to parent texts
+        // for convenience in the template.
+        for (let text of this.texts) {
+            text.parent = this.get_text_from_id_or_siglum(text.attributes.group);
+        }
+
         self.init_blocks();
       });
     },
@@ -93,7 +99,7 @@ $(() => {
     filters: {
       view_type_label: function(value) {
         return TYPES_LABEL[value];
-      }
+      },
     },
     methods: {
       on_view_changed: function(block, view) {
@@ -179,6 +185,8 @@ $(() => {
       },
 
       get_text_from_id_or_siglum: function (id_or_siglum) {
+        // clog('get_text_from_x '+id_or_siglum);
+        id_or_siglum += '';
         for (let text of this.texts) {
           if (
             text.id == id_or_siglum ||
