@@ -12,7 +12,7 @@ const Vue = window.Vue;
 const TYPES_LABEL = {
   transcription: 'Latin',
   translation: 'English translation',
-  histogram: 'Histogram',
+//  histogram: 'Histogram',
 };
 
 function clog(message) {
@@ -71,6 +71,9 @@ $(() => {
       });
     },
     computed: {
+      view_types: function() {
+        return TYPES_LABEL;
+      },
       text_types: function() {
         return [
           // {label: 'Work', type: 'work'},
@@ -102,6 +105,10 @@ $(() => {
       },
     },
     methods: {
+      change_view_type: function(block, view, view_type) {
+        view.type = view_type;
+        this.on_view_changed(block, view);
+      },
       on_view_changed: function(block, view) {
         // a view needs its content to be fetched
         view.status = STATUS_FETCHING;
