@@ -166,7 +166,7 @@ $(() => {
         ).addTo(map);
         window.image_layer = image_layer;
 
-        // Unfortuantely I couldn't find an event for json loaded
+        // Unfortunately I couldn't find an event for json loaded
         // https://github.com/mejackreed/Leaflet-IIIF/blob/master/leaflet-iiif.js#L73
         // so we are going through this frequent tile-related event instead
         // but make sure we execute only once.
