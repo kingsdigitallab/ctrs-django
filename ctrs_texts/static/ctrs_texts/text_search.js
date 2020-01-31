@@ -9,7 +9,10 @@ const STATUS_ERROR = 4;
 
 const Vue = window.Vue;
 const L = window.L;
-const ARCHETYPE_IMAGE_DIMENSIONS = [3212, 4392]
+// These are the dimensions of the image in Archetype.
+// We use a bigger version of that image for COTR site.
+// Hence the need for ad-hoc scaling.
+const ARCHETYPE_IMAGE_DIMENSIONS = [3212, 4392];
 
 // magic number... see leaflet-iiif annotation example
 // https://bl.ocks.org/mejackreed/raw/2724146adfe91233c74120b9056fba06/
@@ -27,6 +30,8 @@ const PRESELECTED_TEXT_SIGLA = ['O', 'JH'];
 
 // const DEFAULT_RESULT_TYPE = 'regions';
 const DEFAULT_RESULT_TYPE = 'sentences';
+
+const SENTENCE_NUMBER_MAX = 27;
 
 function clog(message) {
   window.console.log(message);
@@ -80,6 +85,9 @@ $(() => {
           {label: 'Manuscripts', type: 'manuscript'},
         ];
       },
+      sentence_number_max: function() {
+        return SENTENCE_NUMBER_MAX;
+      }
     },
     watch: {
       facets: {
@@ -146,6 +154,13 @@ $(() => {
       get_default_text: function () {
         return this.get_text_from_id_or_siglum('O');
       },
+
+      move_sentence_number: function(increment) {
+        let ret = this.facets.sentence_number + increment;
+        if (ret < 1) ret = 1;
+        if (ret > this.sentence_number_max) ret = this.sentence_number_max;
+        this.facets.sentence_number = ret;
+      }
 
     }
   });

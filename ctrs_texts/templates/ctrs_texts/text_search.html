@@ -26,11 +26,11 @@
       <h2>Options</h2>
 
       <template v-if="facets.result_type == 'sentences'">
-        <h3>Sentence</h3>
+        <h3>Sentence number</h3>
         <div class="button-group with-input">
-          <button class="button secondary"><i class="fas fa-angle-double-left"></i><span class="show-for-sr">Prev</span></button>
+          <button class="button secondary" @click="move_sentence_number(-1)"><i class="fas fa-angle-double-left"></i><span class="show-for-sr">Prev</span></button>
           <input v-model="facets.sentence_number" type="number" min="1" max="27" value="1">
-          <button class="button secondary"><i class="fas fa-angle-double-right"></i><span class="show-for-sr">Next</span></button>
+          <button class="button secondary" @click="move_sentence_number(1)"><i class="fas fa-angle-double-right"></i><span class="show-for-sr">Next</span></button>
         </div>
       </template>
 
