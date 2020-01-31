@@ -125,20 +125,40 @@ def view_api_text_search_sentences(request):
     '''
     '''
 
-    text_ids = request.GET.get('texts', '') or '520'
+    text_ids = request.GET.get('texts', '') or '0'
     text_ids = text_ids.split(',')
 
     encoded_texts = EncodedText.objects.filter(
         abstracted_text__id__in=text_ids,
         type__slug='transcription'
+    ).order_by(
+        'abstracted_text__group__short_name',
+        'abstracted_text__short_name'
     )
 
+    sentence_number = request.GET.get('sn', '1')
+
     texts = []
+    import re
     for text in encoded_texts:
+        pattern = ''.join([
+            r'<p><span data-dpt="sn">\s*',
+            sentence_number,
+            r'\s*</span>.*?</p>'
+        ])
+        sentences = re.findall(pattern, text.content)
+
+        html = text.abstracted_text.short_name + ': ' +\
+            text.abstracted_text.name
+        html += '<br>'
+        html += sentences[0] if sentences \
+            else 'Sentence absent from this text'
+
         text_data = {
             # 'chunk': re.findall(
-            # r'<p><span data-dpt="sn">(.?*)</span>.*?</p>', '', text.content),
-            'chunk': text.id,
+            # r'<p><span data-dpt="sn">(.?*)</span>.*?</p>', '',
+            # text.content),
+            'html': html,
         }
         texts.append(text_data)
 

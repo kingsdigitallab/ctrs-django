@@ -25,7 +25,8 @@ const TYPES_LABEL = {
 
 const PRESELECTED_TEXT_SIGLA = ['O', 'JH'];
 
-const DEFAULT_RESULT_TYPE = 'regions';
+// const DEFAULT_RESULT_TYPE = 'regions';
+const DEFAULT_RESULT_TYPE = 'sentences';
 
 function clog(message) {
   window.console.log(message);
@@ -38,6 +39,7 @@ $(() => {
       status: STATUS_TO_FETCH,
       facets: {
         result_type: DEFAULT_RESULT_TYPE,
+        sentence_number: 1,
         /*
         List of all available texts. Exactly as returned by /api/texts/.
 
@@ -64,7 +66,7 @@ $(() => {
         clog(res);
 
         for (let siglum of PRESELECTED_TEXT_SIGLA) {
-            self.get_text_from_id_or_siglum(siglum).selected = true;
+            Vue.set(self.get_text_from_id_or_siglum(siglum), 'selected', true);
         }
 
         // self.init_blocks();
@@ -109,7 +111,10 @@ $(() => {
 
         $.getJSON(
           '/api/texts/search/'+self.facets.result_type+'/',
-          {'texts': text_ids.join(',')}
+          {
+            'texts': text_ids.join(','),
+            'sn': self.facets.sentence_number,
+          }
         )
         .done(res => {
           clog(res);

@@ -25,15 +25,30 @@
 
       <h2>Options</h2>
 
+      <template v-if="facets.result_type == 'sentences'">
+        <h3>Sentence</h3>
+        <input v-model="facets.sentence_number" type="number" min="1" max="27" value="1">
+      </template>
+
       <h3>Texts</h3>
       <ul class="menu vertical">
           <template v-for="text in facets.texts">
-              <li :class="">
-                  <label>
-                      <input type="checkbox" v-model="text.selected">
-                      <span class="label secondary">{{ text.attributes.siglum }}</span> {{ text.attributes.name }}
-                  </label>
-              </li>
+              <template v-if="text.type == 'version'">
+                  <li :class="">
+                      <label>
+                          <input type="checkbox" v-model="text.selected">
+                          <span class="label secondary">{{ text.attributes.siglum }}</span> {{ text.attributes.name }}
+                      </label>
+                  </li>
+                  <template v-for="member in facets.texts">
+                      <li :class="" v-if="member.attributes.group == text.id">
+                          <label>
+                              <input type="checkbox" v-model="member.selected">
+                              <span class="label secondary">{{ member.attributes.siglum }}</span> {{ member.attributes.name }}
+                          </label>
+                      </li>
+                  </template>
+              </template>
           </template>
       </ul>
   </div>
