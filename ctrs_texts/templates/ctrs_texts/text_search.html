@@ -20,7 +20,7 @@
   <div class="cell medium-3">
       <h2>Result Type</h2>
 
-      <label><input type="radio" v-model="facets.result_type" value="regions">Heatmap</label>
+      <label v-if="debug_mode"><input type="radio" v-model="facets.result_type" value="regions">Heatmap</label>
       <label><input type="radio" v-model="facets.result_type" value="sentences">Sentences</label>
 
       <h2>Options</h2>
@@ -29,7 +29,7 @@
         <h3>Sentence number</h3>
         <div class="button-group with-input">
           <button class="button secondary" @click="move_sentence_number(-1)"><i class="fas fa-angle-double-left"></i><span class="show-for-sr">Prev</span></button>
-          <input v-model="facets.sentence_number" type="number" min="1" max="27" value="1">
+          <input v-model="facets.sentence_number" type="number" min="1" max="sentence_number_max" value="1">
           <button class="button secondary" @click="move_sentence_number(1)"><i class="fas fa-angle-double-right"></i><span class="show-for-sr">Next</span></button>
         </div>
       </template>
@@ -71,6 +71,10 @@
 
 {% block footer_scripts %}
   {{ block.super }}
+  <script>
+      window.DEBUG = {% if DEBUG %}true{% else %}false{% endif %};
+  </script>
+
   <script src="{% static 'vue/dist/vue.js' %}"></script>
 
   <script src="{% static 'leaflet/dist/leaflet.js' %}"></script>

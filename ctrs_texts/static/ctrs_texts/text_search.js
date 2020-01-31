@@ -87,6 +87,9 @@ $(() => {
       },
       sentence_number_max: function() {
         return SENTENCE_NUMBER_MAX;
+      },
+      debug_mode: function() {
+        return window.DEBUG;
       }
     },
     watch: {
