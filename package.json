@@ -20,6 +20,8 @@
   "dependencies": {
     "foundation-sites": "^6.4.3",
     "js-cookie": "^2.2.1",
+    "leaflet": "^1.6.0",
+    "leaflet-iiif": "^3.0.0",
     "vue": "^2.6.11"
   }
 }
