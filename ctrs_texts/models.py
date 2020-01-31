@@ -82,9 +82,9 @@ class EncodedText(index.Indexed, TimestampedModel, ImportedModel):
         ret = self.content
 
         ab_text = self.abstracted_text
-        members = list(ab_text.members.all())
-        if 0 and not members:
-            return ret
+        members = list(ab_text.members.all().exclude(
+            short_name__in=['HM1', 'HM2']
+        ))
 
         # TODO: won't work yet with Work...
         # need to filter the type of regions

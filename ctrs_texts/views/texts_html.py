@@ -28,6 +28,14 @@ def view_texts(request):
     return render(request, 'ctrs_texts/texts.html', context)
 
 
+def view_text_search(request):
+    '''
+    '''
+    context = {
+    }
+
+    return render(request, 'ctrs_texts/text_search.html', context)
+
 # -----------------------------------------------------------------------
 
 

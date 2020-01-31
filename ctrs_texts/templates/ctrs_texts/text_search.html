@@ -1,0 +1,76 @@
+{% extends "base.html" %}
+{% load staticfiles compress %}
+
+{% block meta_title %}Side by side viewer integrated{% endblock %}
+
+{% block custom_css %}
+<link rel="stylesheet" type="text/x-scss" href="{% static 'scss/search.scss' %}">
+<link rel="stylesheet" type="text/x-scss" href="{% static 'leaflet/dist/leaflet.css' %}">
+{% endblock %}
+
+{% block title %}
+<h1 class="no-container">Search</h1>
+{% endblock %}
+
+{% block main %}
+{% verbatim %}
+
+<div id="text-search" class="grid-x grid-margin-x">
+
+  <div class="cell medium-3">
+      <h2>Result Type</h2>
+
+      <label><input type="radio" v-model="facets.result_type" value="regions">Heatmap</label>
+      <label><input type="radio" v-model="facets.result_type" value="sentences">Sentences</label>
+
+      <h2>Options</h2>
+
+      <template v-if="facets.result_type == 'sentences'">
+        <h3>Sentence</h3>
+        <input v-model="facets.sentence_number" type="number" min="1" max="27" value="1">
+      </template>
+
+      <h3>Texts</h3>
+      <ul class="menu vertical">
+          <template v-for="text in facets.texts">
+              <template v-if="text.type == 'version'">
+                  <li :class="">
+                      <label>
+                          <input type="checkbox" v-model="text.selected">
+                          <span class="label secondary">{{ text.attributes.siglum }}</span> {{ text.attributes.name }}
+                      </label>
+                  </li>
+                  <template v-for="member in facets.texts">
+                      <li :class="" v-if="member.attributes.group == text.id">
+                          <label>
+                              <input type="checkbox" v-model="member.selected">
+                              <span class="label secondary">{{ member.attributes.siglum }}</span> {{ member.attributes.name }}
+                          </label>
+                      </li>
+                  </template>
+              </template>
+          </template>
+      </ul>
+  </div>
+
+  <div class="cell medium-9">
+      <h2>Results</h2>
+      <template v-if="response.data && response.data.length > 0">
+          <div class="hit" v-for="hit in response.data" v-html="hit.html">
+          </div>
+      </template>
+  </div>
+
+</div>
+{% endverbatim %}
+{% endblock %}
+
+{% block footer_scripts %}
+  {{ block.super }}
+  <script src="{% static 'vue/dist/vue.js' %}"></script>
+
+  <script src="{% static 'leaflet/dist/leaflet.js' %}"></script>
+  <script src="{% static 'leaflet-iiif/leaflet-iiif.js' %}"></script>
+
+  <script src="{% static 'ctrs_texts/text_search.js' %}"></script>
+{% endblock %}
