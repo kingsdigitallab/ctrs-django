@@ -140,24 +140,23 @@ def view_api_text_search_sentences(request):
 
     texts = []
     import re
-    for text in encoded_texts:
+    for encoded_text in encoded_texts:
         pattern = ''.join([
             r'<p><span data-dpt="sn">\s*',
             sentence_number,
             r'\s*</span>.*?</p>'
         ])
-        sentences = re.findall(pattern, text.content)
+        sentence = ''
+        sentences = re.findall(pattern, encoded_text.content)
+        if sentences:
+            sentence = sentences[0]
 
-        html = text.abstracted_text.short_name + ': ' +\
-            text.abstracted_text.name
-        html += '<br>'
-        html += sentences[0] if sentences \
-            else 'Sentence absent from this text'
+        html = render_to_string('ctrs_texts/search_sentence.html', {
+            'text': encoded_text.abstracted_text,
+            'sentence': sentence,
+        })
 
         text_data = {
-            # 'chunk': re.findall(
-            # r'<p><span data-dpt="sn">(.?*)</span>.*?</p>', '',
-            # text.content),
             'html': html,
         }
         texts.append(text_data)
