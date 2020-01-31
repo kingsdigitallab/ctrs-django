@@ -159,7 +159,7 @@ $(() => {
       },
 
       move_sentence_number: function(increment) {
-        let ret = this.facets.sentence_number + increment;
+        let ret = (parseInt(this.facets.sentence_number) || 1) + increment;
         if (ret < 1) ret = 1;
         if (ret > this.sentence_number_max) ret = this.sentence_number_max;
         this.facets.sentence_number = ret;
