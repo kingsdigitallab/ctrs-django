@@ -1,0 +1,10 @@
+<div class="hit hit-sentence">
+  <span class="text-title"><span class="label secondary">{{ text.short_name }}</span> {{ text.name }}</span>
+  {% if sentence %}
+    {# GN: temporarily added .text-view to reuse text rendering styles #}
+    {# GN: note that w/v-regions don't render properly #}
+    <div class="text-view">{{ sentence|safe }}</div>
+  {% else %}
+    <p><em>Sentence absent from this text.</em</p>
+  {% endif %}
+</div>

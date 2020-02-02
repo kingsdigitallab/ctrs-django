@@ -2,6 +2,10 @@ from ctrs_texts.models import AbstractedText, EncodedText
 from django.http import JsonResponse
 from _collections import OrderedDict
 from django.db.models import Q
+from django.template.loader import render_to_string
+import json
+from django.conf import settings
+import os
 
 
 def view_api_texts(request):
@@ -110,6 +114,89 @@ def view_api_text_chunk(
     ret = OrderedDict([
         ['jsonapi', '1.0'],
         ['data', data],
+    ])
+
+    return JsonResponse(ret)
+
+# -------------------------------------------------------------------
+
+
+def view_api_text_search_sentences(request):
+    '''
+    '''
+
+    text_ids = request.GET.get('texts', '') or '0'
+    text_ids = text_ids.split(',')
+
+    encoded_texts = EncodedText.objects.filter(
+        abstracted_text__id__in=text_ids,
+        type__slug='transcription'
+    ).order_by(
+        'abstracted_text__group__short_name',
+        'abstracted_text__short_name'
+    )
+
+    sentence_number = request.GET.get('sn', '1')
+
+    texts = []
+    import re
+    for encoded_text in encoded_texts:
+        pattern = ''.join([
+            r'<p><span data-dpt="sn">\s*',
+            sentence_number,
+            r'\s*</span>.*?</p>'
+        ])
+        sentence = ''
+        sentences = re.findall(pattern, encoded_text.content)
+        if sentences:
+            sentence = sentences[0]
+
+        html = render_to_string('ctrs_texts/search_sentence.html', {
+            'text': encoded_text.abstracted_text,
+            'sentence': sentence,
+        })
+
+        text_data = {
+            'html': html,
+        }
+        texts.append(text_data)
+
+    ret = OrderedDict([
+        ['jsonapi', '1.0'],
+        ['data', texts],
+    ])
+
+    return JsonResponse(ret)
+
+# -------------------------------------------------------------------
+
+
+def view_api_text_search_regions(request):
+    '''
+    '''
+
+    text_ids = request.GET.get('texts', '') or '520'
+    text_ids = text_ids.split(',')
+
+    annotation_path = os.path.join(
+        settings.MEDIA_ROOT, 'arch-annotations.json'
+    )
+    with open(annotation_path, 'rt') as fh:
+        annotations_res = json.load(fh)
+
+    for a in annotations_res['results']:
+        a['geo_json'] = json.loads(a['geo_json'])
+
+    hits = [{
+        'type': 'heatmap',
+        'id': 0,
+        'html': render_to_string('ctrs_texts/search_region.html', {}),
+        'annotations': annotations_res['results'],
+    }]
+
+    ret = OrderedDict([
+        ['jsonapi', '1.0'],
+        ['data', hits],
     ])
 
     return JsonResponse(ret)
