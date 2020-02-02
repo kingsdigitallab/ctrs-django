@@ -24,7 +24,7 @@
               {% if text.short_name != 'HM1' and text.short_name != 'HM2' %}
                 <li>
                   <a class="status-{{text.get_status.slug}}" href="{% url 'text_viewer' %}?blocks={{text.id}}:transcription">
-                    {{ text.full_name_with_siglum }}
+                    {{ text.short_name }}: {{ text.name }}
                   </a>
                 </li>
               {% endif %}
