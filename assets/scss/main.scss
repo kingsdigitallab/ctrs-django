@@ -126,6 +126,8 @@ button,
 
 .button-group {
     &.with-input {
+        max-width: 80px;
+
         button,
         .button {
             border: 1px solid $secondary-color;
