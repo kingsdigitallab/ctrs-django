@@ -168,7 +168,7 @@ class Command(BaseCommand):
 
     @classmethod
     def clean_archetype_text_content(cls, content):
-        # clean the input text
+        # non-breaking spaces -> normal spaces
         ret = (content or '').replace('&nbsp;', '').replace('\xA0', ' ')
 
         # allow the empty symbol to be styled

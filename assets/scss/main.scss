@@ -800,6 +800,10 @@ footer {
 
 .card-section,
 .text-view {
+    p {
+        line-height: 2.25;
+    }
+
     span[data-dpt=head]:before {
         font-weight: 700;
         content: '(Title) ';
