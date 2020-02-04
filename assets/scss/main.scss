@@ -645,6 +645,11 @@ footer {
             margin-right: 1rem;
         }
 
+        &.float-mid {
+            margin: 0 auto;
+            max-width: 600px;
+        }
+
         &.float-right {
             margin-left: 1rem;
         }
@@ -654,7 +659,7 @@ footer {
             width: 50%;
 
             img {
-                width: 100%;
+                max-width: 100%;
             }
         }
     }
