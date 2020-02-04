@@ -79,8 +79,6 @@ class EncodedText(index.Indexed, TimestampedModel, ImportedModel):
         Where each unsettled region contains the variant readings
         and associated metadata from participating members (MS or V).
         '''
-        ret = self.content
-
         ab_text = self.abstracted_text
         members = list(ab_text.members.all().exclude(
             short_name__in=['HM1', 'HM2']
@@ -110,38 +108,33 @@ class EncodedText(index.Indexed, TimestampedModel, ImportedModel):
             if region.attrib.get('data-dpt-group', None) == 'work':
                 # TODO: adapt this condition when self.type == 'work'
                 continue
-            else:
-                region.attrib['data-dpt-group'] = 'version'
 
-            if ri < len(regions):
-                variants = utils.append_xml_element(
-                    region, 'span', None, class_='variants', prepend=True
+            if ri >= len(regions):
+                break
+
+            variants = utils.append_xml_element(
+                region, 'span', None, class_='variants', prepend=True
+            )
+
+            for mi, r in enumerate(regions[ri]):
+
+                variant = utils.append_xml_element(
+                    variants, 'span', None, class_='variant'
                 )
 
-                for mi, r in enumerate(regions[ri]):
+                utils.append_xml_element(
+                    variant, 'span', members[mi].short_name,
+                    class_='ms'
+                )
 
-                    variant = utils.append_xml_element(
-                        variants, 'span', None, class_='variant'
-                    )
-
-                    utils.append_xml_element(
-                        variant, 'span', members[mi].short_name,
-                        class_='ms'
-                    )
-
-                    utils.append_xml_element(
-                        variant, 'span', r,
-                        class_='reading'
-                    )
+                utils.append_xml_element(
+                    variant, 'span', r,
+                    class_='reading'
+                )
 
             ri += 1
 
         ret = utils.get_unicode_from_xml(xml, remove_root=True)
-
-        # TODO: only works for versions
-        # cleanup the empty symbol in the w-region
-        # ret = ret.replace('∅', '<span class="no-text">∅</span>')
-        ret = ret.replace('⊕', '<span class="no-text">⊕</span>')
 
         return ret
 
