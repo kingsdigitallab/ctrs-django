@@ -28,8 +28,7 @@ const TYPES_LABEL = {
 
 const PRESELECTED_TEXT_SIGLA = ['O', 'JH'];
 
-const DEFAULT_RESULT_TYPE = 'regions';
-// const DEFAULT_RESULT_TYPE = 'sentences';
+const DEFAULT_RESULT_TYPE = window.DEBUG ? 'regions' : 'sentences';
 
 const SENTENCE_NUMBER_MAX = 27;
 
