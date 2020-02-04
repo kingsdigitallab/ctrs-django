@@ -7,6 +7,7 @@ def view_text_viewer(request):
     New text viewer: multi-text, multi-views
     '''
     context = {
+        'awesome_pseudo': True,
     }
     ret = render(request, 'ctrs_texts/text_viewer.html', context)
     return ret

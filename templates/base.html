@@ -21,7 +21,8 @@
 
   {# Font Awesome js to svg #}
   {# compress js #}
-  <script data-search-pseudo-elements defer src="{% static 'vendor/font-awesome/js/all.min.js' %}"></script>
+  {# See AC-102 #}
+  <script {% if awesome_pseudo %} data-search-pseudo-elements {% endif %} defer src="{% static 'vendor/font-awesome/js/all.min.js' %}"></script>
   {# endcompress #}
 
 </head>
