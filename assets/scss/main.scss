@@ -405,8 +405,7 @@ main {
     }
 
     img {
-        border: 8px solid white;
-        max-width: 250px;
+        width: 250px;
     }
 }
 
@@ -521,6 +520,12 @@ footer {
 
     img {
         width: 100%;
+    }
+}
+
+main {
+    img {
+        border: 8px solid white;
     }
 }
 
@@ -772,4 +777,3 @@ footer {
 }
 
 /* 7. Print */
-

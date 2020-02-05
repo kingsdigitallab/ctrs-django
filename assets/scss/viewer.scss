@@ -246,18 +246,8 @@
     }
 }
 
-/* X. Text Viewer (GN) */
-
 // GN: Temporary rules for demo page
 // Both html structure and styles will be improve at a later stage
-
-// GF (05022020): Commenting bits that are no longer needed.
-// TODO: Remove commented code.
-// .container.text-members {
-//     ul {
-//         // list-style-type: upper-alpha;
-//     }
-// }
 
 .legend {
     font-size: 0.625em;
@@ -296,7 +286,7 @@
 
     span[data-dpt-type=unsettled] {
         // GN: added some margin to prevent the box from sticking to the
-        // previous or next word.
+        // previous of next word.
         margin: 0 .25rem;
     }
 
@@ -364,14 +354,6 @@
 
             position: relative;
 
-            // &:after {
-            //     content: '...';
-            // }
-
-            // span.ms:after {
-            //     content: ': ';
-            // }
-
             span.variants {
                 background-color: scale-color($light-gray, $lightness: 20%);
                 border: 1px solid grey;
@@ -380,7 +362,6 @@
                 opacity: .95;
                 position: absolute;
                 padding: .5em .5em .25em;
-                // line-height: 2em;
 
                 .variant {
                     display: block;
@@ -413,4 +394,18 @@
 .heatmap {
     width: 100%;
     height: 80vh;
+}
+
+#text-search {
+  .menu.vertical {
+    li {
+      margin-top: 4px;
+    };
+    input[type=checkbox] {
+      margin-right: 0;
+    }
+    .menu.vertical {
+      margin-left: 1rem;
+    }
+  }
 }
