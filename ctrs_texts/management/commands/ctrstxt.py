@@ -4,6 +4,7 @@ from ctrs_texts.models import (
     AbstractedTextType, EncodedTextStatus
 )
 from django.utils.text import slugify
+from ctrs_texts.utils import get_xml_from_unicode, get_unicode_from_xml
 
 
 class Command(BaseCommand):
@@ -138,12 +139,10 @@ class Command(BaseCommand):
                 )
                 models_imported_ids[AbstractedText].append(jip['id'])
 
-            # clean the input text
-            content = (jtcxml['content'] or '').replace(
-                '&nbsp;', '').replace('\xA0', ' ')
-
             EncodedText.update_or_create(
-                jtc['id'], ab_txt, jtc['type'], content, status
+                jtc['id'], ab_txt, jtc['type'],
+                cls.clean_archetype_text_content(jtcxml['content']),
+                status
             )
             models_imported_ids[EncodedText].append(jtc['id'])
 
@@ -168,6 +167,26 @@ class Command(BaseCommand):
         return True
 
     @classmethod
+    def clean_archetype_text_content(cls, content):
+        # non-breaking spaces -> normal spaces
+        ret = (content or '').replace('&nbsp;', '').replace('\xA0', ' ')
+
+        # allow the empty symbol to be styled
+        ret = ret.replace('⊕', '<span class="no-text">⊕</span>')
+
+        # Minor XML transforms
+        xml = get_xml_from_unicode(ret, ishtml=True, add_root=True)
+
+        for region in xml.findall('.//span[@data-dpt-type="unsettled"]'):
+            # add data-dpt-group="version" to the v-regions
+            if not region.attrib.get('data-dpt-group', None):
+                region.attrib['data-dpt-group'] = 'version'
+
+        ret = get_unicode_from_xml(xml, remove_root=True)
+
+        return ret
+
+    @classmethod
     def delete_unimported_records(cls, models_imported_ids):
         '''
         Delete all the records with .imported_id <> None
@@ -189,6 +208,7 @@ class Command(BaseCommand):
 ACTION:
   help
     show this help.
+
   import FILE
     import all the text content and metadata from FILE.
     update if the record already exists.

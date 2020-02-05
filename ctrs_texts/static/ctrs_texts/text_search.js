@@ -26,10 +26,9 @@ const TYPES_LABEL = {
   histogram: 'Histogram',
 };
 
-const PRESELECTED_TEXT_SIGLA = ['O', 'JH'];
+const PRESELECTED_TEXT_SIGLA = ['V1'];
 
-const DEFAULT_RESULT_TYPE = 'regions';
-// const DEFAULT_RESULT_TYPE = 'sentences';
+const DEFAULT_RESULT_TYPE = window.DEBUG ? 'regions' : 'sentences';
 
 const SENTENCE_NUMBER_MAX = 27;
 
@@ -68,13 +67,22 @@ $(() => {
       let self = this;
       $.getJSON('/api/texts/?group=declaration').done(res => {
         Vue.set(self.facets, 'texts', res.data);
-        clog(res);
+        // clog(res);
+
+        // add direct references to parent texts
+        // for convenience in the template.
+        for (let text of this.facets.texts) {
+            text.parent = this.get_text_from_id_or_siglum(text.attributes.group);
+        }
 
         for (let siglum of PRESELECTED_TEXT_SIGLA) {
-            Vue.set(self.get_text_from_id_or_siglum(siglum), 'selected', true);
+            let text = self.get_text_from_id_or_siglum(siglum);
+            text.selected = true;
+            self.on_tick_text(text, true);
         }
 
         // self.init_blocks();
+        self.fetch_results();
       });
     },
     computed: {
@@ -93,14 +101,20 @@ $(() => {
       }
     },
     watch: {
-      facets: {
+      'facets.deprecated': {
         handler: function() {
           // Something has changed in a block or view,
           // fetch view content if needed.
           this.fetch_results();
         },
         deep: true
-      }
+      },
+      'facets.sentence_number': function() {
+        this.fetch_results();
+      },
+      'facets.result_type': function() {
+        this.fetch_results();
+      },
     },
     filters: {
       view_type_label: function(value) {
@@ -108,6 +122,26 @@ $(() => {
       }
     },
     methods: {
+      on_tick_text: function(text, silent) {
+        let selected = text.selected;
+
+        if (text.type == 'version') {
+          // select all members accordingly
+          for (let member of this.facets.texts) {
+            if (member.parent === text) {
+              member.selected = selected;
+            }
+          }
+        }
+        if (text.type == 'manuscript') {
+          // deselect parent of member is unselected
+          if (!selected) {
+            text.parent.selected = selected;
+          }
+        }
+
+        if (!silent) this.fetch_results();
+      },
       fetch_results: function(block, view) {
         if (this.status == STATUS_FETCHING) return;
         this.status = STATUS_FETCHING;
@@ -128,7 +162,7 @@ $(() => {
           }
         )
         .done(res => {
-          clog(res);
+          // clog(res);
           self.status = STATUS_FETCHED;
           Vue.set(self, 'response', res);
           // self.update_query_string();
@@ -143,6 +177,7 @@ $(() => {
       },
 
       get_text_from_id_or_siglum: function (id_or_siglum) {
+        id_or_siglum += '';
         for (let text of this.facets.texts) {
           if (
             text.id == id_or_siglum ||
@@ -215,8 +250,7 @@ $(() => {
     let map = image_layer._map;
 
     for (let an of response.data[0].annotations) {
-      let coordinates = an.geo_json.geometry.coordinates[0];
-      let bounds = ps2cs(image_layer, [coordinates[0], coordinates[2]]);
+      let bounds = ps2cs(image_layer, an.bounds);
       let rect = L.rectangle(bounds, {color: "#ff0000", weight: 1}).addTo(map);
       window.rectangles.push(rect);
       // break;
