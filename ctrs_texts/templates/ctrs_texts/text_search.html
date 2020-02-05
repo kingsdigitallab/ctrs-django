@@ -35,26 +35,28 @@
       </template>
 
       <h3>Texts</h3>
-      <ul class="menu vertical">
-          <template v-for="text in facets.texts">
-              <template v-if="text.type == 'version'">
+      <template v-for="text in facets.texts">
+          <template v-if="text.type == 'version'">
+              <ul class="menu vertical">
                   <li :class="">
                       <label>
-                          <input type="checkbox" v-model="text.selected">
-                          <span class="label secondary">{{ text.attributes.siglum }}</span> {{ text.attributes.name }}
+                          <input type="checkbox" v-model="text.selected" @change="on_tick_text(text)">
+                          <span class="label secondary version">{{ text.attributes.siglum }}</span> {{ text.attributes.name }}
                       </label>
+                      <ul class="menu vertical">
+                          <template v-for="member in facets.texts">
+                              <li :class="" v-if="member.attributes.group == text.id">
+                                  <label>
+                                      <input type="checkbox" v-model="member.selected" @change="on_tick_text(member)">
+                                      <span class="label secondary manuscript">{{ member.attributes.siglum }}</span> {{ member.attributes.name }}
+                                  </label>
+                              </li>
+                          </template>
+                      </ul>
                   </li>
-                  <template v-for="member in facets.texts">
-                      <li :class="" v-if="member.attributes.group == text.id">
-                          <label>
-                              <input type="checkbox" v-model="member.selected">
-                              <span class="label secondary">{{ member.attributes.siglum }}</span> {{ member.attributes.name }}
-                          </label>
-                      </li>
-                  </template>
-              </template>
+              </ul>
           </template>
-      </ul>
+      </template>
   </div>
 
   <div class="cell medium-9">

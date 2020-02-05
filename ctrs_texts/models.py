@@ -79,6 +79,9 @@ class EncodedText(index.Indexed, TimestampedModel, ImportedModel):
         Where each unsettled region contains the variant readings
         and associated metadata from participating members (MS or V).
         '''
+        if self.abstracted_text.type.slug == 'manuscript':
+            return self.content
+
         ab_text = self.abstracted_text
         members = list(ab_text.members.all().exclude(
             short_name__in=['HM1', 'HM2']
@@ -106,7 +109,7 @@ class EncodedText(index.Indexed, TimestampedModel, ImportedModel):
         # Now inject the region content and info into each region of the parent
         for region in xml.findall('.//span[@data-dpt-type="unsettled"]'):
             if region.attrib.get('data-dpt-group', None) == 'work':
-                # TODO: adapt this condition when self.type == 'work'
+                # TODO: adapt this condition when type == 'work'
                 continue
 
             if ri >= len(regions):
