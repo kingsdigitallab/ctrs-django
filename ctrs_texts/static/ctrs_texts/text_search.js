@@ -28,7 +28,8 @@ const TYPES_LABEL = {
 
 const PRESELECTED_TEXT_SIGLA = ['V1'];
 
-const DEFAULT_RESULT_TYPE = window.DEBUG ? 'regions' : 'sentences';
+// const DEFAULT_RESULT_TYPE = window.DEBUG ? 'regions' : 'sentences';
+const DEFAULT_RESULT_TYPE = 'sentences';
 
 const SENTENCE_NUMBER_MAX = 27;
 
@@ -235,7 +236,7 @@ $(() => {
         image_layer.on('load', function() {
           if (this.annotation_loaded) return;
           load_annotations(this, response);
-          map.setZoom(0);
+          // map.setZoom(0);
           this.annotation_loaded = true;
         });
       } else {
