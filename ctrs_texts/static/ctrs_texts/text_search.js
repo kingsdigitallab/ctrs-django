@@ -291,7 +291,12 @@ $(() => {
     let region = window.regions[annotation.key];
     if (!region) {
       clog('WARNING: annotation key '+annotation.key+' not found in regions');
-      ret.color = '#0000ff';
+      if (window.DEBUG) {
+        ret.color = '#0000ff';
+      } else {
+        ret.fillOpacity = 0;
+        ret.weight= 0;
+      }
     } else {
       let freq = Object.keys(region.readings).length;
       freq = Math.min(freq, DISTINCT_READINGS_MAX);
