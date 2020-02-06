@@ -394,6 +394,10 @@
 .heatmap {
     width: 100%;
     height: 80vh;
+
+    img {
+        border: 0;
+    }
 }
 
 #text-search {
