@@ -20,8 +20,31 @@
   <div class="cell medium-3">
       <h2>Result Type</h2>
 
-      <label v-if="debug_mode"><input type="radio" v-model="facets.result_type" value="regions">Heatmap</label>
-      <label><input type="radio" v-model="facets.result_type" value="sentences">Sentences</label>
+<!-- 
+      <label v-if="debug_mode">
+        <input type="radio" v-model="facets.result_type" value="regions">Heatmap
+      </label>
+      <label>
+        <input type="radio" v-model="facets.result_type" value="sentences">Sentences
+      </label>
+-->
+      <div v-if="debug_mode">
+        <p>Heatmap</p>
+        <div class="switch tiny">
+          <input class="switch-input" v-model="facets.result_type" type="radio" value="regions" id="regions" checked name="radio-group">
+          <label class="switch-paddle" for="regions">
+            <span class="show-for-sr">Heatmap</span>
+          </label>
+        </div>
+
+        <p>Sentences</p>
+        <div class="switch tiny">
+          <input class="switch-input" v-model="facets.result_type" type="radio" value="sentences" id="sentences" name="radio-group">
+          <label class="switch-paddle" for="sentences">
+            <span class="show-for-sr">Sentences</span>
+          </label>
+        </div>
+      </div>
 
       <h2>Options</h2>
 
