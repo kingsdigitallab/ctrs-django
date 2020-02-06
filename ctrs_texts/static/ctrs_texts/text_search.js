@@ -236,7 +236,7 @@ $(() => {
         image_layer.on('load', function() {
           if (this.annotation_loaded) return;
           load_annotations(this, response);
-          map.setZoom(0);
+          // map.setZoom(0);
           this.annotation_loaded = true;
         });
       } else {
