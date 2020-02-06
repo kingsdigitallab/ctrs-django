@@ -246,7 +246,7 @@ def _get_regions_with_unique_variants(text_ids):
         for vregion in content.findall(vpattern):
             vregions.append(get_unicode_from_xml(vregion, text_only=True))
 
-        print(vregions)
+        # print(vregions)
 
         # get parent
         parent = EncodedText.objects.filter(

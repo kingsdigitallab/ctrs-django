@@ -307,7 +307,7 @@ $(() => {
         ret.weight= 0;
       } else {
         ret.color = 'rgb(255, '+((1-((freq-2)/(DISTINCT_READINGS_MAX - 2)))*255)+', 0)';
-        clog(freq);
+        // clog(freq);
         // clog(ret);
       }
     }
