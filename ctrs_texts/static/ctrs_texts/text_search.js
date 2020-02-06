@@ -32,6 +32,12 @@ const DEFAULT_RESULT_TYPE = window.DEBUG ? 'regions' : 'sentences';
 
 const SENTENCE_NUMBER_MAX = 27;
 
+// maximum number of distinct readings per region (in Declaration)
+// actual maximum is 17 but we cap it to 10
+// => - all values above look like 10
+// => + 2 or 3 distinct readings are more distinct visually
+const DISTINCT_READINGS_MAX = 10;
+
 function clog(message) {
   window.console.log(message);
 }
@@ -207,8 +213,6 @@ $(() => {
   function init_leaflet(response) {
     $('[data-leaflet-iiif]').each(function() {
       if (!$(this).hasClass('ctrs-initialised')) {
-        window.rectangles = [];
-
         $(this).addClass('ctrs-initialised');
 
         let map = L.map(this, {
@@ -231,14 +235,14 @@ $(() => {
         image_layer.on('load', function() {
           if (this.annotation_loaded) return;
           load_annotations(this, response);
+          map.setZoom(0);
           this.annotation_loaded = true;
         });
       } else {
-        for (let rect of window.rectangles) {
+        for (let rect of window.annotations) {
           // TODO: update color instead of removing and adding everything again
           window.map.removeLayer(rect);
         }
-        window.rectangles = [];
         load_annotations(window.image_layer, response);
       }
     });
@@ -247,14 +251,67 @@ $(() => {
   function load_annotations(image_layer, response) {
     // iiif-image metadata is loaded, now we draw all the annotations
     // TODO: avoid using _ property
+    let ret = response.data[0].annotations;
+
     let map = image_layer._map;
 
-    for (let an of response.data[0].annotations) {
-      let bounds = ps2cs(image_layer, an.bounds);
-      let rect = L.rectangle(bounds, {color: "#ff0000", weight: 1}).addTo(map);
-      window.rectangles.push(rect);
-      // break;
+    // make the regions accessible by their keys.
+    // TODO: check that this code works on mobile/older browsers.
+    // regions becomes an array with keys... convenient but unorthodox.
+    let regions = response.data[0].regions;
+    window.regions = regions;
+    for (let i = regions.length - 1; i > -1; i--) {
+      regions[regions[i].key] = regions[i];
     }
+
+    // we draw all the rectangles.
+    // replace each pair of coordinates in an.rects
+    // with a reference to the new rectangle.
+    window.annotations = [];
+
+    for (let [key, an] of Object.entries(ret)) {
+      an.key = key;
+      for (let i = 0; i < an.rects.length; i++){
+        an.rects[i] = L.rectangle(
+          ps2cs(image_layer, an.rects[i]),
+          _get_annotation_style(an)
+        ).addTo(map);
+        window.annotations.push(an.rects[i]);
+      }
+    }
+
+    return ret;
+  }
+
+  function _get_annotation_style(annotation) {
+    let ret = {
+      color: "#ff0000", weight: 1, fillOpacity: 0.3
+    };
+
+    let region = window.regions[annotation.key];
+    if (!region) {
+      clog('WARNING: annotation key '+annotation.key+' not found in regions');
+      if (window.DEBUG) {
+        ret.color = '#0000ff';
+      } else {
+        ret.fillOpacity = 0;
+        ret.weight= 0;
+      }
+    } else {
+      let freq = Object.keys(region.readings).length;
+      freq = Math.min(freq, DISTINCT_READINGS_MAX);
+
+      if (freq < 2) {
+        ret.fillOpacity = 0;
+        ret.weight= 0;
+      } else {
+        ret.color = 'rgb(255, '+((1-((freq-2)/(DISTINCT_READINGS_MAX - 2)))*255)+', 0)';
+        clog(freq);
+        // clog(ret);
+      }
+    }
+
+    return ret;
   }
 
   // returns coordinates from [x, y] point extracted from archetype geo_json

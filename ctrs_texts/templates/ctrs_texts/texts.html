@@ -16,20 +16,22 @@
         {# <h3><a class="status-{{work.get_status.slug}}" href="{% url 'text_viewer' %}?blocks={{work.id}}:transcription">{{ work.name }}</a></h3> #}
         <h3>{{ work.name }}</h3>
         {% for version in work.members.all %}
-          <h4><a class="status-{{version.get_status.slug}}" href="{% url 'text_viewer' %}?blocks={{version.id}}:transcription">
-            {{ version.short_name}}: {{ version.name }}
-          </a></h4>
-          <ul>
-            {% for text in version.members.all %}
-              {% if text.short_name != 'HM1' and text.short_name != 'HM2' %}
-                <li>
-                  <a class="status-{{text.get_status.slug}}" href="{% url 'text_viewer' %}?blocks={{text.id}}:transcription">
-                    {{ text.short_name }}: {{ text.name }}
-                  </a>
-                </li>
-              {% endif %}
-            {% endfor %}
-          </ul>
+          {% if version.short_name != 'HM1' and version.short_name != 'HM2' %}
+            <h4><a class="status-{{version.get_status.slug}}" href="{% url 'text_viewer' %}?blocks={{version.id}}:transcription">
+              {{ version.short_name}}: {{ version.name }}
+            </a></h4>
+            <ul>
+              {% for text in version.members.all %}
+                {% if text.short_name != 'HM1' and text.short_name != 'HM2' %}
+                  <li>
+                    <a class="status-{{text.get_status.slug}}" href="{% url 'text_viewer' %}?blocks={{text.id}}:transcription">
+                      {{ text.short_name }}: {{ text.name }}
+                    </a>
+                  </li>
+                {% endif %}
+              {% endfor %}
+            </ul>
+          {% endif %}
         {% endfor %}
       {% endif %}
     {% endfor %}

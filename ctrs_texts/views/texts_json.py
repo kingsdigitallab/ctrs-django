@@ -181,13 +181,7 @@ def view_api_text_search_regions(request):
     text_ids = request.GET.get('texts', '') or '520'
     text_ids = text_ids.split(',')
 
-    annotation_path = os.path.join(
-        settings.MEDIA_ROOT, 'arch-annotations.json'
-    )
-    with open(annotation_path, 'rt') as fh:
-        annotations_res = json.load(fh)
-
-    annotations = _get_annotations_from_archetype(annotations_res)
+    annotations = _get_annotations_from_archetype()
 
     hits = [{
         'type': 'heatmap',
@@ -208,9 +202,12 @@ def view_api_text_search_regions(request):
 def _get_regions_with_unique_variants(text_ids):
     ret = []
 
+    # build ret: list of all wregions in HM1, in their order of appearance.
+    # for each region, ['key'] is a key that will match the annotation key
+    # see _get_annotations_from_archetype()
     wpattern = './/span[@data-dpt-group="work"]'
 
-    rids = Counter()
+    keys_freq = Counter()
     for encoded_text in EncodedText.objects.filter(
         abstracted_text__short_name__in=['HM1'],
         type__slug='transcription'
@@ -219,24 +216,39 @@ def _get_regions_with_unique_variants(text_ids):
             encoded_text.content, ishtml=True, add_root=True
         )
         for wregion in content.findall(wpattern):
-            rid = slugify(get_unicode_from_xml(wregion, text_only=True))[:20]
-            rid = rid or '∅'
-            rids.update([rid])
-            c = rids[rid] - 1
-            if c:
-                rid = '{}:{}'.format(rid, c)
-            print(rid)
+            key = slugify(get_unicode_from_xml(wregion, text_only=True))[:20]
+            key = key or '∅'
+            keys_freq.update([key])
+            freq = keys_freq[key] - 1
+            if freq:
+                key = '{}:{}'.format(key, freq)
             ret.append({
-                'id': rid
+                'key': key,
+                'readings': OrderedDict()
             })
 
+    # for each selected manuscript, get its parent w-regions
+    # where all v-regions have been substituted with the content from the MS
     vpattern = './/span[@data-dpt-group="version"]'
 
     for encoded_text in EncodedText.objects.filter(
         abstracted_text_id__in=text_ids,
         type__slug='transcription',
         abstracted_text__type__slug='manuscript',
-    ):
+    ).order_by('abstracted_text__short_name'):
+        member_siglum = encoded_text.abstracted_text.short_name
+
+        # get vregions from member
+        vregions = []
+        content = get_xml_from_unicode(
+            encoded_text.content, ishtml=True, add_root=True
+        )
+        for vregion in content.findall(vpattern):
+            vregions.append(get_unicode_from_xml(vregion, text_only=True))
+
+        print(vregions)
+
+        # get parent
         parent = EncodedText.objects.filter(
             abstracted_text=encoded_text.abstracted_text.group,
             type__slug='transcription',
@@ -246,45 +258,73 @@ def _get_regions_with_unique_variants(text_ids):
             parent.content, ishtml=True, add_root=True
         )
 
-        vregions = []
-        content = get_xml_from_unicode(
-            encoded_text.content, ishtml=True, add_root=True
-        )
-        for vregion in content.findall(vpattern):
-            vregions.append(get_unicode_from_xml(wregion, text_only=True))
-
+        # replace vregion in parent with text from member
         for i, vregion in enumerate(content_parent.findall(vpattern)):
             if i < len(vregions):
+                vregion.clear(keep_tail=True)
                 vregion.text = vregions[i]
             else:
-                print('WARNING: region #{} of {} not found in {}'.format(
+                print('WARNING: v-region #{} of {} not found in {}'.format(
                     i, encoded_text, parent)
+                )
+
+        # get the text of all the wregions from parent
+        for i, wregion in enumerate(content_parent.findall(wpattern)):
+            if i < len(ret):
+                wreading = get_unicode_from_xml(wregion, text_only=True)
+                wreading = wreading.strip()
+                if wreading not in ret[i]['readings']:
+                    ret[i]['readings'][wreading] = []
+                ret[i]['readings'][wreading].append(member_siglum)
+            else:
+                print('WARNING: w-region #{} of {} not found in {}'.format(
+                    i, parent, 'heatmap text (HM1)')
                 )
 
     return ret
 
 
-def _get_annotations_from_archetype(api_response):
+def _get_annotations_from_archetype():
     '''
-    Returns a list of simplified annotation dictionaries from archetype api.
+    Returns a simplified dictionary of annotations from archetype api.
+
+    ret['principem-regem'] = {
+        rects: [
+            [
+                [994.4017594070153,2871.1062469927056]],
+                [1201.1631251142062,2825.8702290932333]
+            ]
+        ]
+    },
     '''
-    ret = []
+    ret = {}
+
+    annotation_path = os.path.join(
+        settings.MEDIA_ROOT, 'arch-annotations.json'
+    )
+    with open(annotation_path, 'rt') as fh:
+        api_response = json.load(fh)
+
     for a in api_response['results']:
         geo_json = json.loads(a['geo_json'])
 
         # skip 'ghost' annotations (no properties)
-        if geo_json['properties']:
-            # extract bounds and text from geo_json
-            ret.append(a)
-            a['bounds'] = [
-                geo_json['geometry']['coordinates'][0][0],
-                geo_json['geometry']['coordinates'][0][2]
-            ]
-            a['text'] = ':'.join([
-                e[1] for e in
-                geo_json['properties']['elementid']
-                if e[0].startswith('@')
-            ])
-            del(a['geo_json'])
+        if not geo_json['properties']:
+            continue
+
+        # extract bounds and text from geo_json
+        key = ':'.join([
+            e[1] for e in
+            geo_json['properties']['elementid']
+            if e[0].startswith('@')
+        ])
+
+        if key not in ret:
+            ret[key] = {'rects': []}
+
+        ret[key]['rects'].append([
+            geo_json['geometry']['coordinates'][0][0],
+            geo_json['geometry']['coordinates'][0][2]
+        ])
 
     return ret
