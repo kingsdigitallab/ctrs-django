@@ -28,7 +28,8 @@ const TYPES_LABEL = {
 
 const PRESELECTED_TEXT_SIGLA = ['V1'];
 
-const DEFAULT_RESULT_TYPE = window.DEBUG ? 'regions' : 'sentences';
+// const DEFAULT_RESULT_TYPE = window.DEBUG ? 'regions' : 'sentences';
+const DEFAULT_RESULT_TYPE = 'sentences';
 
 const SENTENCE_NUMBER_MAX = 27;
 
@@ -235,7 +236,7 @@ $(() => {
         image_layer.on('load', function() {
           if (this.annotation_loaded) return;
           load_annotations(this, response);
-          map.setZoom(0);
+          // map.setZoom(0);
           this.annotation_loaded = true;
         });
       } else {
@@ -306,7 +307,7 @@ $(() => {
         ret.weight= 0;
       } else {
         ret.color = 'rgb(255, '+((1-((freq-2)/(DISTINCT_READINGS_MAX - 2)))*255)+', 0)';
-        clog(freq);
+        // clog(freq);
         // clog(ret);
       }
     }
