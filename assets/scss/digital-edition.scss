@@ -1,4 +1,4 @@
-/* Style for the side by side viewer */
+/* Style for the digital edition */
 
 @import 'settings';
 
@@ -287,6 +287,7 @@
     span[data-dpt-type=unsettled] {
         // GN: added some margin to prevent the box from sticking to the
         // previous of next word.
+        border: 1px dashed scale-color($secondary-color, $lightness: -40%);
         margin: 0 .25rem;
     }
 
@@ -391,12 +392,41 @@
 
 // Search page
 
+.controls {
+
+    h2 {
+        border-bottom: 1px solid scale-color($primary-color, $lightness: 50%);
+    }
+
+    h3 {
+        border-bottom: 1px solid scale-color($primary-color, $lightness: 70%);
+    }
+
+    p {
+        font-size: .8125rem;
+        margin-bottom: 0;
+    }
+}
+
 .heatmap {
     width: 100%;
     height: 80vh;
 
     img {
         border: 0;
+    }
+}
+
+#results {
+    .hit-sentence {
+        border-bottom: 1px solid scale-color($primary-color, $lightness: 70%);
+        margin-left: 2.5rem;
+        margin-bottom: 1rem;
+
+        .label {
+            margin-left: -2.5rem;
+            margin-right: .25rem;
+        }
     }
 }
 
