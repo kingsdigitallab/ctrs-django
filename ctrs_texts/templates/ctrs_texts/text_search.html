@@ -17,9 +17,16 @@
 
 <div id="text-search" class="grid-x grid-margin-x">
 
+  <div v-if="selected_region" id="heatmap-tooltip">
+    <ul v-for="(sigla, reading) in selected_region.readings">
+      <span v-for="siglum in sigla" class="label secondary manuscript">{{ siglum }}</span>
+      {{ reading }}
+    </ul>
+  </div>
+
   <div class="cell medium-3">
       <h2>Result Type</h2>
-      
+
       <div class="grid-x grid-margin-x" v-if="debug_mode">
         <div class="cell small-6">
           <p>Heatmap</p>
