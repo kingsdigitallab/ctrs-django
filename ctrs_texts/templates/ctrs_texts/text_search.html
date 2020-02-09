@@ -19,9 +19,27 @@
 
   <div class="cell medium-3">
       <h2>Result Type</h2>
-
-      <label><input type="radio" v-model="facets.result_type" value="regions">Heatmap</label>
-      <label><input type="radio" v-model="facets.result_type" value="sentences">Sentences</label>
+      
+      <div class="grid-x grid-margin-x" v-if="debug_mode">
+        <div class="cell small-6">
+          <p>Heatmap</p>
+          <div class="switch tiny">
+            <input class="switch-input" v-model="facets.result_type" type="radio" value="regions" id="regions" checked name="radio-group">
+            <label class="switch-paddle" for="regions">
+              <span class="show-for-sr">Heatmap</span>
+            </label>
+          </div>
+        </div>
+        <div class="cell small-6">
+          <p>Sentences</p>
+          <div class="switch tiny">
+            <input class="switch-input" v-model="facets.result_type" type="radio" value="sentences" id="sentences" name="radio-group">
+            <label class="switch-paddle" for="sentences">
+              <span class="show-for-sr">Sentences</span>
+            </label>
+          </div>
+        </div>
+      </div>
 
       <h2>Options</h2>
 
@@ -65,7 +83,7 @@
       </template>
   </div>
 
-  <div class="cell medium-9">
+  <div class="cell medium-9" id="results">
       <h2>Results</h2>
       <template v-if="response.data && response.data.length > 0">
           <div class="hit" v-for="hit in response.data" v-html="hit.html">
