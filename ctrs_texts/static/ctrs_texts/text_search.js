@@ -51,6 +51,7 @@ $(() => {
       facets: {
         result_type: DEFAULT_RESULT_TYPE,
         sentence_number: 1,
+        encoding_type: 'transcription',
         /*
         List of all available texts. Exactly as returned by /api/texts/.
 
@@ -122,6 +123,9 @@ $(() => {
       'facets.result_type': function() {
         this.fetch_results();
       },
+      'facets.encoding_type': function() {
+        this.fetch_results();
+      },
     },
     filters: {
       view_type_label: function(value) {
@@ -165,6 +169,7 @@ $(() => {
           '/api/texts/search/'+self.facets.result_type+'/',
           {
             'texts': text_ids.join(','),
+            'et': self.facets.encoding_type,
             'sn': self.facets.sentence_number,
           }
         )

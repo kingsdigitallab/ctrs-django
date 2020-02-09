@@ -10,13 +10,15 @@ from ctrs_texts.utils import get_xml_from_unicode, get_unicode_from_xml
 class Command(BaseCommand):
     help = 'CTRS text management toolbox'
 
-    @classmethod
-    def log(cls, message):
-        print(message)
+    def log(self, message, verbosity=1):
+        if verbosity <= self.get_verbosity():
+            self.stdout.write(message)
 
-    @classmethod
-    def error(cls, message):
-        cls.log('ERROR: ' + message)
+    def error(self, message):
+        self.stderr.write(self.style.ERROR(message))
+
+    def get_verbosity(self):
+        return self.verbosity
 
     def add_arguments(self, parser):
         parser.add_argument('action', nargs='?', type=str)
@@ -25,6 +27,7 @@ class Command(BaseCommand):
     def handle(self, *args, **options):
         action = options['action']
         self.options = options['options']
+        self.verbosity = options['verbosity']
 
         valid = False
 
@@ -63,8 +66,7 @@ class Command(BaseCommand):
 
         return ret
 
-    @classmethod
-    def action_import(cls, input_file):
+    def action_import(self, input_file):
         data = None
 
         import json
@@ -72,13 +74,12 @@ class Command(BaseCommand):
             with open(input_file, 'rt') as fh:
                 data = json.load(fh)
         except Exception as e:
-            cls.error('%s' % e)
+            self.error('%s' % e)
             return False
 
-        return cls.import_json(data)
+        return self.import_json(data)
 
-    @classmethod
-    def import_json(cls, data):
+    def import_json(self, data):
         '''
         Imports the text XML and metadata
         from a json file exported from Archetype.
@@ -98,7 +99,7 @@ class Command(BaseCommand):
         arch_ipid_to_ab_txt = {}
 
         for jtcxml in data['results']:
-            print(jtcxml['str'])
+            self.log(jtcxml['str'], 2)
             jtc = jtcxml['text_content']
             jip = jtc['item_part']
             jci = jip['current_item']
@@ -141,7 +142,7 @@ class Command(BaseCommand):
 
             EncodedText.update_or_create(
                 jtc['id'], ab_txt, jtc['type'],
-                cls.clean_archetype_text_content(jtcxml['content']),
+                self.clean_archetype_text_content(jtcxml['content']),
                 status
             )
             models_imported_ids[EncodedText].append(jtc['id'])
@@ -162,12 +163,16 @@ class Command(BaseCommand):
                 ab_text.short_name = jip.get('group_locus', None)
                 ab_text.save()
 
-        cls.delete_unimported_records(models_imported_ids)
+        deleted_count = self.delete_unimported_records(models_imported_ids)
+
+        self.log('{} inserted/updated, {} deleted.'.format(
+            sum([len(ids) for m, ids in models_imported_ids.items()]),
+            deleted_count
+        ))
 
         return True
 
-    @classmethod
-    def clean_archetype_text_content(cls, content):
+    def clean_archetype_text_content(self, content):
         # non-breaking spaces -> normal spaces
         ret = (content or '').replace('&nbsp;', '').replace('\xA0', ' ')
 
@@ -186,26 +191,33 @@ class Command(BaseCommand):
 
         return ret
 
-    @classmethod
-    def delete_unimported_records(cls, models_imported_ids):
+    def delete_unimported_records(self, models_imported_ids):
         '''
         Delete all the records with .imported_id <> None
         which have not been imported by the import command.
 
         models_imported_ids is a dictionary of the form
         {ModelClass: [id1, id2, ...], }
+
+        returns number of deleted records.
         '''
+        ret = 0
+
         for m, ids in models_imported_ids.items():
             res = m.objects.exclude(imported_id__in=ids).delete()
             if res[0]:
-                print('Deleted {} {}'.format(res[0], m))
+                self.log('Deleted {} {}'.format(res[0], m), 2)
+                ret += res[0]
+
+        return ret
 
     def show_help(self):
-        print('''ACTION OPTIONS
+        self.stdout.write('''{}
 
-{}
+Usage: ACTION OPTIONS
 
 ACTION:
+
   help
     show this help.
 
@@ -216,4 +228,5 @@ ACTION:
           see inline comment (handle_import)
   delete
     delete all the text concent records from the DB
+
 '''.format(self.help))
