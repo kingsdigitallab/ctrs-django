@@ -28,8 +28,8 @@ const TYPES_LABEL = {
 
 const PRESELECTED_TEXT_SIGLA = ['V1'];
 
-// const DEFAULT_RESULT_TYPE = window.DEBUG ? 'regions' : 'sentences';
-const DEFAULT_RESULT_TYPE = 'sentences';
+const DEFAULT_RESULT_TYPE = window.DEBUG ? 'regions' : 'sentences';
+// const DEFAULT_RESULT_TYPE = 'sentences';
 
 const SENTENCE_NUMBER_MAX = 27;
 
@@ -51,6 +51,7 @@ $(() => {
       facets: {
         result_type: DEFAULT_RESULT_TYPE,
         sentence_number: 1,
+        encoding_type: 'transcription',
         /*
         List of all available texts. Exactly as returned by /api/texts/.
 
@@ -69,6 +70,7 @@ $(() => {
       },
       blocks: [],
       response: {},
+      selected_region: {},
     },
     mounted() {
       let self = this;
@@ -122,6 +124,9 @@ $(() => {
       'facets.result_type': function() {
         this.fetch_results();
       },
+      'facets.encoding_type': function() {
+        this.fetch_results();
+      },
     },
     filters: {
       view_type_label: function(value) {
@@ -165,6 +170,7 @@ $(() => {
           '/api/texts/search/'+self.facets.result_type+'/',
           {
             'texts': text_ids.join(','),
+            'et': self.facets.encoding_type,
             'sn': self.facets.sentence_number,
           }
         )
@@ -273,15 +279,32 @@ $(() => {
     for (let [key, an] of Object.entries(ret)) {
       an.key = key;
       for (let i = 0; i < an.rects.length; i++){
-        an.rects[i] = L.rectangle(
-          ps2cs(image_layer, an.rects[i]),
-          _get_annotation_style(an)
-        ).addTo(map);
-        window.annotations.push(an.rects[i]);
+        let style = _get_annotation_style(an);
+        if (style) {
+          let rect = L.rectangle(
+            ps2cs(image_layer, an.rects[i]),
+            style
+          ).addTo(map);
+          rect.annotation = an;
+          rect.on('mouseover', _on_rect_mouseenter);
+          rect.on('mouseout', _on_rect_mouseleave);
+          an.rects[i] = rect;
+          window.annotations.push(rect);
+        }
       }
     }
 
     return ret;
+  }
+
+  function _on_rect_mouseenter(e) {
+    let region_key = e.target.annotation.key;
+    app.selected_region = window.regions[region_key];
+    // clog(region);
+  }
+  function _on_rect_mouseleave(e) {
+    app.selected_region = null;
+    clog(e);
   }
 
   function _get_annotation_style(annotation) {
@@ -305,6 +328,7 @@ $(() => {
       if (freq < 2) {
         ret.fillOpacity = 0;
         ret.weight= 0;
+        ret = null;
       } else {
         ret.color = 'rgb(255, '+((1-((freq-2)/(DISTINCT_READINGS_MAX - 2)))*255)+', 0)';
         // clog(freq);
