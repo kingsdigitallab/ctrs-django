@@ -253,8 +253,9 @@ main {
     }
 
     img {
-        object-fit: cover;
+        border: 0;
         height: 100%;
+        object-fit: cover;
         width: 100%;
     }
 
