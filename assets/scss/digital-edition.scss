@@ -1,4 +1,4 @@
-/* Style for the side by side viewer */
+/* Style for the digital edition */
 
 @import 'settings';
 
@@ -93,7 +93,7 @@
     .label {
         margin-left: .5rem;
 
-        &.manuscript {        
+        &.manuscript {
             background: scale-color($secondary-color, $lightness: 20%);
             border: 1px solid scale-color($secondary-color, $lightness: -20%);
         }
@@ -102,7 +102,7 @@
             padding-top: .25rem;
         }
 
-        &.version {        
+        &.version {
             background: scale-color($primary-color, $lightness: 80%);
             border: 1px solid scale-color($primary-color, $lightness: 50%);
         }
@@ -202,7 +202,7 @@
             &.version {
                 &:hover {
                     background: scale-color($primary-color, $lightness: 80%);
-                }    
+                }
             }
 
 
@@ -287,6 +287,7 @@
     span[data-dpt-type=unsettled] {
         // GN: added some margin to prevent the box from sticking to the
         // previous of next word.
+        border: 1px dashed scale-color($secondary-color, $lightness: -40%);
         margin: 0 .25rem;
     }
 
@@ -391,12 +392,41 @@
 
 // Search page
 
+.controls {
+
+    h2 {
+        border-bottom: 1px solid scale-color($primary-color, $lightness: 50%);
+    }
+
+    h3 {
+        border-bottom: 1px solid scale-color($primary-color, $lightness: 70%);
+    }
+
+    p {
+        font-size: .8125rem;
+        margin-bottom: 0;
+    }
+}
+
 .heatmap {
     width: 100%;
     height: 80vh;
 
     img {
         border: 0;
+    }
+}
+
+#results {
+    .hit-sentence {
+        border-bottom: 1px solid scale-color($primary-color, $lightness: 70%);
+        margin-left: 2.5rem;
+        margin-bottom: 1rem;
+
+        .label {
+            margin-left: -2.5rem;
+            margin-right: .25rem;
+        }
     }
 }
 
@@ -412,4 +442,23 @@
       margin-left: 1rem;
     }
   }
+
+  // GN: prototype/temporary tooltip
+  #heatmap-tooltip {
+    background-color: rgba(47,72,88,0.7);
+    border: 1px solid #2f4858;
+    position: fixed;
+    top: 1rem;
+    left: 1rem;
+    padding: 0.5rem;
+    z-index: 1100; // higher than leaflet controls (1000)
+    color: #eee;
+    max-height: 8rem;
+    -webkit-box-shadow: 7px 7px 10px 0px rgba(50,50,50,0.75);
+    -moz-box-shadow: 7px 7px 10px 0px rgba(50,50,50,0.75);
+    box-shadow: 7px 7px 10px 0px rgba(50,50,50,0.75);
+    overflow-y: auto; // in case user selects a lot of texts
+    font-size: 0.8rem; // some regions can be very long...
+  }
+
 }

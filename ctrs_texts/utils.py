@@ -94,3 +94,20 @@ def append_xml_element(
         ret.text = text
 
     return ret
+
+
+def get_sentence_from_text(encoded_text, sentence_number):
+    ret = ''
+
+    pattern = ''.join([
+        r'(?usi)(<p>\s*<span data-dpt="sn">\s*',
+        str(sentence_number),
+        r'\s*</span>.*?</p>)(\s*<p>\s*<span data-dpt="sn">|$)'
+    ])
+
+    sentences = re.findall(pattern, encoded_text.content)
+
+    if sentences:
+        ret = sentences[0][0]
+
+    return ret
