@@ -31,7 +31,7 @@
         <div class="cell small-6">
           <p>Heatmap</p>
           <div class="switch tiny">
-            <input class="switch-input" v-model="facets.result_type" type="radio" value="regions" id="regions" checked name="radio-group">
+            <input class="switch-input" v-model="facets.result_type" type="radio" value="regions" id="regions" checked name="radio-group-type">
             <label class="switch-paddle" for="regions">
               <span class="show-for-sr">Heatmap</span>
             </label>
@@ -40,7 +40,7 @@
         <div class="cell small-6">
           <p>Sentences</p>
           <div class="switch tiny">
-            <input class="switch-input" v-model="facets.result_type" type="radio" value="sentences" id="sentences" name="radio-group">
+            <input class="switch-input" v-model="facets.result_type" type="radio" value="sentences" id="sentences" name="radio-group-type">
             <label class="switch-paddle" for="sentences">
               <span class="show-for-sr">Sentences</span>
             </label>
@@ -61,8 +61,27 @@
 
       <template v-if="facets.result_type == 'sentences'">
         <h3>Language</h3>
-        <label><input type="radio" v-model="facets.encoding_type" value="transcription">Latin</label>
-        <label><input type="radio" v-model="facets.encoding_type" value="translation">English</label>
+
+        <div class="grid-x grid-margin-x">
+          <div class="cell small-6">
+            <p>Latin</p>
+            <div class="switch tiny">
+              <input class="switch-input" v-model="facets.encoding_type" type="radio" value="transcription" id="transcription" checked name="radio-group-lang">
+              <label class="switch-paddle" for="transcription">
+                <span class="show-for-sr">Latin</span>
+              </label>
+            </div>
+          </div>
+          <div class="cell small-6">
+            <p>English</p>
+            <div class="switch tiny">
+              <input class="switch-input" v-model="facets.encoding_type" type="radio" value="translation" id="translation" name="radio-group-lang">
+              <label class="switch-paddle" for="translation">
+                <span class="show-for-sr">English</span>
+              </label>
+            </div>
+          </div>
+        </div>
       </template>
 
       <h3>Texts</h3>
