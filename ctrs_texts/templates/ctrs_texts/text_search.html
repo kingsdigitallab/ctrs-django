@@ -112,6 +112,7 @@
       <h2>Results</h2>
 
       <!-- Static visualisation to add info based on the heatmap -->
+      <!-- 
       <template v-if="facets.result_type == 'sentences'">
         <nav aria-label="Pagination" class="heatmap-viz-nav">
           <ul class="pagination text-center">
@@ -147,6 +148,7 @@
           </ul>
         </nav>
       </template>
+      -->
 
       <template v-if="response.data && response.data.length > 0">
           <div class="hit" v-for="hit in response.data" v-html="hit.html">

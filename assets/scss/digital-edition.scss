@@ -395,11 +395,19 @@
 .controls {
 
     h2 {
-        border-bottom: 1px solid scale-color($primary-color, $lightness: 50%);
+        // border-bottom: 1px solid scale-color($primary-color, $lightness: 50%);
+        border-top: 1px dotted $primary-color;
     }
 
     h3 {
-        border-bottom: 1px solid scale-color($primary-color, $lightness: 70%);
+        // border-bottom: 1px solid scale-color($secondary-color, $lightness: 40%);
+        border-top: 1px dotted $secondary-color;
+    }
+
+    h2, h3 {
+        &:first-child {
+            border-top: 0;
+        }
     }
 
     p {
