@@ -384,7 +384,6 @@ main {
     background: scale-color($secondary-color, $lightness: 50%);
     font-size: .875rem;
     padding: .5rem 1rem;
-    text-align: right;
 
     button,
     .button {
@@ -393,6 +392,28 @@ main {
         &.active {
             background: scale-color($primary-color, $lightness: 70%);
             border-bottom: 3px solid $primary-color;
+        }
+
+        &:hover {
+            background: $primary-color;
+            color: $white;
+        }
+
+        &.secondary {
+            border-color: scale-color($secondary-color, $lightness: -40%);
+            color: scale-color($secondary-color, $lightness: -40%);
+
+            &:hover {
+                background: transparent;
+                border-color: scale-color($secondary-color, $lightness: -60%);
+                color: scale-color($secondary-color, $lightness: -60%);
+            }
+        }
+
+        .label {
+            &:hover {
+                cursor: pointer;
+            }
         }
     }
 

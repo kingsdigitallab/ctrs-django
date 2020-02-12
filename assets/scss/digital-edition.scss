@@ -247,7 +247,7 @@
 }
 
 // GN: Temporary rules for demo page
-// Both html structure and styles will be improve at a later stage
+// Both html structure and styles will be improved at a later stage
 
 .legend {
     font-size: 0.625em;
@@ -395,11 +395,17 @@
 .controls {
 
     h2 {
-        border-bottom: 1px solid scale-color($primary-color, $lightness: 50%);
+        border-top: 1px dotted $primary-color;
     }
 
     h3 {
-        border-bottom: 1px solid scale-color($primary-color, $lightness: 70%);
+        border-top: 1px dotted $secondary-color;
+    }
+
+    h2, h3 {
+        &:first-child {
+            border-top: 0;
+        }
     }
 
     p {
@@ -461,4 +467,10 @@
     font-size: 0.8rem; // some regions can be very long...
   }
 
+}
+
+.leaflet-interactive {
+    &:hover {
+        fill: $primary-color;
+    }
 }
