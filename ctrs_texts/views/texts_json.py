@@ -214,8 +214,8 @@ def _get_regions_with_unique_variants(text_ids):
             key = slugify(get_unicode_from_xml(wregion, text_only=True))[:20]
             key = key or '∅'
             keys_freq.update([key])
-            freq = keys_freq[key] - 1
-            if freq:
+            freq = keys_freq[key]
+            if freq > 1:
                 key = '{}:{}'.format(key, freq)
             ret.append({
                 'key': key,
