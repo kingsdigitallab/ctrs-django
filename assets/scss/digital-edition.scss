@@ -343,6 +343,11 @@
                     display: inline;
                 }
             }
+
+            &.toggle-off {
+                background: transparent;
+                border: 0;
+            }
         }
 
         span[data-dpt-type=unsettled][data-dpt-group=version] {
