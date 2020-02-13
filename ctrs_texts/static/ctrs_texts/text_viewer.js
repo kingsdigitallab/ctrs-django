@@ -109,6 +109,15 @@ $(() => {
         view.type = view_type;
         this.on_view_changed(block, view);
       },
+
+      toggle_view_display(block, view, display_type) {
+        // toggle a display setting for this view
+        // all display setttings are prefixed with display_
+        let display_key = 'display_'+display_type;
+        let v = view[display_key];
+        Vue.set(view, display_key, !v);
+      },
+
       on_view_changed: function(block, view) {
         // a view needs its content to be fetched
         view.status = STATUS_FETCHING;
