@@ -105,7 +105,7 @@
                             </ul>
 
                             <!-- html chunk -->
-                            <div v-html="view.chunk" :class="'text-display'"></div>
+                            <div v-html="view.chunk" :class="['text-display', view.display_wregions ? 'toggle-off': '']"></div>
                         </template>
 
                         <template v-if="view.status < 3">
