@@ -244,6 +244,36 @@
     .text-display {
         padding: 1rem;
     }
+
+    .toggle-off {
+        span[data-dpt-type="unsettled"][data-dpt-group="work"] {
+            background: transparent;
+            border: 0;
+            padding: 0;
+
+            &::before {
+                display: none;
+            }
+        }
+    }
+
+    .show-hide-regions {
+        &::before {
+            content: "\f070";
+            display: none;
+            font-family: "Font Awesome 5 Pro";
+            font-weight: 900;
+        }
+
+        &.display-wregions {
+            &::before {
+                content: "\f06e";
+                display: none;
+                font-family: "Font Awesome 5 Pro";
+                font-weight: 900;
+            }
+        }
+    }
 }
 
 // GN: Temporary rules for demo page
@@ -315,7 +345,8 @@
     }
 
 
-    &.version, &.work {
+    &.version,
+    &.work {
         span[data-dpt-type=unsettled][data-dpt-group=work] {
 
             // GF: adding background to unsettled areas at work level.
@@ -332,21 +363,10 @@
                 padding-right: .125rem;
             }
 
-            // GN: we hide empty-symbol IF w-regions are not highlighted
-            // TODO: depends on toggled class in the future
-            .no-text {
-                // display: none;
-            }
-
             span[data-dpt-type=unsettled][data-dpt-group=version] {
                 .no-text {
                     display: inline;
                 }
-            }
-
-            &.toggle-off {
-                background: transparent;
-                border: 0;
             }
         }
 
@@ -394,7 +414,7 @@
             }
 
             &:hover {
-                &> span.variants {
+                & > span.variants {
                     display: inline-block;
                     position: absolute;
                     z-index: 10;
