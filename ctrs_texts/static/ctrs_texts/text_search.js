@@ -70,7 +70,7 @@ $(() => {
       },
       blocks: [],
       response: {},
-      selected_region: {},
+      selected_region: null,
     },
     mounted() {
       let self = this;
