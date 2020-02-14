@@ -177,7 +177,18 @@ class Command(BaseCommand):
         ret = (content or '').replace('&nbsp;', '').replace('\xA0', ' ')
 
         # allow the empty symbol to be styled
-        ret = ret.replace('⊕', '<span class="no-text">⊕</span>')
+        if 0:
+            # ac-128: disabled until confirmed unnecessary
+            ret = ret.replace('∅', '<span class="no-text">∅</span>')
+
+        # ac-128: add an empty-region class the spans that only contains an
+        # empty symbol
+        import re
+        ret = re.sub(
+            r'(<span[^>]+data-dpt-type="unsettled"[^>]*)(>\s*∅\s*</span>)',
+            r'\1 class="empty-region"\2',
+            ret
+        )
 
         # Minor XML transforms
         xml = get_xml_from_unicode(ret, ishtml=True, add_root=True)
