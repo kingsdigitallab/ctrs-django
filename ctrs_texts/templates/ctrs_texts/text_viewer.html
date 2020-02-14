@@ -30,8 +30,7 @@
 
                 <template v-if="0">>
                     <a :id="'Work-'+block_index"></a>
-                    <h4>Work</h4>
-                    Work
+                    <h4>{{ text_type.label }}</h4>
                     <ul class="menu vertical">
                         <template v-for="text in texts">
                             <li v-if="text.type=='work'" :class="{selected: text == block.text} + ' text ' + text.type">
