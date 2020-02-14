@@ -373,8 +373,6 @@
                 padding: .5em .5em .25em;
 
                 .variant {
-                    cursor: pointer;
-
                     display: block;
                     white-space: nowrap;
 
@@ -385,6 +383,12 @@
                         font-size: .75rem;
                         margin-right: 4px;
                         padding: 4px 4px 0;
+                    }
+
+                    // GN: interaction POC, to be improved
+                    cursor: pointer;
+                    &:hover {
+                      background-color: #ee0;
                     }
                 }
             }
