@@ -84,7 +84,7 @@
                         <div v-if="block.text" class="metadata">
                             <div class="grid-x small-up-2">
                                 <div class="cell">
-                                    <button :class="'button tiny hollow secondary show-hide-regions'+(view.display_wregions ? ' display-wregions' : ' ')" @click="toggle_view_display(block, view, 'wregions')">
+                                    <button v-if="block.text.type == 'version'" :class="'button tiny hollow secondary show-hide-regions'+(view.display_wregions ? ' display-wregions' : ' ')" @click="toggle_view_display(block, view, 'wregions')">
                                         <span class="label secondary work">W</span>
                                         <span class="show-for-sr">Toggle Work unsettled regions borders</span>
                                     </button>
