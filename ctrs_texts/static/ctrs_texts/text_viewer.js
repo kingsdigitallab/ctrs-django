@@ -7,6 +7,9 @@ const STATUS_FETCHING = 2;
 const STATUS_FETCHED = 3;
 const STATUS_ERROR = 4;
 
+// are the w-regions highlighted by default
+const DISPLAY_WREGIONS_DEFAULT = true;
+
 const Vue = window.Vue;
 
 const TYPES_LABEL = {
@@ -76,7 +79,7 @@ $(() => {
       },
       text_types: function() {
         return [
-          // {label: 'Work', type: 'work'},
+          {label: 'Work', type: 'work'},
           {label: 'Versions', type: 'version'},
           {label: 'Manuscripts', type: 'manuscript'},
         ];
@@ -165,7 +168,7 @@ $(() => {
               this.blocks.push({
                 text: self.get_text_from_id_or_siglum(parts[0]),
                 views: parts[1].split(',').map(
-                  view_type => ({type: view_type, chunk: null, status: STATUS_TO_FETCH})
+                  (view_type) => self._get_new_view_data(view_type)
                 ),
                 comparative: false,
               });
@@ -177,7 +180,7 @@ $(() => {
           // block for the 'original copy'
           this.blocks.push({
             text: self.get_default_text(),
-            views: [{type: 'transcription', chunk: null, status: STATUS_TO_FETCH}],
+            views: [self._get_new_view_data()],
             comparative: false,
           });
         }
@@ -185,7 +188,9 @@ $(() => {
           // placeholder block
           this.blocks.push({
             text: null,
-            views: [{type: 'transcription', chunk: 'placeholder', status: STATUS_FETCHED}],
+            views: [self._get_new_view_data(
+              'transcription', 'placeholder', STATUS_FETCHED
+            )],
             comparative: false,
           });
         }
@@ -217,6 +222,15 @@ $(() => {
       get_default_text: function () {
         return this.get_text_from_id_or_siglum('O');
       },
+
+      _get_new_view_data: function(view_type, chunk, status) {
+        return {
+          type: view_type || 'transcription',
+          chunk: chunk || null,
+          status: (status === undefined) ? STATUS_TO_FETCH : status,
+          display_wregions: DISPLAY_WREGIONS_DEFAULT
+        };
+      }
 
     }
   });

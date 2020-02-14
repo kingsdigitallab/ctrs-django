@@ -28,16 +28,19 @@
                     <li><a class="button secondary" :href="'#Manuscripts-'+block_index" title="Manuscripts">MS</a></li>
                 </ul>
 
-                <a :id="'Work-'+block_index"></a>
-                <h4>Work</h4>
-                <!-- We do NOT link to Work at this stage -->
-                <ul class="menu vertical">
-                    <template v-for="text in texts">
-                        <li v-if="text.type=='work'" :class="{selected: text == block.text} + ' text ' + text.type">
-                            <span class="label secondary">{{ text.attributes.siglum }}</span> {{ text.attributes.name }}
-                        </li>
-                    </template>
-                </ul>
+                <template v-if="0">>
+                    <a :id="'Work-'+block_index"></a>
+                    <h4>Work</h4>
+                    Work
+                    <ul class="menu vertical">
+                        <template v-for="text in texts">
+                            <li v-if="text.type=='work'" :class="{selected: text == block.text} + ' text ' + text.type">
+                                <span class="label secondary">{{ text.attributes.siglum }}</span> {{ text.attributes.name }}
+                            </li>
+                        </template>
+                    </ul>
+                </template>
+
                 <!-- Versions and MSs -->
                 <template v-for="text_type in text_types">
                     <a :id="text_type.label+'-'+block_index"></a>
@@ -53,6 +56,7 @@
                         </template>
                     </ul>
                 </template>
+
             </div>
 
             <div class="off-canvas-content" data-off-canvas-content>
@@ -80,7 +84,7 @@
                         <div v-if="block.text" class="metadata">
                             <div class="grid-x small-up-2">
                                 <div class="cell">
-                                    <button :class="'button tiny hollow secondary show-hide-regions'+(view.display_wregions ? ' display-wregions' : ' nope')" @click="toggle_view_display(block, view, 'wregions')">
+                                    <button :class="'button tiny hollow secondary show-hide-regions'+(view.display_wregions ? ' display-wregions' : ' ')" @click="toggle_view_display(block, view, 'wregions')">
                                         <i class="fas fa-eye"></i>
                                         <span class="label secondary work">W</span>
                                         <span class="show-for-sr">Toggle Work unsettled regions borders</span>
@@ -96,7 +100,7 @@
 
                         <template v-if="view.status == 3">
                             <!-- show list of MS texts in a version -->
-                            <ul v-if="block.text && block.text.type=='version'" class="group-members">
+                            <ul v-if="block.text && block.text.type!='manuscript'" class="group-members">
                                 <template v-for="member in texts">
                                     <li v-if="member.attributes.group == block.text.id">
                                         <span class="label secondary">{{ member.attributes.siglum }}</span> {{ member.attributes.name }}
@@ -105,7 +109,7 @@
                             </ul>
 
                             <!-- html chunk -->
-                            <div v-html="view.chunk" :class="['text-display', view.display_wregions ? 'toggle-off': '']"></div>
+                            <div v-html="view.chunk" :class="{'text-display': 1, 'toggle-off': !view.display_wregions && block.text.type == 'version'}"></div>
                         </template>
 
                         <template v-if="view.status < 3">

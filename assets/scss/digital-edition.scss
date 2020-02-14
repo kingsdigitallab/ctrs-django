@@ -315,7 +315,7 @@
     }
 
 
-    &.version {
+    &.version, &.work {
         span[data-dpt-type=unsettled][data-dpt-group=work] {
 
             // GF: adding background to unsettled areas at work level.
@@ -359,6 +359,9 @@
             }
 
             position: relative;
+        }
+
+        span[data-dpt-type=unsettled] {
 
             span.variants {
                 background-color: scale-color($light-gray, $lightness: 20%);
@@ -385,7 +388,7 @@
             }
 
             &:hover {
-                span.variants {
+                &> span.variants {
                     display: inline-block;
                     position: absolute;
                     z-index: 10;
