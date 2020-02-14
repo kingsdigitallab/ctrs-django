@@ -254,6 +254,12 @@
             &::before {
                 display: none;
             }
+
+            // GN: we hide empty-symbol IF w-regions are not highlighted
+            // TODO: depends on toggled class in the future
+            &.no-text {
+                display: none;
+            }
         }
     }
 
