@@ -30,8 +30,7 @@
 
                 <template v-if="0">>
                     <a :id="'Work-'+block_index"></a>
-                    <h4>Work</h4>
-                    Work
+                    <h4>{{ text_type.label }}</h4>
                     <ul class="menu vertical">
                         <template v-for="text in texts">
                             <li v-if="text.type=='work'" :class="{selected: text == block.text} + ' text ' + text.type">
@@ -84,8 +83,7 @@
                         <div v-if="block.text" class="metadata">
                             <div class="grid-x small-up-2">
                                 <div class="cell">
-                                    <button :class="'button tiny hollow secondary show-hide-regions'+(view.display_wregions ? ' display-wregions' : ' ')" @click="toggle_view_display(block, view, 'wregions')">
-                                        <i class="fas fa-eye"></i>
+                                    <button v-if="block.text.type == 'version'" :class="'button tiny hollow secondary show-hide-regions'+(view.display_wregions ? ' display-wregions' : ' ')" @click="toggle_view_display(block, view, 'wregions')">
                                         <span class="label secondary work">W</span>
                                         <span class="show-for-sr">Toggle Work unsettled regions borders</span>
                                     </button>
