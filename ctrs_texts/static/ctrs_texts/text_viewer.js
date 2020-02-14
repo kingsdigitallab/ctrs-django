@@ -130,6 +130,11 @@ $(() => {
           view.chunk = res.data.attributes.chunk;
           view.status = STATUS_FETCHED;
           self.update_query_string();
+
+          // add javascript interactions to the text chunk
+          Vue.nextTick(function() {
+            self._after_chunk_loaded(block, view);
+          });
         })
         .fail(res => {
           view.status = STATUS_ERROR;
@@ -201,7 +206,6 @@ $(() => {
             $(this).addClass('foundation-initialised');
             new window.Foundation.OffCanvas($(this));
           });
-
         });
       },
 
@@ -230,7 +234,25 @@ $(() => {
           status: (status === undefined) ? STATUS_TO_FETCH : status,
           display_wregions: DISPLAY_WREGIONS_DEFAULT
         };
-      }
+      },
+
+      _after_chunk_loaded(block, view) {
+        // when the user clicks a variant/reading in a region
+        // we load the text of that variant in the other block/pane
+        let self = this;
+        $('.variants').not('.clickable').addClass('clickable').on('click', '.variant', function() {
+          let $variant = $(this);
+          let siglum = $variant.find('.ms').first().text();
+          let text = self.get_text_from_id_or_siglum(siglum);
+          if (text) {
+            for (let other_block of self.blocks) {
+              if (other_block != block) {
+                self.on_change_text(other_block, text);
+              }
+            }
+          }
+        });
+      },
 
     }
   });
