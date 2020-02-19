@@ -70,7 +70,7 @@ $(() => {
       },
       blocks: [],
       response: {},
-      selected_region: {},
+      selected_region: null,
     },
     mounted() {
       let self = this;
@@ -300,11 +300,9 @@ $(() => {
   function _on_rect_mouseenter(e) {
     let region_key = e.target.annotation.key;
     app.selected_region = window.regions[region_key];
-    // clog(region);
   }
   function _on_rect_mouseleave(e) {
     app.selected_region = null;
-    clog(e);
   }
 
   function _get_annotation_style(annotation) {

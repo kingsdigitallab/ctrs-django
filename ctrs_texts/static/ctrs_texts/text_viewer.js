@@ -7,6 +7,9 @@ const STATUS_FETCHING = 2;
 const STATUS_FETCHED = 3;
 const STATUS_ERROR = 4;
 
+// are the w-regions highlighted by default
+const DISPLAY_WREGIONS_DEFAULT = true;
+
 const Vue = window.Vue;
 
 const TYPES_LABEL = {
@@ -76,7 +79,7 @@ $(() => {
       },
       text_types: function() {
         return [
-          // {label: 'Work', type: 'work'},
+          {label: 'Work', type: 'work'},
           {label: 'Versions', type: 'version'},
           {label: 'Manuscripts', type: 'manuscript'},
         ];
@@ -109,6 +112,15 @@ $(() => {
         view.type = view_type;
         this.on_view_changed(block, view);
       },
+
+      toggle_view_display(block, view, display_type) {
+        // toggle a display setting for this view
+        // all display setttings are prefixed with display_
+        let display_key = 'display_'+display_type;
+        let v = view[display_key];
+        Vue.set(view, display_key, !v);
+      },
+
       on_view_changed: function(block, view) {
         // a view needs its content to be fetched
         view.status = STATUS_FETCHING;
@@ -118,6 +130,11 @@ $(() => {
           view.chunk = res.data.attributes.chunk;
           view.status = STATUS_FETCHED;
           self.update_query_string();
+
+          // add javascript interactions to the text chunk
+          Vue.nextTick(function() {
+            self._after_chunk_loaded(block, view);
+          });
         })
         .fail(res => {
           view.status = STATUS_ERROR;
@@ -156,7 +173,7 @@ $(() => {
               this.blocks.push({
                 text: self.get_text_from_id_or_siglum(parts[0]),
                 views: parts[1].split(',').map(
-                  view_type => ({type: view_type, chunk: null, status: STATUS_TO_FETCH})
+                  (view_type) => self._get_new_view_data(view_type)
                 ),
                 comparative: false,
               });
@@ -168,7 +185,7 @@ $(() => {
           // block for the 'original copy'
           this.blocks.push({
             text: self.get_default_text(),
-            views: [{type: 'transcription', chunk: null, status: STATUS_TO_FETCH}],
+            views: [self._get_new_view_data()],
             comparative: false,
           });
         }
@@ -176,7 +193,9 @@ $(() => {
           // placeholder block
           this.blocks.push({
             text: null,
-            views: [{type: 'transcription', chunk: 'placeholder', status: STATUS_FETCHED}],
+            views: [self._get_new_view_data(
+              'transcription', 'placeholder', STATUS_FETCHED
+            )],
             comparative: false,
           });
         }
@@ -187,7 +206,6 @@ $(() => {
             $(this).addClass('foundation-initialised');
             new window.Foundation.OffCanvas($(this));
           });
-
         });
       },
 
@@ -207,6 +225,33 @@ $(() => {
 
       get_default_text: function () {
         return this.get_text_from_id_or_siglum('O');
+      },
+
+      _get_new_view_data: function(view_type, chunk, status) {
+        return {
+          type: view_type || 'transcription',
+          chunk: chunk || null,
+          status: (status === undefined) ? STATUS_TO_FETCH : status,
+          display_wregions: DISPLAY_WREGIONS_DEFAULT
+        };
+      },
+
+      _after_chunk_loaded(block, view) {
+        // when the user clicks a variant/reading in a region
+        // we load the text of that variant in the other block/pane
+        let self = this;
+        $('.variants').not('.clickable').addClass('clickable').on('click', '.variant', function() {
+          let $variant = $(this);
+          let siglum = $variant.find('.ms').first().text();
+          let text = self.get_text_from_id_or_siglum(siglum);
+          if (text) {
+            for (let other_block of self.blocks) {
+              if (other_block != block) {
+                self.on_change_text(other_block, text);
+              }
+            }
+          }
+        });
       },
 
     }

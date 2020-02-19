@@ -227,7 +227,6 @@
 
             &.work {
                 background: scale-color($primary-color, $lightness: 80%);
-                padding: .25rem .5rem .5rem 38px;
             }
         }
     }
@@ -244,10 +243,46 @@
     .text-display {
         padding: 1rem;
     }
+
+    .toggle-off {
+        span[data-dpt-type="unsettled"][data-dpt-group="work"] {
+            background: transparent;
+            border: 0;
+            padding: 0;
+
+            &::before {
+                display: none;
+            }
+
+            // GN: we hide empty-symbol IF w-regions are not highlighted
+            // TODO: depends on toggled class in the future
+            &.no-text {
+                display: none;
+            }
+        }
+    }
+
+    .show-hide-regions {
+        &::before {
+            content: "\f070";
+            display: none;
+            font-family: "Font Awesome 5 Pro";
+            font-weight: 900;
+        }
+
+        &.display-wregions {
+            &::before {
+                content: "\f06e";
+                display: none;
+                font-family: "Font Awesome 5 Pro";
+                font-weight: 900;
+            }
+        }
+    }
 }
 
 // GN: Temporary rules for demo page
-// Both html structure and styles will be improve at a later stage
+// Both html structure and styles will be improved at a later stage
 
 .legend {
     font-size: 0.625em;
@@ -315,7 +350,8 @@
     }
 
 
-    &.version {
+    &.version,
+    &.work {
         span[data-dpt-type=unsettled][data-dpt-group=work] {
 
             // GF: adding background to unsettled areas at work level.
@@ -330,12 +366,6 @@
                 font-size: .75rem;
                 padding-left: .25rem;
                 padding-right: .125rem;
-            }
-
-            // GN: we hide empty-symbol IF w-regions are not highlighted
-            // TODO: depends on toggled class in the future
-            .no-text {
-                // display: none;
             }
 
             span[data-dpt-type=unsettled][data-dpt-group=version] {
@@ -354,6 +384,9 @@
             }
 
             position: relative;
+        }
+
+        span[data-dpt-type=unsettled] {
 
             span.variants {
                 background-color: scale-color($light-gray, $lightness: 20%);
@@ -376,11 +409,17 @@
                         margin-right: 4px;
                         padding: 4px 4px 0;
                     }
+
+                    // GN: interaction POC, to be improved
+                    cursor: pointer;
+                    &:hover {
+                      background-color: #ee0;
+                    }
                 }
             }
 
             &:hover {
-                span.variants {
+                & > span.variants {
                     display: inline-block;
                     position: absolute;
                     z-index: 10;
@@ -395,11 +434,17 @@
 .controls {
 
     h2 {
-        border-bottom: 1px solid scale-color($primary-color, $lightness: 50%);
+        border-top: 1px dotted $primary-color;
     }
 
     h3 {
-        border-bottom: 1px solid scale-color($primary-color, $lightness: 70%);
+        border-top: 1px dotted $secondary-color;
+    }
+
+    h2, h3 {
+        &:first-child {
+            border-top: 0;
+        }
     }
 
     p {
@@ -431,34 +476,41 @@
 }
 
 #text-search {
-  .menu.vertical {
-    li {
-      margin-top: 4px;
-    };
-    input[type=checkbox] {
-      margin-right: 0;
-    }
     .menu.vertical {
-      margin-left: 1rem;
+        li {
+            margin-top: 4px;
+        }
+
+        input[type=checkbox] {
+            margin-right: 0;
+        }
+
+        .menu.vertical {
+            margin-left: 1rem;
+        }
     }
-  }
 
-  // GN: prototype/temporary tooltip
-  #heatmap-tooltip {
-    background-color: rgba(47,72,88,0.7);
-    border: 1px solid #2f4858;
-    position: fixed;
-    top: 1rem;
-    left: 1rem;
-    padding: 0.5rem;
-    z-index: 1100; // higher than leaflet controls (1000)
-    color: #eee;
-    max-height: 8rem;
-    -webkit-box-shadow: 7px 7px 10px 0px rgba(50,50,50,0.75);
-    -moz-box-shadow: 7px 7px 10px 0px rgba(50,50,50,0.75);
-    box-shadow: 7px 7px 10px 0px rgba(50,50,50,0.75);
-    overflow-y: auto; // in case user selects a lot of texts
-    font-size: 0.8rem; // some regions can be very long...
-  }
+    // GN: prototype/temporary tooltip
+    #heatmap-tooltip {
+        background-color: rgba(47,72,88,0.7);
+        border: 1px solid #2f4858;
+        position: fixed;
+        top: 1rem;
+        left: 1rem;
+        padding: 0.5rem;
+        z-index: 1100; // higher than leaflet controls (1000)
+        color: #eee;
+        max-height: 8rem;
+        -webkit-box-shadow: 7px 7px 10px 0px rgba(50,50,50,0.75);
+        -moz-box-shadow: 7px 7px 10px 0px rgba(50,50,50,0.75);
+        box-shadow: 7px 7px 10px 0px rgba(50,50,50,0.75);
+        overflow-y: auto; // in case user selects a lot of texts
+        font-size: 0.8rem; // some regions can be very long...
+    }
+}
 
+.leaflet-interactive {
+    &:hover {
+        fill: $primary-color;
+    }
 }
