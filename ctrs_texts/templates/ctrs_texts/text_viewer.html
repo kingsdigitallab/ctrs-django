@@ -47,15 +47,14 @@
                     <ul class="menu vertical">
                         <template v-for="text in texts">
                             <li v-if="text.type==text_type.type" :class="{selected: text == block.text} + ' text ' + text.type" @click="on_change_text(block, text)">
-                                <a href="#" :data-toggle="'offCanvas-'+block_index"><span class="label secondary">{{ text.attributes.siglum }}</span>
+                                <a href="#" :data-toggle="'offCanvas-'+block_index"><span :class="'label secondary '+ text.attributes.siglum.toLowerCase()+'-bg'">{{ text.attributes.siglum }}</span>
                                   {{ text.attributes.name }}
-                                  <span v-if="text.parent" class="label secondary version">{{ text.parent.attributes.siglum }}</span>
+                                  <span v-if="text.parent" :class="'label secondary version '+ text.parent.attributes.siglum.toLowerCase()+'-bg'">{{ text.parent.attributes.siglum }}</span>
                                 </a>
                             </li>
                         </template>
                     </ul>
                 </template>
-
             </div>
 
             <div class="off-canvas-content" data-off-canvas-content>
