@@ -514,3 +514,57 @@
         fill: $primary-color;
     }
 }
+
+// Using colour blind friendly palette for the versions
+
+// GF - TODO: rearrange hierarchy to remove !important
+// See label classes inside text viewer;
+
+.v1 {
+    color: $orange !important;
+}
+
+.v1-bg {
+    background-color: $orange !important;
+}
+
+.v2 {
+    color: $sky-blue !important;
+}
+
+.v2-bg {
+    background-color: $sky-blue !important;
+}
+
+.v3 {
+    color: $bluish-green !important;
+}
+
+.v3-bg {
+    background-color: $bluish-green !important;
+    color: $white !important;
+}
+
+.v4 {
+    color: $yellow !important;
+}
+
+.v4-bg {
+    background-color: $yellow !important;
+}
+
+.v5 {
+    color: $vermillion !important;
+}
+
+.v5-bg {
+    background-color: $vermillion !important;
+}
+
+.v6 {
+    color: $reddish-purple !important;
+}
+
+.v6-bg {
+    background-color: $reddish-purple !important;
+}
