@@ -49,7 +49,7 @@
                             <li v-if="text.type==text_type.type" :class="{selected: text == block.text} + ' text ' + text.type" @click="on_change_text(block, text)">
                                 <a href="#" :data-toggle="'offCanvas-'+block_index"><span :class="'label secondary '+ text.attributes.siglum.toLowerCase()">{{ text.attributes.siglum }}</span>
                                   {{ text.attributes.name }}
-                                  <span v-if="text.parent" :class="'label secondary version '+ text.parent.attributes.siglum.toLowerCase()">{{ text.parent.attributes.siglum }}</span>
+                                  <span v-if="text.parent" :class="'label version '+ text.parent.attributes.siglum.toLowerCase()">{{ text.parent.attributes.siglum }}</span>
                                 </a>
                             </li>
                         </template>
@@ -64,11 +64,11 @@
                             <a class="button hollow arrow-only canvas-trigger" :data-toggle="'offCanvas-'+block_index">
                                 <span class="show-for-sr">List of texts</span>
                             </a>
-                            <span v-if="block.text" :class="'label secondary ' + block.text.type + ' ' + block.text.attributes.siglum.toLowerCase()">{{ block.text.attributes.siglum }}</span>
+                            <span v-if="block.text" :class="'label ' + block.text.type + ' ' + block.text.attributes.siglum.toLowerCase()">{{ block.text.attributes.siglum }}</span>
                             <h2>
                                 <template v-if="block.text">
                                     {{ block.text.attributes.name }}
-                                    <span v-if="block.text.parent" :class="'label secondary version nested ' + block.text.parent.attributes.siglum.toLowerCase()">{{ block.text.parent.attributes.siglum }}</span>
+                                    <span v-if="block.text.parent" :class="'label version nested ' + block.text.parent.attributes.siglum.toLowerCase()">{{ block.text.parent.attributes.siglum }}</span>
                                 </template>
                                 <template v-else>
                                     Select text

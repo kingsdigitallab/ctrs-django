@@ -76,7 +76,6 @@
 
             &.secondary {
                 background: scale-color($secondary-color, $lightness: 20%);
-                // border: 1px solid $secondary-color;
             }
         }
     }
@@ -95,16 +94,10 @@
 
         &.manuscript {
             background: scale-color($secondary-color, $lightness: 20%);
-            // border: 1px solid scale-color($secondary-color, $lightness: -20%);
         }
 
         &.nested {
             padding-top: .25rem;
-        }
-
-        &.version {
-            background: scale-color($primary-color, $lightness: 80%);
-            // border: 1px solid scale-color($primary-color, $lightness: 50%);
         }
     }
 }
@@ -152,15 +145,19 @@
             font-size: 1rem;
         }
     }
+}
 
-
+.block-view,
+.off-canvas-wrapper,
+#text-search {
     .label {
         &.version {
             background: scale-color($primary-color, $lightness: 75%);
-            // border: 1px solid scale-color($primary-color, $lightness: 40%);
+            color: $primary-color;
         }
     }
 }
+
 
 // Repetition below due to nesting
 
@@ -516,9 +513,6 @@
 }
 
 // Using colour blind friendly palette for the versions
-
-// GF - TODO: rearrange hierarchy to remove !important
-// See label classes inside text viewer;
 
 .v1 {
     border-bottom: 10px solid $orange;
