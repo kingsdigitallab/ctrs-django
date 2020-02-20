@@ -92,10 +92,6 @@
     .label {
         margin-left: .5rem;
 
-        &.manuscript {
-            background: scale-color($secondary-color, $lightness: 20%);
-        }
-
         &.nested {
             padding-top: .25rem;
         }
@@ -145,15 +141,25 @@
             font-size: 1rem;
         }
     }
+
+    // Microsoft Edge fix to avoid overflow display of svgs
+    svg:not(:root).svg-inline--fa {
+        overflow: hidden !important;
+    }
 }
 
 .block-view,
 .off-canvas-wrapper,
 #text-search {
     .label {
+        color: $black;
+
+        &.manuscript {
+            background: scale-color($secondary-color, $lightness: 20%);
+        }
+
         &.version {
             background: scale-color($primary-color, $lightness: 75%);
-            color: $primary-color;
         }
     }
 }
@@ -260,19 +266,27 @@
     }
 
     .show-hide-regions {
-        &::before {
-            content: "\f070";
-            display: none;
-            font-family: "Font Awesome 5 Pro";
-            font-weight: 900;
-        }
+        // &::before {
+        //     content: "\f070";
+        //     display: none;
+        //     font-family: "Font Awesome 5 Pro";
+        //     font-weight: 900;
+        // }
 
-        &.display-wregions {
-            &::before {
-                content: "\f06e";
-                display: none;
-                font-family: "Font Awesome 5 Pro";
-                font-weight: 900;
+        // &.display-wregions {
+        //     &::before {
+        //         content: "\f06e";
+        //         display: none;
+        //         font-family: "Font Awesome 5 Pro";
+        //         font-weight: 900;
+        //     }
+        // }
+
+        svg {
+            width: .6875rem;
+
+            path {
+                fill: scale-color($secondary-color, $lightness: -40%);
             }
         }
     }
