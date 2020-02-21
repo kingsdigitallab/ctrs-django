@@ -153,14 +153,18 @@
 #text-search {
     .label {
         color: $black;
+    }
+}
 
-        &.manuscript {
-            background: scale-color($secondary-color, $lightness: 20%);
-        }
+.label {
+    &.manuscript {
+        background: scale-color($secondary-color, $lightness: 20%);
+        color: $black;
+    }
 
-        &.version {
-            background: scale-color($primary-color, $lightness: 75%);
-        }
+    &.version {
+        background: scale-color($primary-color, $lightness: 75%);
+        color: $black;
     }
 }
 
@@ -206,11 +210,6 @@
                 &:hover {
                     background: scale-color($primary-color, $lightness: 80%);
                 }
-            }
-
-
-            &.manuscript {
-                background: scale-color($primary-color, $lightness: 94%);
             }
 
             &.text {
@@ -523,6 +522,18 @@
 .leaflet-interactive {
     &:hover {
         fill: $primary-color;
+    }
+}
+
+/* Texts page styles */
+
+.texts {
+    h4 {
+        a {
+            &:hover {
+                border-bottom: 10px solid scale-color($primary-color, $lightness: 75%);
+            }
+        }
     }
 }
 
