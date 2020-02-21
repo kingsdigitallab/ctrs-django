@@ -162,7 +162,8 @@
         color: $black;
     }
 
-    &.version {
+    &.version,
+    &.work {
         background: scale-color($primary-color, $lightness: 75%);
         color: $black;
     }
@@ -525,46 +526,28 @@
     }
 }
 
-/* Texts page styles */
-
-.texts {
-    h4 {
-        a {
-            &:hover {
-                border-bottom: 10px solid scale-color($primary-color, $lightness: 75%);
-            }
-        }
-    }
-}
-
 // Using colour blind friendly palette for the versions
 
 .v1 {
-    border-bottom: 10px solid $orange;
-    // border-top: 5px solid $orange;
+    border-left: 10px solid $orange;
 }
 
 .v2 {
-    border-bottom: 10px solid $sky-blue;
-    // border-top: 5px solid $sky-blue;
+    border-left: 10px solid $sky-blue;
 }
 
 .v3 {
-    border-bottom: 10px solid $bluish-green;
-    // border-top: 5px solid $bluish-green;
+    border-left: 10px solid $bluish-green;
 }
 
 .v4 {
-    border-bottom: 10px solid $yellow;
-    // border-top: 5px solid $yellow;
+    border-left: 10px solid $yellow;
 }
 
 .v5 {
-    border-bottom: 10px solid $vermillion;
-    // border-top: 5px solid $vermillion;
+    border-left: 10px solid $vermillion;
 }
 
 .v6 {
-    border-bottom: 10px solid $reddish-purple;
-    // border-top: 5px solid $reddish-purple;
+    border-left: 10px solid $reddish-purple;
 }
