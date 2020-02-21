@@ -128,7 +128,7 @@
                             <ul v-if="block.text && block.text.type!='manuscript'" class="group-members">
                                 <template v-for="member in texts">
                                     <li v-if="member.attributes.group == block.text.id">
-                                        <span class="label secondary">{{ member.attributes.siglum }}</span> {{ member.attributes.name }}
+                                        <span v-bind:class="['label', block.text.type=='work' ? 'version' : 'manuscript', member.attributes.siglum.toLowerCase()]">{{ member.attributes.siglum }}</span> {{ member.attributes.name }}
                                     </li>
                                 </template>
                             </ul>
