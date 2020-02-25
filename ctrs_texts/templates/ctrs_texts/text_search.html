@@ -90,7 +90,7 @@
                   <li :class="">
                       <label>
                           <input type="checkbox" v-model="text.selected" @change="on_tick_text(text)">
-                          <span :class="'label secondary version ' + text.attributes.siglum.toLowerCase()">{{ text.attributes.siglum }}</span> {{ text.attributes.name }}
+                          <span :class="'label secondary version ' + text.attributes.siglum.toLowerCase() + '-text-id'">{{ text.attributes.siglum }}</span> {{ text.attributes.name }}
                       </label>
                       <ul class="menu vertical">
                           <template v-for="member in facets.texts">
