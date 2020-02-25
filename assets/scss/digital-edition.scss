@@ -256,36 +256,15 @@
             &::before {
                 display: none;
             }
-
-            // GN: we hide empty-symbol IF w-regions are not highlighted
-            // TODO: depends on toggled class in the future
-            &.no-text {
-                display: none;
-            }
         }
 
+        // Hide empty symbol if w-regions are hidden
         .no-text {
             display: none;
         }
     }
 
     .show-hide-regions {
-        // &::before {
-        //     content: "\f070";
-        //     display: none;
-        //     font-family: "Font Awesome 5 Pro";
-        //     font-weight: 900;
-        // }
-
-        // &.display-wregions {
-        //     &::before {
-        //         content: "\f06e";
-        //         display: none;
-        //         font-family: "Font Awesome 5 Pro";
-        //         font-weight: 900;
-        //     }
-        // }
-
         svg {
             width: .6875rem;
 
