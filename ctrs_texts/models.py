@@ -155,11 +155,10 @@ class EncodedText(index.Indexed, TimestampedModel, ImportedModel):
 
         return ret
 
-    # IGNORE the warning message from command line about slug
-    # not defined in abstracted_text.
-    # It is defined via the NamedModel.
     search_fields = [
-        index.SearchField('abstracted_text__slug', partial_match=True),
+        index.RelatedFields('abstracted_text', [
+            index.SearchField('slug', partial_match=True),
+        ])
     ]
 
 
