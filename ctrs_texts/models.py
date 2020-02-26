@@ -111,23 +111,23 @@ class EncodedText(index.Indexed, TimestampedModel, ImportedModel):
         ri = 0
 
         # Now inject the region content and info into each region of the parent
-        for region in xml.findall('.//span[@data-dpt-type="unsettled"]'):
-            if (region.attrib.get(
-                'data-dpt-group', None
-            ) != abstracted_type.slug):
-                continue
-
+        selector = './/span[@data-dpt-group="' + abstracted_type.slug + '"]'
+        for region in xml.findall(selector):
             if ri >= len(regions):
                 break
 
+            # Insert the HTML of the variants under the region
             variants = utils.append_xml_element(
-                region, 'span', None, class_='variants', prepend=True
+                region, 'span', None,
+                class_='variants', prepend=True
             )
 
             for mi, r in enumerate(regions[ri]):
 
                 variant = utils.append_xml_element(
-                    variants, 'span', None, class_='variant'
+                    variants, 'span', None,
+                    class_='variant',
+                    data_tid=str(members[mi].id)
                 )
 
                 utils.append_xml_element(

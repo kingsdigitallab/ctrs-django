@@ -77,10 +77,17 @@ def append_xml_element(
 
     If an attribute name is a python reserved word (e.g. class),
     just add _ at the end (e.g. class_).
+
+    Note that _ in attribute name is converted to -.
+    E.g. data_something => data-something
     '''
 
     if attributes:
-        attributes = {k.rstrip('_'): v for k, v in attributes.items()}
+        attributes = {
+            k.rstrip('_').replace('_', '-'): v
+            for k, v
+            in attributes.items()
+        }
 
     ret = ET.Element(tag_name, attrib=attributes)
     if prepend:
