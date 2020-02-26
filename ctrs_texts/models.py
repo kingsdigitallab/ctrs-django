@@ -98,9 +98,11 @@ class EncodedText(index.Indexed, TimestampedModel, ImportedModel):
             other_content = member.encoded_texts.filter(type=self.type).first()
             if not other_content:
                 continue
-            for ri, region in enumerate(other_content.get_regions()):
+            for ri, region in enumerate(other_content.get_regions(
+                abstracted_type.slug)
+            ):
                 if len(regions) <= ri:
-                    regions.append(['?'] * len(members))
+                    regions.append(['[absent]'] * len(members))
                 regions[ri][mi] = region
 
         #  Get the content of the parent (i.e. self)
@@ -144,13 +146,21 @@ class EncodedText(index.Indexed, TimestampedModel, ImportedModel):
 
         return ret
 
-    def get_regions(self):
+    def get_regions(self, region_type):
+        '''
+        Returns a list of regions of type region_type.
+        region_type = work|version
+        Each region is a string that contains the text of the region.
+        All xml tags are removed.
+        '''
         ret = []
 
         xml = utils.get_xml_from_unicode(
             self.content, ishtml=True, add_root=True)
 
-        for region in xml.findall('.//span[@data-dpt-type="unsettled"]'):
+        # for region in xml.findall('.//span[@data-dpt-type="unsettled"]'):
+        region_selector = './/span[@data-dpt-group="' + region_type + '"]'
+        for region in xml.findall(region_selector):
             ret.append(utils.get_unicode_from_xml(region, text_only=True))
 
         return ret
