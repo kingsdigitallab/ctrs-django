@@ -25,7 +25,7 @@
         {% for version in work.members.all %}
           {% if version.short_name != 'HM1' and version.short_name != 'HM2' %}
             <h4><a class="status-{{version.get_status.slug}}" href="{% url 'text_viewer' %}?blocks={{version.id}}:transcription">
-              <span class="label version large {{ version.short_name | lower }}">{{ version.short_name}}</span> {{ version.name }}
+              <span class="label version large {{ version.short_name | lower }}-text-id">{{ version.short_name}}</span> {{ version.name }}
             </a></h4>
             <ul>
               {% for text in version.members.all %}
