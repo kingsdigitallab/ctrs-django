@@ -106,13 +106,21 @@ def append_xml_element(
 def get_sentence_from_text(encoded_text, sentence_number):
     ret = ''
 
+    # we remove all auxiliary sentences first
+    content = re.sub('<p[^>]+data-dpt-type="auxiliary".*?</p>',
+                     '', encoded_text.content)
+    if content == encoded_text.content:
+        print('unchanged')
+    else:
+        print('changed')
+
     pattern = ''.join([
         r'(?usi)(<p>\s*<span data-dpt="sn">\s*',
         str(sentence_number),
         r'\s*</span>.*?</p>)(\s*<p>\s*<span data-dpt="sn">|$)'
     ])
 
-    sentences = re.findall(pattern, encoded_text.content)
+    sentences = re.findall(pattern, content)
 
     if sentences:
         ret = sentences[0][0]
