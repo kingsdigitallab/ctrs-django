@@ -98,9 +98,11 @@ class EncodedText(index.Indexed, TimestampedModel, ImportedModel):
             other_content = member.encoded_texts.filter(type=self.type).first()
             if not other_content:
                 continue
-            for ri, region in enumerate(other_content.get_regions()):
+            for ri, region in enumerate(other_content.get_regions(
+                abstracted_type.slug)
+            ):
                 if len(regions) <= ri:
-                    regions.append(['?'] * len(members))
+                    regions.append(['[absent]'] * len(members))
                 regions[ri][mi] = region
 
         #  Get the content of the parent (i.e. self)
@@ -109,23 +111,23 @@ class EncodedText(index.Indexed, TimestampedModel, ImportedModel):
         ri = 0
 
         # Now inject the region content and info into each region of the parent
-        for region in xml.findall('.//span[@data-dpt-type="unsettled"]'):
-            if (region.attrib.get(
-                'data-dpt-group', None
-            ) != abstracted_type.slug):
-                continue
-
+        selector = './/span[@data-dpt-group="' + abstracted_type.slug + '"]'
+        for region in xml.findall(selector):
             if ri >= len(regions):
                 break
 
+            # Insert the HTML of the variants under the region
             variants = utils.append_xml_element(
-                region, 'span', None, class_='variants', prepend=True
+                region, 'span', None,
+                class_='variants', prepend=True
             )
 
             for mi, r in enumerate(regions[ri]):
 
                 variant = utils.append_xml_element(
-                    variants, 'span', None, class_='variant'
+                    variants, 'span', None,
+                    class_='variant',
+                    data_tid=str(members[mi].id)
                 )
 
                 utils.append_xml_element(
@@ -144,13 +146,21 @@ class EncodedText(index.Indexed, TimestampedModel, ImportedModel):
 
         return ret
 
-    def get_regions(self):
+    def get_regions(self, region_type):
+        '''
+        Returns a list of regions of type region_type.
+        region_type = work|version
+        Each region is a string that contains the text of the region.
+        All xml tags are removed.
+        '''
         ret = []
 
         xml = utils.get_xml_from_unicode(
             self.content, ishtml=True, add_root=True)
 
-        for region in xml.findall('.//span[@data-dpt-type="unsettled"]'):
+        # for region in xml.findall('.//span[@data-dpt-type="unsettled"]'):
+        region_selector = './/span[@data-dpt-group="' + region_type + '"]'
+        for region in xml.findall(region_selector):
             ret.append(utils.get_unicode_from_xml(region, text_only=True))
 
         return ret
