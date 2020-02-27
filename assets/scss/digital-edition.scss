@@ -486,18 +486,19 @@
 
     // GN: prototype/temporary tooltip
     #heatmap-tooltip {
-        background-color: rgba(47,72,88,0.7);
+        background-color: rgba(47, 72, 88, 0.95);
         border: 1px solid #2f4858;
         position: fixed;
-        top: 1rem;
+        // top: 1rem;
         left: 1rem;
         padding: 0.5rem;
         z-index: 1100; // higher than leaflet controls (1000)
         color: #eee;
-        max-height: 8rem;
-        -webkit-box-shadow: 7px 7px 10px 0px rgba(50,50,50,0.75);
-        -moz-box-shadow: 7px 7px 10px 0px rgba(50,50,50,0.75);
-        box-shadow: 7px 7px 10px 0px rgba(50,50,50,0.75);
+        max-height: 80vh;
+        max-width: 80vw;
+        -webkit-box-shadow: 7px 7px 10px 0px rgba(50, 50, 50, 0.75);
+        -moz-box-shadow: 7px 7px 10px 0px rgba(50, 50, 50, 0.75);
+        box-shadow: 7px 7px 10px 0px rgba(50, 50, 50, 0.75);
         overflow-y: auto; // in case user selects a lot of texts
         font-size: 0.8rem; // some regions can be very long...
     }
