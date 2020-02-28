@@ -148,6 +148,12 @@ button,
     }
 }
 
+.label {
+    &.large {
+        font-size: 1rem;
+    }
+}
+
 // 2.2 Forms
 
 // 2.3 Headings

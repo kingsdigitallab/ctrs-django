@@ -177,9 +177,7 @@ class Command(BaseCommand):
         ret = (content or '').replace('&nbsp;', '').replace('\xA0', ' ')
 
         # allow the empty symbol to be styled
-        if 0:
-            # ac-128: disabled until confirmed unnecessary
-            ret = ret.replace('∅', '<span class="no-text">∅</span>')
+        ret = ret.replace('∅', '<span class="no-text">∅</span>')
 
         # ac-128: add an empty-region class the spans that only contains an
         # empty symbol

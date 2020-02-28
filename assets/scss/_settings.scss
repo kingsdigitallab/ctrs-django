@@ -107,6 +107,16 @@ $print-transparent-backgrounds: true;
 
 @include add-foundation-colors;
 
+/* Colourblind-friendly colours */
+
+$orange: rgba(230, 159, 0, 1);
+$sky-blue: rgba(86, 180, 233, 1);
+$bluish-green: rgba(0, 158, 115, 1);
+$yellow: rgba(240, 228, 66, 1);
+$blue: rgba(0, 114, 178, 1);
+$vermillion: rgba(213, 94, 0, 1);
+$reddish-purple: rgba(204, 121, 167, 1);
+
 // 2. Breakpoints
 // --------------
 

@@ -77,10 +77,17 @@ def append_xml_element(
 
     If an attribute name is a python reserved word (e.g. class),
     just add _ at the end (e.g. class_).
+
+    Note that _ in attribute name is converted to -.
+    E.g. data_something => data-something
     '''
 
     if attributes:
-        attributes = {k.rstrip('_'): v for k, v in attributes.items()}
+        attributes = {
+            k.rstrip('_').replace('_', '-'): v
+            for k, v
+            in attributes.items()
+        }
 
     ret = ET.Element(tag_name, attrib=attributes)
     if prepend:
@@ -99,13 +106,17 @@ def append_xml_element(
 def get_sentence_from_text(encoded_text, sentence_number):
     ret = ''
 
+    # ac-139 we remove all auxiliary sentences first
+    content = re.sub('<p[^>]+data-dpt-type="auxiliary".*?</p>',
+                     '', encoded_text.content)
+
     pattern = ''.join([
         r'(?usi)(<p>\s*<span data-dpt="sn">\s*',
         str(sentence_number),
         r'\s*</span>.*?</p>)(\s*<p>\s*<span data-dpt="sn">|$)'
     ])
 
-    sentences = re.findall(pattern, encoded_text.content)
+    sentences = re.findall(pattern, content)
 
     if sentences:
         ret = sentences[0][0]

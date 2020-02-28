@@ -142,7 +142,8 @@ $(() => {
       },
 
       on_change_text: function(block, text) {
-        // change the text of a block according to the user selection in the UI
+        // change the text of a block
+        // according to the user selection in the UI
         block.text = text;
         for (let view of block.views) {
           // this will trigger a request for content
@@ -210,7 +211,8 @@ $(() => {
       },
 
       get_text_from_id_or_siglum: function (id_or_siglum) {
-        // clog('get_text_from_x '+id_or_siglum);
+        // Gotcha: some texts share the same siglum, e.g. PA in v5 and v6!
+        //
         id_or_siglum += '';
         for (let text of this.texts) {
           if (
@@ -241,9 +243,9 @@ $(() => {
         // we load the text of that variant in the other block/pane
         let self = this;
         $('.variants').not('.clickable').addClass('clickable').on('click', '.variant', function() {
-          let $variant = $(this);
-          let siglum = $variant.find('.ms').first().text();
-          let text = self.get_text_from_id_or_siglum(siglum);
+          let text_id = this.getAttribute('data-tid');
+          // find('.ms').first().text();
+          let text = self.get_text_from_id_or_siglum(text_id);
           if (text) {
             for (let other_block of self.blocks) {
               if (other_block != block) {
