@@ -275,6 +275,23 @@
     }
 }
 
+.custom-tooltip {
+    li {
+        margin-bottom: 1rem;
+    }
+
+    .label {
+        &:first-of-type {
+            margin-left: 0 !important;
+        }
+    }
+
+    sub {
+        font-family: "Open Sans Condensed";
+        font-weight: 700;
+    }
+}
+
 // GN: Temporary rules for demo page
 // Both html structure and styles will be improved at a later stage
 
