@@ -183,18 +183,9 @@
 {% block footer_scripts %}
 {{ block.super }}
 <script>
-  window.DEBUG = {
-    %
-    if DEBUG %
-  }
-  true {
-    %
-    else %
-  }
-  false {
-    %
-    endif %
-  };
+  /* beautify preserve:start */
+  window.DEBUG = {% if DEBUG %}true{% else %}false{% endif %};
+  /* beautify preserve:end */
 </script>
 
 <script src="{% static 'vue/dist/vue.js' %}"></script>
