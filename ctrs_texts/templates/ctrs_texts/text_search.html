@@ -4,8 +4,10 @@
 {% block meta_title %}Sentence search{% endblock %}
 
 {% block custom_css %}
-<link rel="stylesheet" type="text/x-scss" href="{% static 'scss/digital-edition.scss' %}">
-<link rel="stylesheet" type="text/x-scss" href="{% static 'leaflet/dist/leaflet.css' %}">
+<link rel="stylesheet" type="text/x-scss"
+  href="{% static 'scss/digital-edition.scss' %}">
+<link rel="stylesheet" type="text/x-scss"
+  href="{% static 'leaflet/dist/leaflet.css' %}">
 {% endblock %}
 
 {% block title %}
@@ -18,101 +20,119 @@
 <div id="text-search" class="grid-x grid-margin-x">
   <div v-if="selected_region" id="heatmap-tooltip">
     <ul v-for="(sigla, reading) in selected_region.readings">
-      <span v-for="siglum in sigla" class="label secondary manuscript">{{ siglum }}</span>
+      <span v-for="siglum in sigla" :class="'label secondary manuscript ' + siglum[0].toLowerCase() +
+        '-text-id'">{{ siglum[1] }}</span>
       {{ reading }}
     </ul>
   </div>
 
   <div class="cell medium-3 controls">
-      <h2>Result Type</h2>
+    <h2>Result Type</h2>
+
+    <div class="grid-x grid-margin-x">
+      <div class="cell small-6">
+        <p>Heatmap</p>
+        <div class="switch tiny">
+          <input class="switch-input" v-model="facets.result_type" type="radio"
+            value="regions" id="regions" checked name="radio-group-type">
+          <label class="switch-paddle" for="regions">
+            <span class="show-for-sr">Heatmap</span>
+          </label>
+        </div>
+      </div>
+      <div class="cell small-6">
+        <p>Sentences</p>
+        <div class="switch tiny">
+          <input class="switch-input" v-model="facets.result_type" type="radio"
+            value="sentences" id="sentences" name="radio-group-type">
+          <label class="switch-paddle" for="sentences">
+            <span class="show-for-sr">Sentences</span>
+          </label>
+        </div>
+      </div>
+    </div>
+
+    <h2>Options</h2>
+
+    <template v-if="facets.result_type == 'sentences'">
+      <h3>Sentence number</h3>
+      <div class="button-group with-input">
+        <button class="button secondary" @click="move_sentence_number(-1)"><i
+            class="fas fa-angle-double-left"></i><span
+            class="show-for-sr">Prev</span></button>
+        <input v-model="facets.sentence_number" type="number" min="1"
+          :max="sentence_number_max" value="1">
+        <button class="button secondary" @click="move_sentence_number(1)"><i
+            class="fas fa-angle-double-right"></i><span
+            class="show-for-sr">Next</span></button>
+      </div>
+    </template>
+
+    <template v-if="facets.result_type == 'sentences'">
+      <h3>Language</h3>
 
       <div class="grid-x grid-margin-x">
         <div class="cell small-6">
-          <p>Heatmap</p>
+          <p>Latin</p>
           <div class="switch tiny">
-            <input class="switch-input" v-model="facets.result_type" type="radio" value="regions" id="regions" checked name="radio-group-type">
-            <label class="switch-paddle" for="regions">
-              <span class="show-for-sr">Heatmap</span>
+            <input class="switch-input" v-model="facets.encoding_type"
+              type="radio" value="transcription" id="transcription" checked
+              name="radio-group-lang">
+            <label class="switch-paddle" for="transcription">
+              <span class="show-for-sr">Latin</span>
             </label>
           </div>
         </div>
         <div class="cell small-6">
-          <p>Sentences</p>
+          <p>English</p>
           <div class="switch tiny">
-            <input class="switch-input" v-model="facets.result_type" type="radio" value="sentences" id="sentences" name="radio-group-type">
-            <label class="switch-paddle" for="sentences">
-              <span class="show-for-sr">Sentences</span>
+            <input class="switch-input" v-model="facets.encoding_type"
+              type="radio" value="translation" id="translation"
+              name="radio-group-lang">
+            <label class="switch-paddle" for="translation">
+              <span class="show-for-sr">English</span>
             </label>
           </div>
         </div>
       </div>
+    </template>
 
-      <h2>Options</h2>
-
-      <template v-if="facets.result_type == 'sentences'">
-        <h3>Sentence number</h3>
-        <div class="button-group with-input">
-          <button class="button secondary" @click="move_sentence_number(-1)"><i class="fas fa-angle-double-left"></i><span class="show-for-sr">Prev</span></button>
-          <input v-model="facets.sentence_number" type="number" min="1" :max="sentence_number_max" value="1">
-          <button class="button secondary" @click="move_sentence_number(1)"><i class="fas fa-angle-double-right"></i><span class="show-for-sr">Next</span></button>
-        </div>
+    <h3>Texts</h3>
+    <template v-for="text in facets.texts">
+      <template v-if="text.type == 'version'">
+        <ul class="menu vertical">
+          <li :class="">
+            <label>
+              <input type="checkbox" v-model="text.selected"
+                @change="on_tick_text(text)">
+              <span
+                :class="'label secondary version ' + text.attributes.siglum.toLowerCase() + '-text-id'">{{ text.attributes.siglum }}</span>
+              {{ text.attributes.name }}
+            </label>
+            <ul class="menu vertical">
+              <template v-for="member in facets.texts">
+                <li :class="" v-if="member.attributes.group == text.id">
+                  <label>
+                    <input type="checkbox" v-model="member.selected"
+                      @change="on_tick_text(member)">
+                    <span
+                      class="label secondary manuscript">{{ member.attributes.siglum }}</span>
+                    {{ member.attributes.name }}
+                  </label>
+                </li>
+              </template>
+            </ul>
+          </li>
+        </ul>
       </template>
-
-      <template v-if="facets.result_type == 'sentences'">
-        <h3>Language</h3>
-
-        <div class="grid-x grid-margin-x">
-          <div class="cell small-6">
-            <p>Latin</p>
-            <div class="switch tiny">
-              <input class="switch-input" v-model="facets.encoding_type" type="radio" value="transcription" id="transcription" checked name="radio-group-lang">
-              <label class="switch-paddle" for="transcription">
-                <span class="show-for-sr">Latin</span>
-              </label>
-            </div>
-          </div>
-          <div class="cell small-6">
-            <p>English</p>
-            <div class="switch tiny">
-              <input class="switch-input" v-model="facets.encoding_type" type="radio" value="translation" id="translation" name="radio-group-lang">
-              <label class="switch-paddle" for="translation">
-                <span class="show-for-sr">English</span>
-              </label>
-            </div>
-          </div>
-        </div>
-      </template>
-
-      <h3>Texts</h3>
-      <template v-for="text in facets.texts">
-          <template v-if="text.type == 'version'">
-              <ul class="menu vertical">
-                  <li :class="">
-                      <label>
-                          <input type="checkbox" v-model="text.selected" @change="on_tick_text(text)">
-                          <span :class="'label secondary version ' + text.attributes.siglum.toLowerCase() + '-text-id'">{{ text.attributes.siglum }}</span> {{ text.attributes.name }}
-                      </label>
-                      <ul class="menu vertical">
-                          <template v-for="member in facets.texts">
-                              <li :class="" v-if="member.attributes.group == text.id">
-                                  <label>
-                                      <input type="checkbox" v-model="member.selected" @change="on_tick_text(member)">
-                                      <span class="label secondary manuscript">{{ member.attributes.siglum }}</span> {{ member.attributes.name }}
-                                  </label>
-                              </li>
-                          </template>
-                      </ul>
-                  </li>
-              </ul>
-          </template>
-      </template>
+    </template>
   </div>
 
   <div class="cell medium-9" id="results">
-      <h2>Results</h2>
+    <h2>Results</h2>
 
-      <!-- Static visualisation to add info based on the heatmap -->
-      <!-- 
+    <!-- Static visualisation to add info based on the heatmap -->
+    <!--
       <template v-if="facets.result_type == 'sentences'">
         <nav aria-label="Pagination" class="heatmap-viz-nav">
           <ul class="pagination text-center">
@@ -150,10 +170,10 @@
       </template>
       -->
 
-      <template v-if="response.data && response.data.length > 0">
-          <div class="hit" v-for="hit in response.data" v-html="hit.html">
-          </div>
-      </template>
+    <template v-if="response.data && response.data.length > 0">
+      <div class="hit" v-for="hit in response.data" v-html="hit.html">
+      </div>
+    </template>
   </div>
 
 </div>
@@ -161,15 +181,26 @@
 {% endblock %}
 
 {% block footer_scripts %}
-  {{ block.super }}
-  <script>
-      window.DEBUG = {% if DEBUG %}true{% else %}false{% endif %};
-  </script>
+{{ block.super }}
+<script>
+  window.DEBUG = {
+    %
+    if DEBUG %
+  }
+  true {
+    %
+    else %
+  }
+  false {
+    %
+    endif %
+  };
+</script>
 
-  <script src="{% static 'vue/dist/vue.js' %}"></script>
+<script src="{% static 'vue/dist/vue.js' %}"></script>
 
-  <script src="{% static 'leaflet/dist/leaflet.js' %}"></script>
-  <script src="{% static 'leaflet-iiif/leaflet-iiif.js' %}"></script>
+<script src="{% static 'leaflet/dist/leaflet.js' %}"></script>
+<script src="{% static 'leaflet-iiif/leaflet-iiif.js' %}"></script>
 
-  <script src="{% static 'ctrs_texts/text_search.js' %}"></script>
+<script src="{% static 'ctrs_texts/text_search.js' %}"></script>
 {% endblock %}
