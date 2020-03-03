@@ -18,16 +18,6 @@
 {% verbatim %}
 
 <div id="text-search" class="grid-x grid-margin-x">
-  <div v-if="selected_region" id="heatmap-tooltip" class="custom-tooltip">
-    <ul class="no-bullet">
-      <li v-for="(sigla, reading) in selected_region.readings">
-        <span v-for="siglum in sigla" :class="'label manuscript ' + siglum[0].toLowerCase() +
-          '-text-id'">{{ siglum[1] }} <sub>{{ siglum[0] }}</sub></span>
-        {{ reading }}
-      </li>
-    </ul>
-  </div>
-
   <div class="cell medium-3 controls">
     <h2>Result Type</h2>
 
@@ -178,6 +168,15 @@
     </template>
   </div>
 
+  <div v-if="selected_region" id="heatmap-tooltip" class="custom-tooltip">
+    <ul class="no-bullet">
+      <li v-for="(sigla, reading) in selected_region.readings">
+        <span v-for="siglum in sigla" :class="'label manuscript ' + siglum[0].toLowerCase() +
+          '-text-id'">{{ siglum[1] }} <sub>{{ siglum[0] }}</sub></span>
+        {{ reading }}
+      </li>
+    </ul>
+  </div>
 </div>
 {% endverbatim %}
 {% endblock %}
