@@ -294,11 +294,20 @@ $(() => {
   function _on_rect_mouseenter(e) {
     let region_key = e.target.annotation.key
     app.selected_region = window.regions[region_key]
-    e.target
-      .bindPopup(document.getElementById('heatmap-tooltip'), {
-        maxWidth: '1000'
-      })
-      .addTo(window.map)
+
+    Vue.nextTick(function() {
+      const popupContent = document
+        .getElementById('heatmap-tooltip')
+        .cloneNode(true)
+      popupContent.id = 'leaflet-heatmap-tooltip'
+
+      e.target
+        .bindPopup(popupContent, {
+          class: 'custom-tooltip',
+          maxWidth: '1000'
+        })
+        .addTo(window.map)
+    })
   }
   function _on_rect_mouseleave(e) {
     // app.selected_region = null;
