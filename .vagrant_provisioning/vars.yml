@@ -1,7 +1,7 @@
 ansible_python_interpreter: /usr/bin/python3
 app: { name: ctrs }
 motd: { file: 00-kdl }
-npm: { original_packages: "jquery vue " }
+npm: { original_packages: 'jquery vue ' }
 postgresql:
   {
     admin_user: postgres,
@@ -38,6 +38,7 @@ system_packages:
     libssl-dev,
     libxml2-dev,
     libxslt-dev,
+    linux-headers-generic,
     nfs-common,
     npm,
     open-vm-tools,
@@ -58,4 +59,4 @@ system_packages:
   ]
 user_home: /home/vagrant
 zsh:
-  { oh_my_zsh: "https://github.com/robbyrussell/oh-my-zsh.git", zshrc: zshrc }
+  { oh_my_zsh: 'https://github.com/robbyrussell/oh-my-zsh.git', zshrc: zshrc }
