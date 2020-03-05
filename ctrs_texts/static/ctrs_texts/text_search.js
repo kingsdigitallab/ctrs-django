@@ -310,7 +310,7 @@ $(() => {
     })
   }
   function _on_rect_mouseleave(e) {
-    // app.selected_region = null;
+    app.selected_region = null;
   }
 
   function _get_annotation_style(annotation) {

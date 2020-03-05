@@ -90,6 +90,8 @@
     </template>
 
     <h3>Texts</h3>
+    <!-- TODO: implements select/deselect all button -->
+    <button class="button small secondary select-all">Select all</button>
     <template v-for="text in facets.texts">
       <template v-if="text.type == 'version'">
         <ul class="menu vertical">

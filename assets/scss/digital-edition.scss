@@ -17,7 +17,7 @@
 
   .card-section {
     height: 0; // It doesn't really matter the value, but height needs
-    // to be declared for overflow to work.
+               // to be declared for overflow to work.
 
     line-height: 2.25;
 
@@ -168,7 +168,6 @@
     color: $black;
   }
 }
-
 
 // Repetition below due to nesting
 
@@ -523,6 +522,17 @@
   //     overflow-y: auto; // in case user selects a lot of texts
   //     font-size: 0.8rem; // some regions can be very long...
   //   }
+}
+
+.leaflet-popup {
+    max-height: 30vw;
+    max-width: 60vw;
+    overflow-y: hidden;
+}
+
+.leaflet-popup-content-wrapper {
+    max-height: 30vw;
+    overflow-y: auto;
 }
 
 .leaflet-interactive {
