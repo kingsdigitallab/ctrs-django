@@ -58,7 +58,7 @@
             </div>
 
             <div class="off-canvas-content" data-off-canvas-content>
-                <div :class="['card block-view', block.text ? '' : 'empty']">
+                <div :class="['card block-view', block.text ? '' : 'empty']" :id="'block-'+block.id">
                     <div class="card-divider">
                         <div class="button-group">
                             <a class="button hollow arrow-only canvas-trigger" :data-toggle="'offCanvas-'+block_index">

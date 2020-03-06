@@ -58,6 +58,8 @@ $(() => {
       ]
       */
       blocks: [],
+      // an id counter for block so we can locate then with jquery
+      last_block_id: 0,
     },
     mounted() {
       let self = this;
@@ -98,6 +100,7 @@ $(() => {
               }
             }
           }
+          this.update_query_string();
         },
         deep: true
       }
@@ -129,7 +132,6 @@ $(() => {
         .done(res => {
           view.chunk = res.data.attributes.chunk;
           view.status = STATUS_FETCHED;
-          self.update_query_string();
 
           // add javascript interactions to the text chunk
           Vue.nextTick(function() {
@@ -141,13 +143,39 @@ $(() => {
         });
       },
 
-      on_change_text: function(block, text) {
+      on_change_text: function(block, text, region_id) {
         // change the text of a block
         // according to the user selection in the UI
-        block.text = text;
-        for (let view of block.views) {
-          // this will trigger a request for content
-          view.status = STATUS_TO_FETCH;
+        block.sublocation = region_id;
+        if (block.text == text) {
+          // text already loaded in that block
+          // we just scroll to region_id
+          this.scroll_to_sublocation(block);
+        } else {
+          block.text = text;
+          for (let view of block.views) {
+            // this will trigger a request for content
+            view.status = STATUS_TO_FETCH;
+          }
+        }
+      },
+
+      scroll_to_sublocation: function(block) {
+        let $block = this._get_block_div(block);
+        let highlight_class = 'highlighted';
+        $block.find('.'+highlight_class).removeClass(highlight_class);
+        let $subl = $block.find('[data-rid="'+block.sublocation+'"]');
+        if ($subl.length) {
+          let $view = $block.find('.card-section');
+          $view.scrollTop(
+            $view.scrollTop() +
+            $subl.position().top -
+            $view.height() / 2 +
+            $subl.height() / 2
+          );
+          $subl.addClass(highlight_class);
+          // clog($subl);
+          // clog(block.sublocation);
         }
       },
 
@@ -155,11 +183,27 @@ $(() => {
         // update query string with current state of viewer
         // e.g. ?blocks=506:transcription,transcription;495:transcription
         var self = this;
-        let qs = 'blocks=' + self.blocks.map(
-          b => b.text ? b.text.id + ':' + (b.views.map(v => v.type)).join(','): ''
-        ).join(';');
+        let qs = 'blocks=' + self.blocks.map(function(b) {
+          let ret = '';
+          if (b.text) {
+            ret = b.text.id + ':' + (b.views.map(v => v.type)).join(',');
+            if (b.sublocation) {
+              ret += '@'+b.sublocation;
+            }
+          }
+          return ret;
+        }).join(';');
         qs = window.location.href.replace(/^([^?]+)([^#]+)(.*)$/, '$1?'+qs+'$3');
         history.pushState(null, '', qs);
+      },
+
+      _add_block: function(block) {
+        block.id = ++this.last_block_id;
+        this.blocks.push(block);
+      },
+
+      _get_block_div: function(block) {
+        return $('#block-'+block.id);
       },
 
       init_blocks: function () {
@@ -170,13 +214,16 @@ $(() => {
         if (query_string_blocks != window.location) {
           for (let block_info of query_string_blocks.split(';')) {
             if (block_info) {
-              let parts = block_info.split(':');
-              this.blocks.push({
+              let parts = block_info.split('@');
+              let sublocation = parts[1] || '';
+              parts = parts[0].split(':');
+              this._add_block({
                 text: self.get_text_from_id_or_siglum(parts[0]),
                 views: parts[1].split(',').map(
                   (view_type) => self._get_new_view_data(view_type)
                 ),
                 comparative: false,
+                sublocation: sublocation,
               });
             }
           }
@@ -184,15 +231,16 @@ $(() => {
         // Default blocks, if needed
         if (this.blocks.length < 1) {
           // block for the 'original copy'
-          this.blocks.push({
+          this._add_block({
             text: self.get_default_text(),
             views: [self._get_new_view_data()],
             comparative: false,
+            id: self.get_new_block_id(),
           });
         }
         if (this.blocks.length < 2) {
           // placeholder block
-          this.blocks.push({
+          this._add_block({
             text: null,
             views: [self._get_new_view_data(
               'transcription', 'placeholder', STATUS_FETCHED
@@ -242,18 +290,46 @@ $(() => {
         // when the user clicks a variant/reading in a region
         // we load the text of that variant in the other block/pane
         let self = this;
-        $('.variants').not('.clickable').addClass('clickable').on('click', '.variant', function() {
+
+        $('.variants').not('.clickable').addClass('clickable').on('click', '.variant', function(e) {
           let text_id = this.getAttribute('data-tid');
-          // find('.ms').first().text();
+          // let region_id = this.getAttribute('data-rid');
+
+          // e.g. v-4 (4th v-region)
+          let region_id = $(this).parents('[data-dpt-group]').first().data('rid');
+
           let text = self.get_text_from_id_or_siglum(text_id);
-          if (text) {
-            for (let other_block of self.blocks) {
-              if (other_block != block) {
-                self.on_change_text(other_block, text);
-              }
-            }
-          }
+          self._load_other_text_in_other_block(block, text, region_id);
+          e.stopPropagation();
         });
+
+        // user click to go up the hierarchy: MS->V, V->W
+        // it is region-based and will open the corresponding region
+        // in the other block
+        $('[data-dpt-group]').not('.clickable').addClass('clickable').on('click', function(e) {
+          let text = block.text;
+          if (this.getAttribute('data-dpt-group') != block.text.type) {
+            text = text.parent;
+          }
+          let region_id = this.getAttribute('data-rid');
+          self._load_other_text_in_other_block(block, text, region_id);
+          e.stopPropagation();
+        });
+
+        // scroll to region/sublocation
+        this.scroll_to_sublocation(block);
+      },
+
+      _load_other_text_in_other_block(source_block, other_text, region_id) {
+        // load other_text in another block than source_block
+        if (!other_text) return;
+
+        for (let other_block of this.blocks) {
+          if (other_block != source_block) {
+            this.on_change_text(other_block, other_text, region_id);
+            break;
+          }
+        }
       },
 
     }
