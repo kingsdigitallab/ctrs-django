@@ -296,6 +296,8 @@
 // GN: Temporary rules for demo page
 // Both html structure and styles will be improved at a later stage
 
+$highlighted-background-color: #ee0;
+
 .legend {
   font-size: 0.625em;
 }
@@ -336,10 +338,37 @@
     // previous of next word.
     border: 1px dashed scale-color($secondary-color, $lightness: -40%);
     margin: 0 .25rem;
+
+    // pointer-events: none;
+
+    &::before {
+        color: $primary-color;
+        content: "?: ";
+        font-size: .75rem;
+        padding-left: .25rem;
+        padding-right: .125rem;
+        // GN: experiment with clickable label to open parent text
+        // see ac-144
+        cursor: pointer;
+        pointer-events: all;
+    }
+
+    &:hover:before {
+      // GN: experiment with clickable label to open parent text
+      // see ac-144
+      // TODO: remove !important
+      // background-color: #ee0 !important;
+    }
+
+    &[data-dpt-group].highlighted {
+      // GN: ac-142: user has clicked on region/reading in other block
+      // we highlight it in this block.
+      // TODO: remove !important
+      background-color: $highlighted-background-color !important;
+    }
   }
 
   span[data-dpt-type=unsettled][data-dpt-group=version] {
-
     background: rgba($primary-color, .2);
     border: 1px solid scale-color($light-gray, $lightness: -20%);
 
@@ -353,11 +382,7 @@
   span[data-dpt-type=unsettled][data-dpt-group=version] {
 
     &::before {
-      color: $primary-color;
       content: "v: ";
-      font-size: .75rem;
-      padding-left: .25rem;
-      padding-right: .125rem;
     }
   }
 
@@ -373,11 +398,7 @@
       padding: .25rem .5rem;
 
       &::before {
-        color: $primary-color;
         content: "w: ";
-        font-size: .75rem;
-        padding-left: .25rem;
-        padding-right: .125rem;
       }
 
       span[data-dpt-type=unsettled][data-dpt-group=version] {
@@ -426,7 +447,7 @@
           cursor: pointer;
 
           &:hover {
-            background-color: #ee0;
+            background-color: $highlighted-background-color;
           }
         }
       }
