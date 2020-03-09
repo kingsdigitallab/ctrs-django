@@ -235,7 +235,6 @@ $(() => {
             text: self.get_default_text(),
             views: [self._get_new_view_data()],
             comparative: false,
-            id: self.get_new_block_id(),
           });
         }
         if (this.blocks.length < 2) {
