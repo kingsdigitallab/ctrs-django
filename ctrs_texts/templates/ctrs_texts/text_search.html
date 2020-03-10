@@ -168,16 +168,16 @@
       <div class="hit" v-for="hit in response.data" v-html="hit.html">
       </div>
     </template>
-  </div>
 
-  <div v-if="selected_region" id="heatmap-tooltip" class="custom-tooltip">
-    <ul class="no-bullet">
-      <li v-for="(sigla, reading) in selected_region.readings">
-        <span v-for="siglum in sigla" :class="'label manuscript ' + siglum[0].toLowerCase() +
+    <div v-if="selected_region" id="heatmap-tooltip" class="custom-tooltip">
+      <ul class="no-bullet">
+        <li v-for="(sigla, reading) in selected_region.readings">
+          <span v-for="siglum in sigla" :class="'label manuscript ' + siglum[0].toLowerCase() +
           '-text-id'">{{ siglum[1] }} <sub>{{ siglum[0] }}</sub></span>
-        {{ reading }}
-      </li>
-    </ul>
+          {{ reading }}
+        </li>
+      </ul>
+    </div>
   </div>
 </div>
 {% endverbatim %}
