@@ -280,8 +280,10 @@ $(() => {
             map
           )
           rect.annotation = an
-          rect.on('mousedown', _on_rect_mouseenter)
-          // rect.on('mouseout', _on_rect_mouseleave)
+          rect.on('mousedown', _on_rect_mousedown)
+          rect.on('mouseover', _on_rect_mouseover)
+          rect.on('mouseout', _on_rect_mouseleave)
+          rect.on('popupclose', _on_rect_popupclose)
           an.rects[i] = rect
           window.annotations.push(rect)
         }
@@ -291,9 +293,8 @@ $(() => {
     return ret
   }
 
-  function _on_rect_mouseenter(e) {
-    let region_key = e.target.annotation.key
-    app.selected_region = window.regions[region_key]
+  function _on_rect_mousedown(e) {
+    _on_rect_mouseover(e)
 
     Vue.nextTick(function() {
       const popupContent = document
@@ -309,8 +310,21 @@ $(() => {
         .addTo(window.map)
     })
   }
+
+  function _on_rect_mouseover(e) {
+    let region_key = e.target.annotation.key
+    app.selected_region = window.regions[region_key]
+  }
+
   function _on_rect_mouseleave(e) {
-    app.selected_region = null;
+    const popup = e.target.getPopup()
+    if (popup === undefined || !popup.isOpen()) {
+      app.selected_region = null
+    }
+  }
+
+  function _on_rect_popupclose(e) {
+    app.selected_region = null
   }
 
   function _get_annotation_style(annotation) {
