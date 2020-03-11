@@ -9,6 +9,7 @@ from .views.texts_json import (
     view_api_texts, view_api_text_chunk, view_api_text_search_sentences
 )
 from ctrs_texts.views.texts_json import view_api_text_search_regions
+from django.views.generic import RedirectView
 
 admin.autodiscover()
 
@@ -17,11 +18,39 @@ urlpatterns = [
     path('texts/', view_texts, name="texts"),
 
     # New Text Viewer (multi-texts and multi-views)
+    path('viewer/',
+         view_text_viewer, name='text_viewer'),
+
     path('texts/viewer/',
          view_text_viewer, name='text_viewer'),
 
+    # New Text Viewer (multi-texts and multi-views)
+    # e.g. /test/viewer?blocks=506:translation;
+    path(
+        'texts/viewer2/',
+        RedirectView.as_view(
+            pattern_name='text_viewer',
+            permanent=False,
+            query_string=True
+        )
+    ),
+
+    path('search/',
+         view_text_search, name='text_search'),
+
     path('texts/search/',
          view_text_search, name='text_search'),
+
+    # New Text Viewer (multi-texts and multi-views)
+    # e.g. /test/viewer?blocks=506:translation;
+    path(
+        'texts/search2/',
+        RedirectView.as_view(
+            pattern_name='text_search',
+            permanent=False,
+            query_string=True
+        )
+    ),
 
     # Standard Text API
     path(
