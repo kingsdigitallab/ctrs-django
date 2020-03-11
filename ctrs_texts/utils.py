@@ -111,14 +111,14 @@ def get_sentence_from_text(encoded_text, sentence_number):
                      '', encoded_text.content)
 
     pattern = ''.join([
-        r'(?usi)(<p>\s*<span data-dpt="sn">\s*',
-        str(sentence_number),
-        r'\s*</span>.*?</p>)(\s*<p>\s*<span data-dpt="sn">|$)'
+        r'(?usi)(<p>\s*<span[^>]+data-rid="s-',
+        re.escape(str(sentence_number)),
+        r'".*?</p>)\s*(<p>\s*<span data-dpt="sn"|$)'
     ])
 
-    sentences = re.findall(pattern, content)
+    match = re.search(pattern, content)
 
-    if sentences:
-        ret = sentences[0][0]
+    if match:
+        ret = match.group(1)
 
     return ret
