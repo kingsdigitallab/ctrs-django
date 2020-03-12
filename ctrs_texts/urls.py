@@ -21,13 +21,10 @@ urlpatterns = [
     path('viewer/',
          view_text_viewer, name='text_viewer'),
 
-    path('texts/viewer/',
-         view_text_viewer, name='text_viewer'),
-
     # New Text Viewer (multi-texts and multi-views)
     # e.g. /test/viewer?blocks=506:translation;
     path(
-        'texts/viewer2/',
+        'texts/viewer/',
         RedirectView.as_view(
             pattern_name='text_viewer',
             permanent=False,
@@ -38,13 +35,10 @@ urlpatterns = [
     path('search/',
          view_text_search, name='text_search'),
 
-    path('texts/search/',
-         view_text_search, name='text_search'),
-
     # New Text Viewer (multi-texts and multi-views)
     # e.g. /test/viewer?blocks=506:translation;
     path(
-        'texts/search2/',
+        'texts/search/',
         RedirectView.as_view(
             pattern_name='text_search',
             permanent=False,
@@ -74,6 +68,7 @@ urlpatterns = [
     ),
 
     # Legacy Text Viewer (only one text at a time)
-    path('texts/<slug:text_slug>/<slug:view>/',
+    # TODO: remove when sure we no longer need it
+    path('legacy/texts/<slug:text_slug>/<slug:view>/',
          view_text_viewer_legacy, name='text_viewer_legacy'),
 ]
