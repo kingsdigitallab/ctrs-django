@@ -1,7 +1,6 @@
-from ctrs_texts.models import EncodedText
-from django.core.management import call_command
 from django.test import TestCase
-
+from django.core.management import call_command
+from ctrs_texts.models import EncodedText
 from . import utils
 
 ARC_TEXT_JSON_PATH = 'arc-content.json'

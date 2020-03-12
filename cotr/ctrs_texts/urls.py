@@ -1,29 +1,50 @@
 # from django.conf import settings
-from ctrs_texts.views.texts_json import view_api_text_search_regions
 from django.urls import path
-
+from django.contrib import admin
 from .views.texts_html import (
-    view_text_search,
-    view_text_viewer,
-    view_text_viewer_legacy,
-    view_texts,
+    view_texts, view_text_search,
+    view_text_viewer, view_text_viewer_legacy,
 )
 from .views.texts_json import (
-    view_api_text_chunk,
-    view_api_text_search_sentences,
-    view_api_texts,
+    view_api_texts, view_api_text_chunk, view_api_text_search_sentences
 )
+from ctrs_texts.views.texts_json import view_api_text_search_regions
+from django.views.generic import RedirectView
+
+admin.autodiscover()
 
 urlpatterns = [
     # List of all texts
     path('texts/', view_texts, name="texts"),
 
     # New Text Viewer (multi-texts and multi-views)
-    path('texts/viewer/',
+    path('viewer/',
          view_text_viewer, name='text_viewer'),
 
-    path('texts/search/',
+    # New Text Viewer (multi-texts and multi-views)
+    # e.g. /test/viewer?blocks=506:translation;
+    path(
+        'texts/viewer/',
+        RedirectView.as_view(
+            pattern_name='text_viewer',
+            permanent=False,
+            query_string=True
+        )
+    ),
+
+    path('search/',
          view_text_search, name='text_search'),
+
+    # New Text Viewer (multi-texts and multi-views)
+    # e.g. /test/viewer?blocks=506:translation;
+    path(
+        'texts/search/',
+        RedirectView.as_view(
+            pattern_name='text_search',
+            permanent=False,
+            query_string=True
+        )
+    ),
 
     # Standard Text API
     path(
@@ -47,6 +68,7 @@ urlpatterns = [
     ),
 
     # Legacy Text Viewer (only one text at a time)
-    path('texts/<slug:text_slug>/<slug:view>/',
+    # TODO: remove when sure we no longer need it
+    path('legacy/texts/<slug:text_slug>/<slug:view>/',
          view_text_viewer_legacy, name='text_viewer_legacy'),
 ]

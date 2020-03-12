@@ -1,11 +1,10 @@
 from django.core.management.base import BaseCommand
-from django.utils.text import slugify
-
 from ctrs_texts.models import (
-    AbstractedText, AbstractedTextType, EncodedText, EncodedTextStatus, Manuscript,
-    Repository,
+    Repository, Manuscript, AbstractedText, EncodedText,
+    AbstractedTextType, EncodedTextStatus
 )
-from ctrs_texts.utils import get_unicode_from_xml, get_xml_from_unicode
+from django.utils.text import slugify
+from ctrs_texts.utils import get_xml_from_unicode, get_unicode_from_xml
 
 
 class Command(BaseCommand):

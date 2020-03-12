@@ -1,5 +1,5 @@
-from ctrs_texts.models import AbstractedText, EncodedText, EncodedTextType
 from django.shortcuts import render
+from ctrs_texts.models import AbstractedText, EncodedText, EncodedTextType
 
 
 def view_text_viewer(request):

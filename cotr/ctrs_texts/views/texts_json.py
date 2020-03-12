@@ -1,16 +1,14 @@
-import json
-import os
-from collections import Counter
-
-from _collections import OrderedDict
-from ctrs_texts.models import AbstractedText, EncodedText
-from ctrs_texts.utils import get_unicode_from_xml, get_xml_from_unicode
-from django.conf import settings
-from django.db.models import Q
-from django.http import JsonResponse
-from django.template.loader import render_to_string
 from django.utils.text import slugify
-
+from ctrs_texts.models import AbstractedText, EncodedText
+from django.http import JsonResponse
+from _collections import OrderedDict
+from django.db.models import Q
+from django.template.loader import render_to_string
+import json
+from django.conf import settings
+import os
+from ctrs_texts.utils import get_xml_from_unicode, get_unicode_from_xml
+from collections import Counter
 from .. import utils
 
 
