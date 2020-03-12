@@ -156,6 +156,10 @@ $(() => {
       },
       fetch_results: function(block, view) {
         if (this.status == STATUS_FETCHING) return
+
+        // hide readings section
+        _on_rect_popupclose(null)
+
         this.status = STATUS_FETCHING
         let self = this
 
