@@ -1,0 +1,9 @@
+{% load staticfiles %}
+
+{% if settings.GA_ID and not settings.DEBUG %}
+<script src="{% static 'js/google_analytics.js' %}"></script>
+<script>
+  ga('create', '{{ settings.GA_ID }}', 'auto');
+  ga('send', 'pageview');
+</script>
+{% endif %}

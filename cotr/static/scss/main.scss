@@ -1,0 +1,818 @@
+/** CTRS
+ *
+ *  1.  Imports
+ *  2.  Globals
+ *          2.1 Buttons
+ *          2.2 Forms
+ *          2.3 Headings
+ *          2.4 Links
+ *          2.5 Tables
+ *  3.  Grid
+ *  4.  Layout
+ *          4.1 Header
+ *          4.2 Navigation
+ *          4.3 Main
+ *          4.4 Sidebar
+ *          4.5 Footer
+ *          4.6 Images
+ *  5.  Social media
+ *  6.  Media queries
+ *  7.  Print
+ *
+ *  TODO - Add:
+ *      code (pre & code)
+ *      blockquote
+ */
+
+/* 1. Imports / Settings / Variables */
+
+@import 'typography';
+@import 'settings';
+@import 'foundation-sites/scss/foundation';
+
+@include foundation-everything;
+
+/* 2. Globals */
+
+*,
+*:before,
+*:after {
+  box-sizing: border-box;
+}
+
+body {
+  background: $primary-color;
+  color: $rich-black;
+  font-size: $base-font-size;
+  font-weight: 400;
+  margin: 0;
+}
+
+blockquote {}
+
+.extra-margin {
+  margin-top: 1.5rem;
+  margin-bottom: .75rem;
+}
+
+.hide {
+  display: none;
+}
+
+.highlight {
+  background: rgba(yellow, 0.3);
+  padding-left: .5rem;
+  padding-right: .5rem;
+}
+
+hr {
+  border: 0;
+  height: 0;
+  border-top: 1px solid rgba(0, 0, 0, 0.1);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.3);
+}
+
+
+// Using it to display the Wagtail icon
+
+i.icon {
+  font-family: "wagtail";
+  font-size: 1.25em;
+}
+
+.icon-wagtail:before {
+  content: "V";
+}
+
+.icon-wagtail-inverse:before {
+  content: "0";
+}
+
+.inline {
+  display: inline-block;
+  max-width: 87%;
+
+  &.icon {
+    border-bottom: 0;
+
+    &:hover {
+      path {
+        fill: $secondary-color;
+      }
+    }
+  }
+}
+
+small {
+  font-size: .625em;
+}
+
+// 2.1 Buttons
+
+button,
+.button {
+  background: $primary-color;
+  border: none;
+  color: white;
+  cursor: pointer;
+  font-family: "Open Sans Condensed";
+  font-weight: 700;
+  line-height: 1.75em;
+  padding: 5px 10px;
+
+  &.secondary {
+    background: lighten($secondary-color, 15%);
+    color: $primary-color
+  }
+
+  &.success {
+    background: $success-color;
+  }
+}
+
+.button-group {
+  &.with-input {
+
+    button,
+    .button {
+      border: 1px solid $secondary-color;
+
+      &:hover {
+        color: $white;
+      }
+    }
+
+    input {
+      margin: 0 0 1px;
+      max-width: 90px;
+    }
+  }
+}
+
+.label {
+  &.large {
+    font-size: 1rem;
+  }
+}
+
+// 2.2 Forms
+
+// 2.3 Headings
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  padding: .5em 0 .25em;
+}
+
+h1 {
+  small {
+    font-style: italic;
+  }
+
+  &.no-container {
+    margin-left: 6rem;
+    margin-top: -2rem;
+  }
+}
+
+h2 {
+  font-size: 38px;
+}
+
+h3 {
+  font-size: 30px;
+}
+
+// 2.4 Links
+
+a {
+  &:hover {
+    // text-decoration: underline;
+    border-bottom: 1px solid $secondary-color;
+  }
+
+  &.decorate {
+    border-bottom: 1px dotted $secondary-color;
+  }
+}
+
+// 2.5 Tables
+
+table {
+  text-align: left;
+
+  td,
+  th {
+    border: 1px solid lighten($primary-color, 50%);
+  }
+
+  th {
+    background: lighten($primary-color, 65%);
+  }
+}
+
+/* 3. Grid */
+
+/*
+ * Since developing with mobile first approach, there is no need to wrap this
+ * in a media query.
+ * This style doesn't need a grid, it's a single column, our base layout.
+ */
+
+.container {
+  max-width: 960px;
+  margin: 0 auto;
+}
+
+/* 4. Layout */
+
+footer,
+header {
+  color: white;
+
+  a {
+    &:hover {
+      color: $secondary-color;
+    }
+  }
+}
+
+main {
+  padding: 1rem 1rem .5rem;
+}
+
+.hp-box {
+  background: white;
+
+  a {
+    color: $rich-black;
+  }
+
+  h2 {
+    border-left: 10px solid lighten($primary-color, 60%);
+    font-size: rem-calc(30);
+    margin-bottom: 0;
+    padding: .5rem .5rem 1rem;
+  }
+
+  img {
+    border: 0;
+    height: 100%;
+    object-fit: cover;
+    width: 100%;
+  }
+
+  .img-wrapper {
+    height: rem-calc(150);
+    max-width: rem-calc(700);
+  }
+
+  p {
+    font-size: rem-calc(14px);
+    padding: .5rem rem-calc(18) 0;
+  }
+
+  path {
+    fill: lighten($primary-color, 60%);
+  }
+}
+
+// 4.1 Header
+
+header {
+  position: relative;
+
+  a {
+    color: white;
+  }
+
+  &.top-header {
+
+    &::after {
+      background: url("/static/images/header-bg.jpg") center center;
+      content: "";
+      height: 100%;
+      left: 0;
+      opacity: 0.1;
+      position: absolute;
+      top: 0;
+      width: 100%;
+      z-index: -1; // Otherwise it disables active areas
+    }
+
+    h1 {
+      padding-left: 1rem;
+      padding-right: 1rem;
+    }
+  }
+
+  .grid-container {
+    position: relative;
+  }
+
+  .avatar {
+    border-radius: 50%;
+
+    img {
+      border-radius: 50%;
+    }
+  }
+}
+
+// 4.2 Navigation
+
+.dropdown {
+  &.menu {
+    margin-left: 1rem;
+
+    a {
+      padding: .75rem .625rem;
+    }
+  }
+}
+
+.menu {
+  font-family: $header-font-family;
+
+  a {
+    border-bottom: 0;
+
+    &:hover {
+      background: lighten($primary-color, 5%);
+      border-bottom: 0;
+    }
+  }
+}
+
+.top-bar {
+  color: white;
+
+  a {
+    color: white;
+    padding: .75rem .25rem;
+  }
+}
+
+.top-nav {
+  background: $topbar-background;
+}
+
+
+// 4.3 Main
+
+main {
+  background: lighten($primary-color, 70%);
+
+  a {
+    border-bottom: 1px dotted #d8d8d8;
+  }
+
+  small {
+    color: scale-color($rich-black, $lightness: 20%);
+  }
+}
+
+.bydate {
+  font-size: .75rem;
+  font-style: italic;
+}
+
+.intro {
+  color: lighten(black, 31%);
+  font-size: 1.125rem;
+  line-height: 1.75;
+}
+
+.metadata {
+  background: scale-color($secondary-color, $lightness: 50%);
+  font-size: .875rem;
+  padding: .5rem 1rem;
+
+  button,
+  .button {
+    margin-bottom: 0;
+
+    &.active {
+      background: scale-color($primary-color, $lightness: 70%);
+      border-bottom: 3px solid $primary-color;
+    }
+
+    &:hover {
+      background: $primary-color;
+      color: $white;
+    }
+
+    &.secondary {
+      border-color: scale-color($secondary-color, $lightness: -40%);
+      color: scale-color($secondary-color, $lightness: -40%);
+
+      &:hover {
+        background: transparent;
+        border-color: scale-color($secondary-color, $lightness: -60%);
+        color: scale-color($secondary-color, $lightness: -60%);
+      }
+    }
+
+    .label {
+      &:hover {
+        cursor: pointer;
+      }
+
+      font-size: .6125rem;
+    }
+  }
+
+  .label {
+    color: $black;
+    padding-top: 8px;
+  }
+}
+
+.more {
+  font-size: .875rem;
+}
+
+.people {
+  a {
+    color: $rich-black;
+  }
+
+  img {
+    width: 250px;
+  }
+}
+
+// 4.4 Sidebar
+
+.sidebar {
+  background: scale-color($primary-color, $lightness: 85%);
+  border-left: 1px solid scale-color($primary-color, $lightness: 55%);
+
+  .menu {
+    .active {
+      background: scale-color($secondary-color, $lightness: 40%);
+    }
+
+    a {
+      color: $rich-black;
+
+      &:hover {
+        background: scale-color($primary-color, $lightness: 70%);
+        text-decoration: none;
+      }
+    }
+
+    li {
+      border-top: 3px solid lighten($primary-color, 70%);
+    }
+
+    li li {
+      background: rgba($primary-color, .1);
+    }
+
+    &.accordion-menu {
+
+      button,
+      .button {
+        background: rgba($primary-color, .2);
+        height: 42px;
+
+        &:hover {
+          background: scale-color($primary-color, $lightness: 70%);
+        }
+      }
+    }
+  }
+}
+
+// 4.5 Footer
+
+footer {
+
+  a {
+    color: lighten($secondary-color, 15%);
+  }
+
+  ul,
+  ol {
+    padding: 0;
+  }
+
+  li {
+    list-style: none;
+  }
+
+  .menu {
+    padding-top: 1rem;
+  }
+
+  .partners-funders {
+    background: white;
+    color: $primary-color;
+    text-align: center;
+
+    img {
+      max-height: 120px;
+    }
+  }
+}
+
+.byline {
+  color: black;
+  font-size: 12px;
+  margin: .5rem 0;
+}
+
+// Cookies box
+
+.cookies-box {
+  background: $primary-color;
+  bottom: 0;
+  color: white;
+  left: 0;
+  margin: 0;
+  opacity: 0.95;
+  padding-top: 1rem;
+  position: fixed;
+  text-align: center;
+  width: 100%;
+}
+
+
+// 4.6 Images
+
+// See media queries
+
+.caption {
+  font-size: rem-calc(14);
+  font-style: italic;
+  margin-top: .5rem;
+}
+
+.image-block {
+  width: 100%;
+
+  img {
+    width: 100%;
+  }
+}
+
+main {
+  img {
+    border: 8px solid white;
+  }
+}
+
+.richtext-image {
+  margin-bottom: 1rem;
+}
+
+/* 5. Social media */
+
+.social {
+  border: 1px solid scale-color($primary-color, $lightness: 80%);
+  border-left: 10px solid scale-color($primary-color, $lightness: 80%);
+  font-size: .9125rem;
+  padding: rem-calc(16 16 8);
+
+  a {
+    overflow-wrap: break-word;
+  }
+
+  h4,
+  h5 {
+    padding: 0;
+  }
+
+  .content,
+  .tweet-datetime {
+    font-size: .875rem;
+  }
+
+  .media-object {
+    h4 {
+      font-size: 1.25rem;
+      line-height: 1.25;
+      patting-top: .25rem;
+
+      small {
+        font-size: 1rem;
+      }
+    }
+  }
+
+  .tweet-datetime {
+    margin-bottom: 0;
+  }
+
+  svg {
+    &.fa-twitter {
+      path {
+        fill: $primary-color;
+      }
+    }
+  }
+}
+
+.like,
+.retweet {
+  border-bottom: 0;
+}
+
+/* 6. Media queries */
+
+@media screen and (max-width: 639px) {
+
+  .avatar {
+    border: 5px solid lighten($primary-color, 70%);
+    height: 120px;
+    margin: 0 auto -70px;
+    text-align: center;
+    width: 120px;
+  }
+
+  main {
+    padding-top: 42px;
+  }
+
+  .menu {
+    font-size: 1.25rem;
+
+    li {
+      width: 100%;
+    }
+  }
+
+  footer {
+    .partners-funders {
+      img {
+        max-width: 300px;
+        padding-bottom: 1rem;
+      }
+    }
+  }
+
+  .top-header {
+    text-align: center;
+  }
+}
+
+@media screen and (min-width: 640px) {
+
+  .avatar {
+    border: 10px solid lighten($primary-color, 70%);
+    height: 200px;
+    left: -105px;
+    position: absolute;
+    top: 15px;
+    width: 200px;
+  }
+
+  .byline {
+    text-align: left;
+  }
+
+  header {
+    h1 {
+      font-size: rem-calc(32);
+    }
+  }
+
+  .image-block {
+
+    &.float-left {
+      margin-right: 1rem;
+    }
+
+    &.float-mid {
+      margin: 0 auto;
+      max-width: 600px;
+    }
+
+    &.float-right {
+      margin-left: 1rem;
+    }
+
+    &.float-left,
+    &.float-right {
+      width: 50%;
+
+      img {
+        max-width: 100%;
+      }
+    }
+  }
+
+  main {
+    padding-top: 66px;
+  }
+
+  .menu {
+    font-size: 1.25rem;
+  }
+
+  .richtext-image {
+
+    &.left,
+    &.right {
+      max-width: 50%;
+    }
+
+    &.center {
+      margin: 0 auto;
+      max-width: 70%;
+    }
+
+    &.full-width {
+      width: 100%;
+    }
+
+    &.left {
+      float: left;
+      margin-right: 1rem;
+    }
+
+    &.right {
+      float: right;
+      margin-left: 1rem;
+    }
+  }
+
+  .left+p+*,
+  .right+p+* {
+    clear: both;
+  }
+
+  .social {
+    .media-object {
+      h4 {
+        font-size: 1.25rem;
+        line-height: 1.25;
+        patting-top: .25rem;
+
+        small {
+          font-size: 1rem;
+        }
+      }
+    }
+  }
+
+  .top-bar-left {
+    padding-left: 70px;
+  }
+
+  .top-bar-right,
+  .top-bar-right .menu {
+    font-size: 1rem;
+
+    .fa-user {
+      font-size: .75rem;
+    }
+  }
+
+  .top-header {
+    h1 {
+      margin-left: 70px;
+    }
+  }
+}
+
+@media screen and (min-width: 800px) {
+
+  .avatar {
+    border: 10px solid lighten($primary-color, 70%);
+    height: 250px;
+    left: -130px;
+    position: absolute;
+    top: 10px;
+    width: 250px;
+  }
+
+  header {
+    h1 {
+      font-size: rem-calc(48);
+    }
+  }
+
+  .top-bar-left {
+    padding-left: 100px;
+  }
+
+  .top-header {
+    h1 {
+      margin-left: 100px;
+    }
+  }
+}
+
+@media screen and (min-width: 1080px) {
+  main {
+    padding-top: rem-calc(36);
+  }
+}
+
+/* 7. Print */

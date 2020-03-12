@@ -1,0 +1,17 @@
+/* TEAM */
+Organisation: King's Digital Lab
+Site: https://kdl.kcl.ac.uk
+Email: kdl-info [at] kcl.ac.uk
+Twitter: @kingsdigitallab
+GitHub: https://github.com/kingsdigitallab
+Location: London WC2B 5LE, United Kingdom
+
+Role: Name
+Site: https://www.kdl.kcl.ac.uk/who-we-are/
+
+Role: Name
+Site: https://www.kdl.kcl.ac.uk/who-we-are/
+
+/* SITE */
+GitHub: https://github.com/kingsdigitallab/cotr/
+ReadtheDocs: https://cotr.readthedocs.io/

@@ -1,0 +1,68 @@
+{% load staticfiles compress %}
+<!DOCTYPE html>
+<html lang="en-GB">
+
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>{% block meta_title %}404 Page not found{% endblock %} | Community of
+      the Realm of Scotland</title>
+    <meta name="author" content="King's Digital Lab">
+    <meta name="description" content="">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    {% compress css %}
+    <link rel="stylesheet" type="text/x-scss"
+      href="{% static 'scss/normalize.css' %}">
+    <link rel="stylesheet" type="text/x-scss"
+      href="{% static 'scss/main.scss' %}">
+    {% endcompress %}
+  </head>
+
+  <body>
+    <header>
+      <div class="wrapper">
+        {% include 'includes/header.html' %}
+      </div>
+    </header>
+
+    <nav>
+      <div class="wrapper">
+        {% include 'includes/navigation.html' %}
+      </div>
+    </nav>
+
+    <main>
+      <div class="wrapper">
+        {% block title %}<h1>404 Page not found</h1>{% endblock %}
+        {% block main %}
+        <p>Sorry, we couldn't find what you're looking for.</p>
+        {% endblock %}
+      </div>
+    </main>
+
+    <footer>
+      <div class="wrapper">
+        {% block footer %}
+        {% include 'includes/footer.html' %}
+        {% endblock %}
+      </div>
+    </footer>
+
+    {% compress js %}
+    <script src="{% static 'jquery/dist/jquery.min.js' %}"></script>
+    <script src="{% static 'js/main.js' %}"></script>
+    {% endcompress %}
+
+    {% block footer_scripts %}{% endblock %}
+
+    {% compress js %}
+    <script src="{% static 'js/google_analytics.js' %}"></script>
+    <script>
+      ga('create', '{{ settings.GA_ID }}', 'auto');
+      ga('send', 'pageview');
+    </script>
+    {% endcompress %}
+  </body>
+
+</html>

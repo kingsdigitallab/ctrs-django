@@ -1,0 +1,56 @@
+version: '3'
+
+volumes:
+  local_postgres_data: {}
+  local_postgres_data_backups: {}
+  # local_elasticsearch_data: {}
+
+services:
+  django:
+    build:
+      context: .
+      dockerfile: ./compose/local/django/Dockerfile
+    image: cotr_local_django
+    depends_on:
+      - postgres
+      # - elasticsearch
+    volumes:
+      - .:/app
+    env_file:
+      - ./.envs/.local/.django
+      - ./.envs/.local/.postgres
+    ports:
+      - '8000:8000'
+    command: /start
+
+  postgres:
+    build:
+      context: .
+      dockerfile: ./compose/production/postgres/Dockerfile
+    image: cotr_production_postgres
+    volumes:
+      - local_postgres_data:/var/lib/postgresql/data
+      - ./.volumes/local_postgres_data_backups:/backups
+    env_file:
+      - ./.envs/.local/.postgres
+    ports:
+      - '5432:5432'
+  #
+  # elasticsearch:
+  #   image: elasticsearch:7.5.1
+  #   volumes:
+  #     - local_elasticsearch_data:/usr/share/elasticsearch/data
+  #   env_file:
+  #     - ./.envs/.local/.elasticsearch
+  #   ports:
+  #     - '9200:9200'
+  #     - '9300:9300'
+  #
+  # kibana:
+  #   image: kibana:7.5.1
+  #   depends_on:
+  #     - elasticsearch
+  #   env_file:
+  #     - ./.envs/.local/.kibana
+  #   ports:
+  #     - '5601:5601'

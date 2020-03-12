@@ -1,0 +1,22 @@
+{% load staticfiles %}
+
+<div class="grid-x">
+  <div class="cell">
+    <div class="avatar show-for-medium">
+      <a href="/">
+        <img src="{% static 'images/avatar.jpg' %}"
+          alt="{{ settings.WAGTAIL_SITE_NAME }} homepage">
+      </a>
+    </div>
+    <h1>
+      <a href="/">{{ settings.WAGTAIL_SITE_NAME }}</a><br>
+      <small>History, law and charters in a recreated kingdom</small>
+    </h1>
+    <div class="avatar show-for-small-only">
+      <a href="/">
+        <img src="{% static 'images/avatar.jpg' %}"
+          alt="{{ settings.WAGTAIL_SITE_NAME }} homepage">
+      </a>
+    </div>
+  </div>
+</div>
