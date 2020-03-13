@@ -2,8 +2,7 @@
 from django.urls import path
 from django.contrib import admin
 from .views.texts_html import (
-    view_texts, view_text_search,
-    view_text_viewer, view_text_viewer_legacy,
+    view_text_search, view_text_viewer, view_text_viewer_legacy,
 )
 from .views.texts_json import (
     view_api_texts, view_api_text_chunk, view_api_text_search_sentences
@@ -14,8 +13,9 @@ from django.views.generic import RedirectView
 admin.autodiscover()
 
 urlpatterns = [
-    # List of all texts
-    path('texts/', view_texts, name="texts"),
+    # List of all texts -> replaced by a wagtail page with text_list block
+    # TODO: remove when confirmed we no longer need this
+    # path('texts/', view_texts, name="texts"),
 
     # New Text Viewer (multi-texts and multi-views)
     path('viewer/',
