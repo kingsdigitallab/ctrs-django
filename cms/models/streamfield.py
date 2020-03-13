@@ -107,7 +107,7 @@ class PullQuoteBlock(StructBlock):
 class TextListBlock(FieldBlock):
     field = forms.ChoiceField(choices=(
         ('all', 'All'),
-        ('declaration', 'The Declaration on Arbroath'),
+        ('declaration', 'The Declaration of Arbroath'),
         ('regiam', 'Regiam Maiestatem'),
     ))
 
