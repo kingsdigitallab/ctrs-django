@@ -102,7 +102,10 @@ class EncodedText(index.Indexed, TimestampedModel, ImportedModel):
                 abstracted_type.slug)
             ):
                 if len(regions) <= ri:
-                    regions.append(['[absent]'] * len(members))
+                    regions.append([{
+                        'text': '[absent]',
+                        'id': '',
+                    }] * len(members))
                 regions[ri][mi] = region
 
         #  Get the content of the parent (i.e. self)
@@ -127,7 +130,8 @@ class EncodedText(index.Indexed, TimestampedModel, ImportedModel):
                 variant = utils.append_xml_element(
                     variants, 'span', None,
                     class_='variant',
-                    data_tid=str(members[mi].id)
+                    data_tid=str(members[mi].id),
+                    # data_rid=str(r['id'])
                 )
 
                 utils.append_xml_element(
@@ -136,7 +140,7 @@ class EncodedText(index.Indexed, TimestampedModel, ImportedModel):
                 )
 
                 utils.append_xml_element(
-                    variant, 'span', r,
+                    variant, 'span', r['text'],
                     class_='reading'
                 )
 
@@ -151,7 +155,7 @@ class EncodedText(index.Indexed, TimestampedModel, ImportedModel):
         Returns a list of regions of type region_type.
         region_type = work|version
         Each region is a string that contains the text of the region.
-        All xml tags are removed.
+        All XML tags are removed.
         '''
         ret = []
 
@@ -161,7 +165,10 @@ class EncodedText(index.Indexed, TimestampedModel, ImportedModel):
         # for region in xml.findall('.//span[@data-dpt-type="unsettled"]'):
         region_selector = './/span[@data-dpt-group="' + region_type + '"]'
         for region in xml.findall(region_selector):
-            ret.append(utils.get_unicode_from_xml(region, text_only=True))
+            ret.append({
+                'text': utils.get_unicode_from_xml(region, text_only=True),
+                'id': region.attrib.get('id', ''),
+            })
 
         return ret
 

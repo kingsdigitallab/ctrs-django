@@ -252,6 +252,7 @@ def _get_regions_with_unique_variants(text_ids):
         content_parent = get_xml_from_unicode(
             parent.content, ishtml=True, add_root=True
         )
+        parent_siglum = parent.abstracted_text.short_name
 
         # replace vregion in parent with text from member
         for i, vregion in enumerate(content_parent.findall(vpattern)):
@@ -270,7 +271,8 @@ def _get_regions_with_unique_variants(text_ids):
                 wreading = wreading.strip()
                 if wreading not in ret[i]['readings']:
                     ret[i]['readings'][wreading] = []
-                ret[i]['readings'][wreading].append(member_siglum)
+                ret[i]['readings'][wreading].append(
+                    [parent_siglum, member_siglum])
             else:
                 print('WARNING: w-region #{} of {} not found in {}'.format(
                     i, parent, 'heatmap text (HM1)')

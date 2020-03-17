@@ -18,7 +18,10 @@ urlpatterns = [
 
     path('wagtail/', include('wagtail.admin.urls')),
     path('documents/', include('wagtail.documents.urls')),
-    path('viewer/', TemplateView.as_view(
+    # GN 'static' mockup, renamed to .bk so it doesn't clash with new location
+    # of the viewer.
+    # TODO: remove when no longer
+    path('viewer.bk/', TemplateView.as_view(
         template_name='viewer/mocks/viewer.html')),
     path('', include('ctrs_texts.urls')),
     path('', include('wagtail.core.urls')),

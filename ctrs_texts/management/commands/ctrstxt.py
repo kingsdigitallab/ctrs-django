@@ -191,10 +191,27 @@ class Command(BaseCommand):
         # Minor XML transforms
         xml = get_xml_from_unicode(ret, ishtml=True, add_root=True)
 
+        counters = {
+            'version': 0,
+            'work': 0,
+        }
+
         for region in xml.findall('.//span[@data-dpt-type="unsettled"]'):
             # add data-dpt-group="version" to the v-regions
+            region_type = 'work'
             if not region.attrib.get('data-dpt-group', None):
-                region.attrib['data-dpt-group'] = 'version'
+                region_type = 'version'
+                region.attrib['data-dpt-group'] = region_type
+
+            # assign short id to all regions
+            counters[region_type] += 1
+            region.attrib['data-rid'] = '{}-{}'.format(
+                region_type[0], counters[region_type]
+            )
+
+        for sn in xml.findall('.//span[@data-dpt="sn"]'):
+            # add short if to all sentence number
+            sn.attrib['data-rid'] = 's-' + str(sn.text.strip())
 
         ret = get_unicode_from_xml(xml, remove_root=True)
 
