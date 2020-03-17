@@ -70,15 +70,18 @@ def has_view_restrictions(page):
 @register.inclusion_tag('cms/tags/main_menu.html', takes_context=True)
 def main_menu(context, root, current_page=None):
     """Returns the main menu items, the children of the root page. Only live
-    pages that have the show_in_menus setting on are returned."""
-    menu_pages = root.get_children().live().in_menu()
+    pages that have the show_in_menus setting on are returned. """
+    menu_pages = []
+    live_pages = root.get_descendants().live().specific()
 
     root.active = (current_page.url == root.url
                    if current_page else False)
 
-    for page in menu_pages:
-        page.active = (current_page.url.startswith(page.url)
-                       if current_page else False)
+    for page in live_pages:
+        if page.show_in_main_menu:
+            page.active = (current_page.url.startswith(page.url)
+                           if current_page else False)
+            menu_pages.append(page)
 
     return {'request': context['request'], 'root': root,
             'current_page': current_page, 'menu_pages': menu_pages}
