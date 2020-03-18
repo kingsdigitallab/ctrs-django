@@ -12,6 +12,7 @@
       {% for page in menu_pages %}
       <li{% if page.active %} class="active"{% endif %}><a href="{% pageurl page %}">{{ page.title }}</a></li>
       {% endfor %}
+      <li{% if page.active %} class="active"{% endif %}><a href="/texts/declaration-arbroath/">Declaration of Arbroath</a></li>
     </ul>
   </div>
   <div class="top-bar-right">
