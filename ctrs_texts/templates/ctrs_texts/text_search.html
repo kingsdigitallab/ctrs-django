@@ -172,23 +172,23 @@
     <div v-if="selected_region" id="heatmap-tooltip" class="custom-tooltip">
       <ul class="no-bullet">
         <li v-for="(sigla, reading) in selected_region.readings">
-          <span v-for="siglum in sigla" :class="'label manuscript ' + siglum[0].toLowerCase() +
-          '-text-id'">{{ siglum[1] }} <sub>{{ siglum[0] }}</sub></span>
-          {{ reading }}
+          <template v-for="siglum in sigla">
+            <span
+              :class="'label version ' + siglum[0].toLowerCase() + '-text-id'">{{ siglum[0] }}</span>
+            <span
+              :class="'label manuscript ' + siglum[1].toLowerCase() + '-text-id'">{{ siglum[1] }}</span>
+            <span class="reading">{{ reading }}</span>
+          </template>
         </li>
       </ul>
     </div>
   </div>
-</div>
-{% endverbatim %}
-{% endblock %}
-
-{% block footer_scripts %}
-{{ block.super }}
+</div> {% endverbatim %}
+{% endblock %} {% block footer_scripts %} {{ block.super }}
 <script>
   /* beautify preserve:start */
-  window.DEBUG = {% if DEBUG %}true{% else %}false{% endif %};
-  /* beautify preserve:end */
+          window.DEBUG = {% if DEBUG %}true{% else %}false{% endif %};
+          /* beautify preserve:end */
 </script>
 
 <script src="{% static 'vue/dist/vue.js' %}"></script>

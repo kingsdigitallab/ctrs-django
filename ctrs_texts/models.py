@@ -96,17 +96,31 @@ class EncodedText(index.Indexed, TimestampedModel, ImportedModel):
         regions = []
         for mi, member in enumerate(members):
             other_content = member.encoded_texts.filter(type=self.type).first()
+
+            parent = EncodedText.objects.filter(
+                abstracted_text=other_content.abstracted_text.group,
+                type__slug='transcription',
+            ).first()
+            parent_siglum = parent.abstracted_text.short_name
+
             if not other_content:
                 continue
             for ri, region in enumerate(other_content.get_regions(
                 abstracted_type.slug)
             ):
                 if len(regions) <= ri:
-                    regions.append([{
-                        'text': '[absent]',
-                        'id': '',
-                    }] * len(members))
-                regions[ri][mi] = region
+                    regions.append([
+                        {
+                            'parent': 'ms',
+                            'content': {
+                                'text': '[absent]',
+                                'id': ''
+                            }
+                        }
+                    ] * len(members))
+
+                regions[ri][mi]['parent'] = parent_siglum
+                regions[ri][mi]['content'] = region
 
         #  Get the content of the parent (i.e. self)
         xml = utils.get_xml_from_unicode(
@@ -126,7 +140,6 @@ class EncodedText(index.Indexed, TimestampedModel, ImportedModel):
             )
 
             for mi, r in enumerate(regions[ri]):
-
                 variant = utils.append_xml_element(
                     variants, 'span', None,
                     class_='variant',
@@ -135,12 +148,25 @@ class EncodedText(index.Indexed, TimestampedModel, ImportedModel):
                 )
 
                 utils.append_xml_element(
-                    variant, 'span', members[mi].short_name,
-                    class_='ms'
+                    variant,
+                    'span',
+                    r['parent'],
+                    class_='label version {}-text-id'.format(
+                        r['parent'].lower())
+                )
+
+                clazz = 'version' if r['parent'] == 'W' else 'manuscript'
+
+                utils.append_xml_element(
+                    variant,
+                    'span',
+                    members[mi].short_name,
+                    class_='label {} {}-text-id'.format(
+                        clazz, members[mi].short_name.lower())
                 )
 
                 utils.append_xml_element(
-                    variant, 'span', r['text'],
+                    variant, 'span', r['content']['text'],
                     class_='reading'
                 )
 
