@@ -128,10 +128,15 @@
                             <!-- histogram -->
                             <template v-if="view.type == 'histogram'">
                               <div class="histogram">
-                                <div v-for="bar in view.chunk" class="bar"
-                                  :style="{'width': parseInt(bar.value/view.value_max*100)+'%'}"
-                                  :data-dpt-group="view.region_type" :data-rid="'s-'+bar.key" :title="bar.value+' regions'">
-                                  ({{ bar.key }})
+                                <div v-for="bar in view.chunk" class="bar-container">
+                                    <div class="bar"
+                                      :style="{'width': parseInt(bar.value/view.value_max*100)+'%'}"
+                                      :data-dpt-group="view.region_type" :data-rid="'s-'+bar.key">
+                                      <span>({{ bar.key }})</span>
+                                    </div>
+                                    <div class="bar-label">
+                                        <strong>{{ bar.value }}</strong> regions
+                                    </div>
                                 </div>
                               </div>
                             </template>

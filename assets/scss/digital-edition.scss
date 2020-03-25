@@ -96,6 +96,16 @@
       padding-top: .25rem;
     }
   }
+
+  .variant {
+    .label {
+      margin-left: 0;
+
+      & + .label {
+        margin-right: .5rem;
+      }
+    }
+  }
 }
 
 .canvas-trigger {
@@ -602,13 +612,26 @@ $highlighted-background-color: #ee0;
 // Histogram
 
 .histogram {
+
+  font-size: .8125rem;
+
   padding: 0 1rem;
+
+  .bar,
+  .bar-container {
+    line-height: 1;
+  }
+
   .bar {
     // TODO: use <a>
     cursor: pointer;
 
-    margin: 0.5rem 0;
-    padding: 0 .5rem;
+    margin: 0.125rem 0;
+
+    // GF: ideally padding should be 0 to avoid giving the wrong impression
+    // there is always someting. With 0 it results in a line only. It can be
+    // improved. Commenting this to achieve padding: 0;
+    // padding: 0 .25rem;
 
     &[data-dpt-group=version] {
       // GN: use same colors as regions in text
@@ -624,9 +647,21 @@ $highlighted-background-color: #ee0;
     &.highlighted {
       // GN: ac-142: user has clicked on region/reading in other block
       // we highlight it in this block.
-      // TODO: remove !important
       background-color: $highlighted-background-color;
     }
+
+    span {
+      padding: 0 .125rem;
+    }
+  }
+
+  .bar-container {
+    margin-bottom: .75rem;
+  }
+
+  .bar-label {
+    font-size: .75rem;
+    font-style: italic;
   }
 
 }
