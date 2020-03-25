@@ -96,6 +96,16 @@
       padding-top: .25rem;
     }
   }
+
+  .variant {
+    .label {
+      margin-left: 0;
+
+      & + .label {
+        margin-right: .5rem;
+      }
+    }
+  }
 }
 
 .canvas-trigger {
@@ -602,7 +612,11 @@ $highlighted-background-color: #ee0;
 // Histogram
 
 .histogram {
-  padding: 0 1rem;
+
+  font-size: .75rem;
+
+  padding: 0 .5rem;
+
   .bar {
     // TODO: use <a>
     cursor: pointer;
@@ -624,7 +638,6 @@ $highlighted-background-color: #ee0;
     &.highlighted {
       // GN: ac-142: user has clicked on region/reading in other block
       // we highlight it in this block.
-      // TODO: remove !important
       background-color: $highlighted-background-color;
     }
   }
