@@ -1,5 +1,7 @@
 /*jshint esversion: 6 */
 
+const API_PATH_TEXTS_LIST = '/api/texts/?group=declaration';
+
 // Content loading statuses
 const STATUS_INITIAL = 0;
 const STATUS_TO_FETCH = 1;
@@ -12,10 +14,11 @@ const DISPLAY_WREGIONS_DEFAULT = true;
 
 const Vue = window.Vue;
 
+// types of views
 const TYPES_LABEL = {
   transcription: 'Latin',
   translation: 'English translation',
-//  histogram: 'Histogram',
+  histogram: 'Histogram',
 };
 
 function clog(message) {
@@ -63,7 +66,7 @@ $(() => {
     },
     mounted() {
       let self = this;
-      $.getJSON('/api/texts/?group=declaration').done(res => {
+      $.getJSON(API_PATH_TEXTS_LIST).done(res => {
         Vue.set(self, 'texts', res.data);
 
         // add direct references to parent texts
@@ -130,7 +133,10 @@ $(() => {
         let self = this;
         $.getJSON('/api/texts/'+block.text.id+'/'+view.type+'/whole/whole/')
         .done(res => {
-          view.chunk = res.data.attributes.chunk;
+          for (const k of Object.keys(res.data.attributes)) {
+            Vue.set(view, k, res.data.attributes[k]);
+          }
+          // view.chunk = res.data.attributes.chunk;
           view.status = STATUS_FETCHED;
 
           // add javascript interactions to the text chunk
@@ -147,7 +153,7 @@ $(() => {
         // change the text of a block
         // according to the user selection in the UI
         block.sublocation = region_id;
-        if (block.text == text) {
+        if (text === null || block.text == text) {
           // text already loaded in that block
           // we just scroll to region_id
           this.scroll_to_sublocation(block);
@@ -302,6 +308,15 @@ $(() => {
           e.stopPropagation();
         });
 
+        // user click on sentence number
+        $('[data-dpt=sn]').not('.clickable').addClass('clickable').on('click', function(e) {
+          // e.g. s-4 (4th sentence)
+          let region_id = this.getAttribute('data-rid');
+
+          self._load_other_text_in_other_block(block, null, region_id);
+          e.stopPropagation();
+        });
+
         // user click to go up the hierarchy: MS->V, V->W
         // it is region-based and will open the corresponding region
         // in the other block
@@ -321,7 +336,7 @@ $(() => {
 
       _load_other_text_in_other_block(source_block, other_text, region_id) {
         // load other_text in another block than source_block
-        if (!other_text) return;
+        // if (!other_text) return;
 
         for (let other_block of this.blocks) {
           if (other_block != source_block) {

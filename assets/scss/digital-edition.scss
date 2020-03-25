@@ -331,6 +331,17 @@ $highlighted-background-color: #ee0;
     &:after {
       content: ') ';
     }
+
+    &.highlighted {
+      // GN: ac-142: user has clicked on region/reading in other block
+      // we highlight it in this block.
+      // TODO: remove !important
+      background-color: $highlighted-background-color;
+    }
+
+    // TODO: use <a> instead?
+    cursor: pointer;
+
   }
 
   span[data-dpt-type=unsettled] {
@@ -586,4 +597,36 @@ $highlighted-background-color: #ee0;
 
 .v6-text-id {
   border-left: 10px solid $reddish-purple;
+}
+
+// Histogram
+
+.histogram {
+  padding: 0 1rem;
+  .bar {
+    // TODO: use <a>
+    cursor: pointer;
+
+    margin: 0.5rem 0;
+    padding: 0 .5rem;
+
+    &[data-dpt-group=version] {
+      // GN: use same colors as regions in text
+      // TODO: avoid code duplication
+      background: rgba($primary-color, .2);
+      border: 1px solid scale-color($light-gray, $lightness: -20%);
+    }
+    &[data-dpt-group=work] {
+      background: rgba($secondary-color, 0.5);
+      border: 1px dashed scale-color($secondary-color, $lightness: -40%);
+    }
+
+    &.highlighted {
+      // GN: ac-142: user has clicked on region/reading in other block
+      // we highlight it in this block.
+      // TODO: remove !important
+      background-color: $highlighted-background-color;
+    }
+  }
+
 }

@@ -124,17 +124,31 @@
                         </div>
 
                         <template v-if="view.status == 3">
-                            <!-- show list of MS texts in a version -->
-                            <ul v-if="block.text && block.text.type!='manuscript'" class="group-members">
-                                <template v-for="member in texts">
-                                    <li v-if="member.attributes.group == block.text.id">
-                                        <span v-bind:class="['label', block.text.type=='work' ? 'version' : 'manuscript', member.attributes.siglum.toLowerCase() + '-text-id']">{{ member.attributes.siglum }}</span> {{ member.attributes.name }}
-                                    </li>
-                                </template>
-                            </ul>
+
+                            <!-- histogram -->
+                            <template v-if="view.type == 'histogram'">
+                              <div class="histogram">
+                                <div v-for="bar in view.chunk" class="bar"
+                                  :style="{'width': parseInt(bar.value/view.value_max*100)+'%'}"
+                                  :data-dpt-group="view.region_type" :data-rid="'s-'+bar.key" :title="bar.value+' regions'">
+                                  ({{ bar.key }})
+                                </div>
+                              </div>
+                            </template>
 
                             <!-- html chunk -->
-                            <div v-html="view.chunk" :class="{'text-display': 1, 'toggle-off': !view.display_wregions && block.text.type == 'version'}"></div>
+                            <template v-else>
+                              <!-- show list of MS texts in a version -->
+                              <ul v-if="block.text && block.text.type!='manuscript'" class="group-members">
+                                <template v-for="member in texts">
+                                  <li v-if="member.attributes.group == block.text.id">
+                                    <span v-bind:class="['label', block.text.type=='work' ? 'version' : 'manuscript', member.attributes.siglum.toLowerCase() + '-text-id']">{{ member.attributes.siglum }}</span> {{ member.attributes.name }}
+                                  </li>
+                                </template>
+                              </ul>
+
+                              <div v-html="view.chunk" :class="{'text-display': 1, 'toggle-off': !view.display_wregions && block.text.type == 'version'}"></div>
+                            </template>
                         </template>
 
                         <template v-if="view.status < 3">
