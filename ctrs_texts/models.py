@@ -85,23 +85,15 @@ class EncodedText(index.Indexed, TimestampedModel, ImportedModel):
             return self.content
 
         ab_text = self.abstracted_text
+        parent_siglum = ab_text.short_name
         members = list(ab_text.members.all().exclude(
             short_name__in=['HM1', 'HM2']
         ))
-
-        # TODO: won't work yet with Work...
-        # need to filter the type of regions
 
         #  Collate all the regions from all the members
         regions = []
         for mi, member in enumerate(members):
             other_content = member.encoded_texts.filter(type=self.type).first()
-
-            parent = EncodedText.objects.filter(
-                abstracted_text=other_content.abstracted_text.group,
-                type__slug='transcription',
-            ).first()
-            parent_siglum = parent.abstracted_text.short_name
 
             if not other_content:
                 continue
@@ -109,6 +101,8 @@ class EncodedText(index.Indexed, TimestampedModel, ImportedModel):
                 abstracted_type.slug)
             ):
                 if len(regions) <= ri:
+                    # watch out: the SAME dictionary instance is shared by all
+                    # entries by default. You modify one => all are modified!
                     regions.append([
                         {
                             'parent': 'ms',
@@ -119,8 +113,10 @@ class EncodedText(index.Indexed, TimestampedModel, ImportedModel):
                         }
                     ] * len(members))
 
-                regions[ri][mi]['parent'] = parent_siglum
-                regions[ri][mi]['content'] = region
+                regions[ri][mi] = {
+                    'parent': parent_siglum,
+                    'content': region.copy(),
+                }
 
         #  Get the content of the parent (i.e. self)
         xml = utils.get_xml_from_unicode(
