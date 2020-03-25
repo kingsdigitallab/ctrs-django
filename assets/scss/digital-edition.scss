@@ -166,19 +166,6 @@
   }
 }
 
-.label {
-  &.manuscript {
-    background: scale-color($secondary-color, $lightness: 20%);
-    color: $black;
-  }
-
-  &.version,
-  &.work {
-    background: scale-color($primary-color, $lightness: 75%);
-    color: $black;
-  }
-}
-
 // Repetition below due to nesting
 
 .is-closed {
@@ -581,32 +568,6 @@ $highlighted-background-color: #ee0;
   &:hover {
     fill: $primary-color;
   }
-}
-
-// Using colour blind friendly palette for the versions
-
-.v1-text-id {
-  border-left: 10px solid $orange;
-}
-
-.v2-text-id {
-  border-left: 10px solid $sky-blue;
-}
-
-.v3-text-id {
-  border-left: 10px solid $bluish-green;
-}
-
-.v4-text-id {
-  border-left: 10px solid $yellow;
-}
-
-.v5-text-id {
-  border-left: 10px solid $vermillion;
-}
-
-.v6-text-id {
-  border-left: 10px solid $reddish-purple;
 }
 
 // Histogram

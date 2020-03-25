@@ -18,6 +18,7 @@
  *  5.  Social media
  *  6.  Media queries
  *  7.  Print
+ *  8.  Digital edition global
  *
  *  TODO - Add:
  *      code (pre & code)
@@ -815,3 +816,45 @@ main {
 }
 
 /* 7. Print */
+
+/* 8. Digital edition global */
+
+
+.label {
+  &.manuscript {
+    background: scale-color($secondary-color, $lightness: 20%);
+    color: $black;
+  }
+
+  &.version,
+  &.work {
+    background: scale-color($primary-color, $lightness: 75%);
+    color: $black;
+  }
+}
+
+// Using colour blind friendly palette for the versions
+
+.v1-text-id {
+  border-left: 10px solid $orange;
+}
+
+.v2-text-id {
+  border-left: 10px solid $sky-blue;
+}
+
+.v3-text-id {
+  border-left: 10px solid $bluish-green;
+}
+
+.v4-text-id {
+  border-left: 10px solid $yellow;
+}
+
+.v5-text-id {
+  border-left: 10px solid $vermillion;
+}
+
+.v6-text-id {
+  border-left: 10px solid $reddish-purple;
+}
