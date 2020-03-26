@@ -106,17 +106,13 @@ class EncodedText(index.Indexed, TimestampedModel, ImportedModel):
                     regions.append([
                         {
                             'parent': 'ms',
-                            'content': {
-                                'text': '[absent]',
-                                'id': ''
-                            }
+                            'text': '[absent]',
+                            'id': ''
                         }
                     ] * len(members))
 
-                regions[ri][mi] = {
-                    'parent': parent_siglum,
-                    'content': region.copy(),
-                }
+                regions[ri][mi] = region
+                region['parent'] = parent_siglum
 
         #  Get the content of the parent (i.e. self)
         xml = utils.get_xml_from_unicode(
@@ -162,7 +158,7 @@ class EncodedText(index.Indexed, TimestampedModel, ImportedModel):
                 )
 
                 utils.append_xml_element(
-                    variant, 'span', r['content']['text'],
+                    variant, 'span', r['text'],
                     class_='reading'
                 )
 
