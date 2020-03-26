@@ -154,17 +154,16 @@
               <!-- histogram -->
               <template v-if="view.type == 'histogram'">
                 <div class="histogram">
-                  <div v-for="bar in view.chunk" class="bar-container">
-                    <div class="bar-label" :data-dpt-group="view.region_type"
-                      :data-rid="'s-' + bar.key">
+                  <div v-for="bar in view.chunk" class="bar-container"
+                    :data-dpt-group="view.region_type" :data-rid="'s-' +
+                        bar.key">
+                    <div class="bar-label">
                       <span>({{ bar.key }})</span>
                       <strong>{{ bar.value }}</strong> regions
                     </div>
                     <div>
                       <span v-for="block in bar.value" class="bar"
-                        :style="'display: inline-block; width:' + parseInt(100/view.value_max) + '%'"
-                        :data-dpt-group="view.region_type" :data-rid="'s-' +
-                        bar.key">&#160;</span>
+                        :style="'display: inline-block; width:' + parseInt(100/view.value_max) + '%'">&#160;</span>
                     </div>
                   </div>
                 </div>

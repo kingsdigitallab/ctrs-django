@@ -17,7 +17,7 @@
 
   .card-section {
     height: 0; // It doesn't really matter the value, but height needs
-               // to be declared for overflow to work.
+    // to be declared for overflow to work.
 
     line-height: 2.25;
 
@@ -101,7 +101,7 @@
     .label {
       margin-left: 0;
 
-      & + .label {
+      &+.label {
         margin-right: .5rem;
       }
     }
@@ -350,15 +350,15 @@ $highlighted-background-color: #ee0;
     // pointer-events: none;
 
     &::before {
-        color: $primary-color;
-        content: "?: ";
-        font-size: .75rem;
-        padding-left: .25rem;
-        padding-right: .125rem;
-        // GN: experiment with clickable label to open parent text
-        // see ac-144
-        cursor: pointer;
-        pointer-events: all;
+      color: $primary-color;
+      content: "?: ";
+      font-size: .75rem;
+      padding-left: .25rem;
+      padding-right: .125rem;
+      // GN: experiment with clickable label to open parent text
+      // see ac-144
+      cursor: pointer;
+      pointer-events: all;
     }
 
     &:hover:before {
@@ -554,14 +554,14 @@ $highlighted-background-color: #ee0;
 }
 
 .leaflet-popup {
-    max-height: 30vw;
-    max-width: 60vw;
-    overflow-y: hidden;
+  max-height: 30vw;
+  max-width: 60vw;
+  overflow-y: hidden;
 }
 
 .leaflet-popup-content-wrapper {
-    max-height: 30vw;
-    overflow-y: auto;
+  max-height: 30vw;
+  overflow-y: auto;
 }
 
 .leaflet-interactive {
@@ -573,9 +573,7 @@ $highlighted-background-color: #ee0;
 // Histogram
 
 .histogram {
-
   font-size: .8125rem;
-
   padding: 0 1rem;
 
   .bar,
@@ -583,11 +581,10 @@ $highlighted-background-color: #ee0;
     line-height: 1;
   }
 
-  .bar {
+  .bar-container {
     // TODO: use <a>
     cursor: pointer;
-
-    margin: 0.125rem 0;
+    margin-bottom: .75rem;
 
     // GF: ideally padding should be 0 to avoid giving the wrong impression
     // there is always someting. With 0 it results in a line only. It can be
@@ -595,34 +592,40 @@ $highlighted-background-color: #ee0;
     // padding: 0 .25rem;
 
     &[data-dpt-group=version] {
-      // GN: use same colors as regions in text
-      // TODO: avoid code duplication
-      background: rgba($primary-color, .2);
-      border: 1px solid scale-color($light-gray, $lightness: -20%);
+      .bar {
+        // GN: use same colors as regions in text
+        // TODO: avoid code duplication
+        background: rgba($primary-color, .2);
+        border: 1px solid scale-color($light-gray, $lightness: -20%);
+      }
     }
+
     &[data-dpt-group=work] {
-      background: rgba($secondary-color, 0.5);
-      border: 1px dashed scale-color($secondary-color, $lightness: -40%);
+      .bar {
+        background: rgba($secondary-color, 0.5);
+        border: 1px dashed scale-color($secondary-color, $lightness: -40%);
+      }
     }
 
     &.highlighted {
-      // GN: ac-142: user has clicked on region/reading in other block
-      // we highlight it in this block.
-      background-color: $highlighted-background-color;
+      .bar {
+        // GN: ac-142: user has clicked on region/reading in other block
+        // we highlight it in this block.
+        background-color: $highlighted-background-color;
+      }
     }
 
-    span {
-      padding: 0 .125rem;
-    }
-  }
+    .bar {
+      margin: 0.125rem 0;
 
-  .bar-container {
-    margin-bottom: .75rem;
+      span {
+        padding: 0 .125rem;
+      }
+    }
   }
 
   .bar-label {
     font-size: .75rem;
     font-style: italic;
   }
-
 }
