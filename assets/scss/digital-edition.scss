@@ -345,6 +345,10 @@ $highlighted-background-color: #ee0;
     font-weight: bold;
   }
 
+  span[data-copies="0"] {
+    font-weight: normal;
+  }
+
   span[data-dpt-type=unsettled] {
     // GN: added some margin to prevent the box from sticking to the
     // previous of next word.
