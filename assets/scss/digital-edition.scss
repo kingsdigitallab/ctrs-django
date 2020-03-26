@@ -616,7 +616,13 @@ $highlighted-background-color: #ee0;
     }
 
     .bar {
+      display: inline-block;
       margin: 0.125rem 0;
+
+      &.empty {
+        background-color: $body-background;
+        border: 0;
+      }
 
       span {
         padding: 0 .125rem;

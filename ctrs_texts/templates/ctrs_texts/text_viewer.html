@@ -162,8 +162,10 @@
                       <strong>{{ bar.value }}</strong> regions
                     </div>
                     <div>
+                      <span v-if="bar.value == 0" class="bar empty" :style="'width:' +
+                        parseInt(100/view.value_max) + '%'">&#160;</span>
                       <span v-for="block in bar.value" class="bar"
-                        :style="'display: inline-block; width:' + parseInt(100/view.value_max) + '%'">&#160;</span>
+                        :style="'width:' + parseInt(100/view.value_max) + '%'">&#160;</span>
                     </div>
                   </div>
                 </div>
