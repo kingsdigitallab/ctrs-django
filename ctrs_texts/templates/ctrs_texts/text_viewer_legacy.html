@@ -32,7 +32,7 @@
   {% endwith %}
 
   <div class="container text-view {{ encoded_text.abstracted_text.type.slug }}">
-    {{ encoded_text.content_variants|safe }}
+    {{ encoded_text.get_content_with_readings|safe }}
   </div>
 
 {% endblock %}

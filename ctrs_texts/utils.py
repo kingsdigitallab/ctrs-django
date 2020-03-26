@@ -289,6 +289,6 @@ def get_text_chunk(encoded_text, view, region_type):
                 }
                 ret.append(res)
     else:
-        ret = encoded_text.content_variants()
+        ret = encoded_text.get_content_with_readings()
 
     return ret

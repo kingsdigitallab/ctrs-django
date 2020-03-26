@@ -341,6 +341,10 @@ $highlighted-background-color: #ee0;
 
   }
 
+  span[data-copies="1"] {
+    font-weight: bold;
+  }
+
   span[data-dpt-type=unsettled] {
     // GN: added some margin to prevent the box from sticking to the
     // previous of next word.
