@@ -14,6 +14,8 @@ const DISPLAY_WREGIONS_DEFAULT = true
 
 const Vue = window.Vue
 
+const HIGHLIGHT_CLASS = 'highlighted'
+
 // types of views
 const TYPES_LABEL = {
   transcription: 'Latin',
@@ -170,21 +172,19 @@ $(() => {
 
       scroll_to_sublocation: function(block) {
         let $block = this._get_block_div(block)
-        let highlight_class = 'highlighted'
-        $block.find('.' + highlight_class).removeClass(highlight_class)
-        let $subl = $block.find('[data-rid="' + block.sublocation + '"]')
-        if ($subl.length) {
-          let $view = $block.find('.card-section')
+        $block.find('.' + HIGHLIGHT_CLASS).removeClass(HIGHLIGHT_CLASS)
+        $block.find('.card-section').each(function(vi, view) {
+          let $view = $(view)
+          let $subl = $view.find('[data-rid="' + block.sublocation + '"]')
+          if ($subl.length < 1) return
+          $subl.addClass(HIGHLIGHT_CLASS)
           $view.scrollTop(
             $view.scrollTop() +
               $subl.position().top -
               $view.height() / 2 +
               $subl.height() / 2
           )
-          $subl.addClass(highlight_class)
-          // clog($subl);
-          // clog(block.sublocation);
-        }
+        })
       },
 
       update_query_string: function() {
@@ -219,6 +219,14 @@ $(() => {
 
       _get_block_div: function(block) {
         return $('#block-' + block.id)
+      },
+
+      _get_view_div: function(block, view) {
+        // returns the jquery element for the div representing a view
+        // TODO: use ids/class in html instead of searching like this
+        let vi = block.views.indexOf(view);
+        let views = $('#block-' + block.id+' .card-section')
+        return $(views[(vi > -1 && vi < views.length) ? vi: 0])
       },
 
       init_blocks: function() {
@@ -314,9 +322,9 @@ $(() => {
         // we load the text of that variant in the other block/pane
         let self = this
 
-        $('.variants')
-          .not('.clickable')
-          .addClass('clickable')
+        let $view = self._get_view_div(block, view)
+
+        $view.find('.variants')
           .on('click', '.variant', function(e) {
             let text_id = this.getAttribute('data-tid')
             // let region_id = this.getAttribute('data-rid');
@@ -333,12 +341,10 @@ $(() => {
           })
 
         // user click on sentence number
-        $('[data-dpt=sn]')
-          .not('.clickable')
-          .addClass('clickable')
+        $view.find('[data-dpt=sn]')
           .on('click', function(e) {
-            $('.highlighted').removeClass('highlighted')
-            $(this).addClass('highlighted')
+            $view.find('.'+HIGHLIGHT_CLASS).removeClass(HIGHLIGHT_CLASS)
+            $(this).addClass(HIGHLIGHT_CLASS)
 
             // e.g. s-4 (4th sentence)
             let region_id = this.getAttribute('data-rid')
@@ -350,16 +356,17 @@ $(() => {
         // user click to go up the hierarchy: MS->V, V->W
         // it is region-based and will open the corresponding region
         // in the other block
-        $('[data-dpt-group]')
-          .not('.clickable')
-          .addClass('clickable')
+        $view.find('[data-dpt-group]')
           .on('click', function(e) {
-            $('.highlighted').removeClass('highlighted')
-            $(this).addClass('highlighted')
+            $view.find('.'+HIGHLIGHT_CLASS).removeClass(HIGHLIGHT_CLASS)
+            $(this).addClass(HIGHLIGHT_CLASS)
 
-            let text = block.text
-            if (this.getAttribute('data-dpt-group') != block.text.type) {
-              text = text.parent
+            let text = null;
+            if (view.type == 'histogram') {
+              let text = block.text
+              if (this.getAttribute('data-dpt-group') != block.text.type) {
+                text = text.parent
+              }
             }
             let region_id = this.getAttribute('data-rid')
             self._load_other_text_in_other_block(block, text, region_id)
@@ -372,7 +379,6 @@ $(() => {
 
       _load_other_text_in_other_block(source_block, other_text, region_id) {
         // load other_text in another block than source_block
-        // if (!other_text) return;
 
         for (let other_block of this.blocks) {
           if (other_block != source_block) {
