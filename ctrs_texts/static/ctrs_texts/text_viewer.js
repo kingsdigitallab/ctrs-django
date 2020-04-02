@@ -224,9 +224,9 @@ $(() => {
       _get_view_div: function(block, view) {
         // returns the jquery element for the div representing a view
         // TODO: use ids/class in html instead of searching like this
-        let vi = block.views.indexOf(view);
-        let views = $('#block-' + block.id+' .card-section')
-        return $(views[(vi > -1 && vi < views.length) ? vi: 0])
+        let vi = block.views.indexOf(view)
+        let views = $('#block-' + block.id + ' .card-section')
+        return $(views[vi > -1 && vi < views.length ? vi : 0])
       },
 
       init_blocks: function() {
@@ -324,54 +324,51 @@ $(() => {
 
         let $view = self._get_view_div(block, view)
 
-        $view.find('.variants')
-          .on('click', '.variant', function(e) {
-            let text_id = this.getAttribute('data-tid')
-            // let region_id = this.getAttribute('data-rid');
+        $view.find('.variants').on('click', '.variant', function(e) {
+          let text_id = this.getAttribute('data-tid')
+          // let region_id = this.getAttribute('data-rid');
 
-            // e.g. v-4 (4th v-region)
-            let region_id = $(this)
-              .parents('[data-dpt-group]')
-              .first()
-              .data('rid')
+          // e.g. v-4 (4th v-region)
+          let region_id = $(this)
+            .parents('[data-dpt-group]')
+            .first()
+            .data('rid')
 
-            let text = self.get_text_from_id_or_siglum(text_id)
-            self._load_other_text_in_other_block(block, text, region_id)
-            e.stopPropagation()
-          })
+          let text = self.get_text_from_id_or_siglum(text_id)
+          self._load_other_text_in_other_block(block, text, region_id)
+          e.stopPropagation()
+        })
 
         // user click on sentence number
-        $view.find('[data-dpt=sn]')
-          .on('click', function(e) {
-            $view.find('.'+HIGHLIGHT_CLASS).removeClass(HIGHLIGHT_CLASS)
-            $(this).addClass(HIGHLIGHT_CLASS)
+        $view.find('[data-dpt=sn]').on('click', function(e) {
+          $view.find('.' + HIGHLIGHT_CLASS).removeClass(HIGHLIGHT_CLASS)
+          $(this).addClass(HIGHLIGHT_CLASS)
 
-            // e.g. s-4 (4th sentence)
-            let region_id = this.getAttribute('data-rid')
+          // e.g. s-4 (4th sentence)
+          let region_id = this.getAttribute('data-rid')
 
-            self._load_other_text_in_other_block(block, null, region_id)
-            e.stopPropagation()
-          })
+          self._load_other_text_in_other_block(block, null, region_id)
+          e.stopPropagation()
+        })
 
         // user click to go up the hierarchy: MS->V, V->W
         // it is region-based and will open the corresponding region
         // in the other block
-        $view.find('[data-dpt-group]')
-          .on('click', function(e) {
-            $view.find('.'+HIGHLIGHT_CLASS).removeClass(HIGHLIGHT_CLASS)
-            $(this).addClass(HIGHLIGHT_CLASS)
+        $view.find('[data-dpt-group]').on('click', function(e) {
+          $view.find('.' + HIGHLIGHT_CLASS).removeClass(HIGHLIGHT_CLASS)
+          $(this).addClass(HIGHLIGHT_CLASS)
 
-            let text = null;
-            if (view.type == 'histogram') {
-              let text = block.text
-              if (this.getAttribute('data-dpt-group') != block.text.type) {
-                text = text.parent
-              }
+          let text = null
+          if (view.type == 'histogram') {
+            let text = block.text
+            if (this.getAttribute('data-dpt-group') != block.text.type) {
+              text = text.parent
             }
-            let region_id = this.getAttribute('data-rid')
-            self._load_other_text_in_other_block(block, text, region_id)
-            e.stopPropagation()
-          })
+          }
+          let region_id = this.getAttribute('data-rid')
+          self._load_other_text_in_other_block(block, text, region_id)
+          e.stopPropagation()
+        })
 
         // scroll to region/sublocation
         this.scroll_to_sublocation(block)
