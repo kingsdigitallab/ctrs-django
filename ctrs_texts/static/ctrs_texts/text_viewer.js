@@ -1,4 +1,4 @@
-/*jshint esversion: 6 */
+/* jshint esversion: 6 */
 
 const API_PATH_TEXTS_LIST = '/api/texts/?group=declaration'
 
@@ -81,10 +81,10 @@ $(() => {
       })
     },
     computed: {
-      view_types: function() {
+      view_types: function () {
         return TYPES_LABEL
       },
-      text_types: function() {
+      text_types: function () {
         return [
           { label: 'Work', type: 'work' },
           { label: 'Versions', type: 'version' },
@@ -94,7 +94,7 @@ $(() => {
     },
     watch: {
       blocks: {
-        handler: function() {
+        handler: function () {
           // Something has changed in a block or view,
           // fetch view content if needed.
           let qs = ''
@@ -111,12 +111,12 @@ $(() => {
       }
     },
     filters: {
-      view_type_label: function(value) {
+      view_type_label: function (value) {
         return TYPES_LABEL[value]
       }
     },
     methods: {
-      change_view_type: function(block, view, view_type) {
+      change_view_type: function (block, view, view_type) {
         view.type = view_type
         this.on_view_changed(block, view)
       },
@@ -129,7 +129,7 @@ $(() => {
         Vue.set(view, display_key, !v)
       },
 
-      on_view_changed: function(block, view) {
+      on_view_changed: function (block, view) {
         // a view needs its content to be fetched
         view.status = STATUS_FETCHING
         let self = this
@@ -144,7 +144,7 @@ $(() => {
             view.status = STATUS_FETCHED
 
             // add javascript interactions to the text chunk
-            Vue.nextTick(function() {
+            Vue.nextTick(function () {
               self._after_chunk_loaded(block, view)
             })
           })
@@ -153,7 +153,7 @@ $(() => {
           })
       },
 
-      on_change_text: function(block, text, region_id) {
+      on_change_text: function (block, text, region_id) {
         // change the text of a block
         // according to the user selection in the UI
         block.sublocation = region_id
@@ -170,31 +170,31 @@ $(() => {
         }
       },
 
-      scroll_to_sublocation: function(block) {
+      scroll_to_sublocation: function (block) {
         let $block = this._get_block_div(block)
         $block.find('.' + HIGHLIGHT_CLASS).removeClass(HIGHLIGHT_CLASS)
-        $block.find('.card-section').each(function(vi, view) {
+        $block.find('.card-section').each(function (vi, view) {
           let $view = $(view)
           let $subl = $view.find('[data-rid="' + block.sublocation + '"]')
           if ($subl.length < 1) return
           $subl.addClass(HIGHLIGHT_CLASS)
           $view.scrollTop(
             $view.scrollTop() +
-              $subl.position().top -
-              $view.height() / 2 +
-              $subl.height() / 2
+            $subl.position().top -
+            $view.height() / 2 +
+            $subl.height() / 2
           )
         })
       },
 
-      update_query_string: function() {
+      update_query_string: function () {
         // update query string with current state of viewer
         // e.g. ?blocks=506:transcription,transcription;495:transcription
         var self = this
         let qs =
           'blocks=' +
           self.blocks
-            .map(function(b) {
+            .map(function (b) {
               let ret = ''
               if (b.text) {
                 ret = b.text.id + ':' + b.views.map(v => v.type).join(',')
@@ -212,24 +212,24 @@ $(() => {
         history.pushState(null, '', qs)
       },
 
-      _add_block: function(block) {
+      _add_block: function (block) {
         block.id = ++this.last_block_id
         this.blocks.push(block)
       },
 
-      _get_block_div: function(block) {
+      _get_block_div: function (block) {
         return $('#block-' + block.id)
       },
 
-      _get_view_div: function(block, view) {
+      _get_view_div: function (block, view) {
         // returns the jquery element for the div representing a view
         // TODO: use ids/class in html instead of searching like this
         let vi = block.views.indexOf(view);
-        let views = $('#block-' + block.id+' .card-section')
-        return $(views[(vi > -1 && vi < views.length) ? vi: 0])
+        let views = $('#block-' + block.id + ' .card-section')
+        return $(views[(vi > -1 && vi < views.length) ? vi : 0])
       },
 
-      init_blocks: function() {
+      init_blocks: function () {
         let self = this
         // Create blocks from the 'blocks' param in the query strings
         // e.g. ?blocks=506:transcription,transcription;495:transcription
@@ -278,10 +278,10 @@ $(() => {
           })
         }
 
-        Vue.nextTick(function() {
+        Vue.nextTick(function () {
           // Fundation JS re-initialisation
           $('.off-canvas-absolute:not(.foundation-initialised)').each(
-            function() {
+            function () {
               $(this).addClass('foundation-initialised')
               new window.Foundation.OffCanvas($(this))
             }
@@ -289,7 +289,7 @@ $(() => {
         })
       },
 
-      get_text_from_id_or_siglum: function(id_or_siglum) {
+      get_text_from_id_or_siglum: function (id_or_siglum) {
         // Gotcha: some texts share the same siglum, e.g. PA in v5 and v6!
         //
         id_or_siglum += ''
@@ -304,11 +304,11 @@ $(() => {
         return null
       },
 
-      get_default_text: function() {
+      get_default_text: function () {
         return this.get_text_from_id_or_siglum('O')
       },
 
-      _get_new_view_data: function(view_type, chunk, status) {
+      _get_new_view_data: function (view_type, chunk, status) {
         return {
           type: view_type || 'transcription',
           chunk: chunk || null,
@@ -318,16 +318,15 @@ $(() => {
       },
 
       _after_chunk_loaded(block, view) {
-        // when the user clicks a variant/reading in a region
-        // we load the text of that variant in the other block/pane
         let self = this
 
         let $view = self._get_view_div(block, view)
 
+        // when the user clicks a variant/reading in a region
+        // we load the text of that variant in the other block/pane
         $view.find('.variants')
-          .on('click', '.variant', function(e) {
+          .on('click', '.variant', function (e) {
             let text_id = this.getAttribute('data-tid')
-            // let region_id = this.getAttribute('data-rid');
 
             // e.g. v-4 (4th v-region)
             let region_id = $(this)
@@ -342,8 +341,8 @@ $(() => {
 
         // user click on sentence number
         $view.find('[data-dpt=sn]')
-          .on('click', function(e) {
-            $view.find('.'+HIGHLIGHT_CLASS).removeClass(HIGHLIGHT_CLASS)
+          .on('click', function (e) {
+            $view.find('.' + HIGHLIGHT_CLASS).removeClass(HIGHLIGHT_CLASS)
             $(this).addClass(HIGHLIGHT_CLASS)
 
             // e.g. s-4 (4th sentence)
@@ -353,18 +352,22 @@ $(() => {
             e.stopPropagation()
           })
 
-        // user click to go up the hierarchy: MS->V, V->W
+        // user click region to go up the hierarchy: MS->V, V->W
         // it is region-based and will open the corresponding region
         // in the other block
+        // OR user click a histogram bar
         $view.find('[data-dpt-group]')
-          .on('click', function(e) {
-            $view.find('.'+HIGHLIGHT_CLASS).removeClass(HIGHLIGHT_CLASS)
+          .on('click', function (e) {
+            $view.find('.' + HIGHLIGHT_CLASS).removeClass(HIGHLIGHT_CLASS)
             $(this).addClass(HIGHLIGHT_CLASS)
 
+            // for histogram bar we don't change the text in the other block
             let text = null;
-            if (view.type == 'histogram') {
-              let text = block.text
+            if (view.type != 'histogram') {
+              // for a click on a region we open the current text
+              text = block.text
               if (this.getAttribute('data-dpt-group') != block.text.type) {
+                // or its parent
                 text = text.parent
               }
             }
@@ -378,7 +381,9 @@ $(() => {
       },
 
       _load_other_text_in_other_block(source_block, other_text, region_id) {
-        // load other_text in another block than source_block
+        // Load other_text in another block than source_block.
+        // If other_text is null, the other block will stay on the same text
+        // and we only scroll to region_id.
 
         for (let other_block of this.blocks) {
           if (other_block != source_block) {
