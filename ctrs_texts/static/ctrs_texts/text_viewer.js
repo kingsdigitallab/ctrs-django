@@ -1,4 +1,4 @@
-/*jshint esversion: 6 */
+/* jshint esversion: 6 */
 
 const API_PATH_TEXTS_LIST = '/api/texts/?group=declaration'
 
@@ -318,16 +318,14 @@ $(() => {
       },
 
       _after_chunk_loaded(block, view) {
-        // when the user clicks a variant/reading in a region
-        // we load the text of that variant in the other block/pane
         let self = this
 
         let $view = self._get_view_div(block, view)
 
+        // when the user clicks a variant/reading in a region
+        // we load the text of that variant in the other block/pane
         $view.find('.variants').on('click', '.variant', function (e) {
-          clog('in')
           let text_id = this.getAttribute('data-tid')
-          // let region_id = this.getAttribute('data-rid');
 
           // e.g. v-4 (4th v-region)
           let region_id = $(this)
@@ -352,17 +350,21 @@ $(() => {
           e.stopPropagation()
         })
 
-        // user click to go up the hierarchy: MS->V, V->W
+        // user click region to go up the hierarchy: MS->V, V->W
         // it is region-based and will open the corresponding region
         // in the other block
+        // OR user click a histogram bar
         $view.find('[data-dpt-group]').on('click', function (e) {
           $view.find('.' + HIGHLIGHT_CLASS).removeClass(HIGHLIGHT_CLASS)
           $(this).addClass(HIGHLIGHT_CLASS)
 
+          // for histogram bar we don't change the text in the other block
           let text = null
-          if (view.type == 'histogram') {
-            let text = block.text
+          if (view.type != 'histogram') {
+            // for a click on a region we open the current text
+            text = block.text
             if (this.getAttribute('data-dpt-group') != block.text.type) {
+              // or its parent
               text = text.parent
             }
           }
@@ -397,7 +399,9 @@ $(() => {
       },
 
       _load_other_text_in_other_block(source_block, other_text, region_id) {
-        // load other_text in another block than source_block
+        // Load other_text in another block than source_block.
+        // If other_text is null, the other block will stay on the same text
+        // and we only scroll to region_id.
 
         for (let other_block of this.blocks) {
           if (other_block != source_block) {
