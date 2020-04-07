@@ -20,7 +20,7 @@ const HIGHLIGHT_CLASS = 'highlighted'
 const TYPES_LABEL = {
   transcription: 'Latin',
   translation: 'English translation',
-  histogram: 'Histogram'
+  histogram: 'Histogram',
 }
 
 function clog(message) {
@@ -64,11 +64,11 @@ $(() => {
       */
       blocks: [],
       // an id counter for block so we can locate then with jquery
-      last_block_id: 0
+      last_block_id: 0,
     },
     mounted() {
       let self = this
-      $.getJSON(API_PATH_TEXTS_LIST).done(res => {
+      $.getJSON(API_PATH_TEXTS_LIST).done((res) => {
         Vue.set(self, 'texts', res.data)
 
         // add direct references to parent texts
@@ -81,20 +81,20 @@ $(() => {
       })
     },
     computed: {
-      view_types: function() {
+      view_types: function () {
         return TYPES_LABEL
       },
-      text_types: function() {
+      text_types: function () {
         return [
           { label: 'Work', type: 'work' },
           { label: 'Versions', type: 'version' },
-          { label: 'Manuscripts', type: 'manuscript' }
+          { label: 'Manuscripts', type: 'manuscript' },
         ]
-      }
+      },
     },
     watch: {
       blocks: {
-        handler: function() {
+        handler: function () {
           // Something has changed in a block or view,
           // fetch view content if needed.
           let qs = ''
@@ -107,16 +107,16 @@ $(() => {
           }
           this.update_query_string()
         },
-        deep: true
-      }
+        deep: true,
+      },
     },
     filters: {
-      view_type_label: function(value) {
+      view_type_label: function (value) {
         return TYPES_LABEL[value]
-      }
+      },
     },
     methods: {
-      change_view_type: function(block, view, view_type) {
+      change_view_type: function (block, view, view_type) {
         view.type = view_type
         this.on_view_changed(block, view)
       },
@@ -129,14 +129,14 @@ $(() => {
         Vue.set(view, display_key, !v)
       },
 
-      on_view_changed: function(block, view) {
+      on_view_changed: function (block, view) {
         // a view needs its content to be fetched
         view.status = STATUS_FETCHING
         let self = this
         $.getJSON(
           '/api/texts/' + block.text.id + '/' + view.type + '/whole/whole/'
         )
-          .done(res => {
+          .done((res) => {
             for (const k of Object.keys(res.data.attributes)) {
               Vue.set(view, k, res.data.attributes[k])
             }
@@ -144,16 +144,16 @@ $(() => {
             view.status = STATUS_FETCHED
 
             // add javascript interactions to the text chunk
-            Vue.nextTick(function() {
+            Vue.nextTick(function () {
               self._after_chunk_loaded(block, view)
             })
           })
-          .fail(res => {
+          .fail((res) => {
             view.status = STATUS_ERROR
           })
       },
 
-      on_change_text: function(block, text, region_id) {
+      on_change_text: function (block, text, region_id) {
         // change the text of a block
         // according to the user selection in the UI
         block.sublocation = region_id
@@ -170,10 +170,10 @@ $(() => {
         }
       },
 
-      scroll_to_sublocation: function(block) {
+      scroll_to_sublocation: function (block) {
         let $block = this._get_block_div(block)
         $block.find('.' + HIGHLIGHT_CLASS).removeClass(HIGHLIGHT_CLASS)
-        $block.find('.card-section').each(function(vi, view) {
+        $block.find('.card-section').each(function (vi, view) {
           let $view = $(view)
           let $subl = $view.find('[data-rid="' + block.sublocation + '"]')
           if ($subl.length < 1) return
@@ -187,17 +187,17 @@ $(() => {
         })
       },
 
-      update_query_string: function() {
+      update_query_string: function () {
         // update query string with current state of viewer
         // e.g. ?blocks=506:transcription,transcription;495:transcription
         var self = this
         let qs =
           'blocks=' +
           self.blocks
-            .map(function(b) {
+            .map(function (b) {
               let ret = ''
               if (b.text) {
-                ret = b.text.id + ':' + b.views.map(v => v.type).join(',')
+                ret = b.text.id + ':' + b.views.map((v) => v.type).join(',')
                 if (b.sublocation) {
                   ret += '@' + b.sublocation
                 }
@@ -212,16 +212,16 @@ $(() => {
         history.pushState(null, '', qs)
       },
 
-      _add_block: function(block) {
+      _add_block: function (block) {
         block.id = ++this.last_block_id
         this.blocks.push(block)
       },
 
-      _get_block_div: function(block) {
+      _get_block_div: function (block) {
         return $('#block-' + block.id)
       },
 
-      _get_view_div: function(block, view) {
+      _get_view_div: function (block, view) {
         // returns the jquery element for the div representing a view
         // TODO: use ids/class in html instead of searching like this
         let vi = block.views.indexOf(view)
@@ -229,7 +229,7 @@ $(() => {
         return $(views[vi > -1 && vi < views.length ? vi : 0])
       },
 
-      init_blocks: function() {
+      init_blocks: function () {
         let self = this
         // Create blocks from the 'blocks' param in the query strings
         // e.g. ?blocks=506:transcription,transcription;495:transcription
@@ -247,9 +247,9 @@ $(() => {
                 text: self.get_text_from_id_or_siglum(parts[0]),
                 views: parts[1]
                   .split(',')
-                  .map(view_type => self._get_new_view_data(view_type)),
+                  .map((view_type) => self._get_new_view_data(view_type)),
                 comparative: false,
-                sublocation: sublocation
+                sublocation: sublocation,
               })
             }
           }
@@ -260,7 +260,7 @@ $(() => {
           this._add_block({
             text: self.get_default_text(),
             views: [self._get_new_view_data()],
-            comparative: false
+            comparative: false,
           })
         }
         if (this.blocks.length < 2) {
@@ -272,16 +272,16 @@ $(() => {
                 'transcription',
                 'placeholder',
                 STATUS_FETCHED
-              )
+              ),
             ],
-            comparative: false
+            comparative: false,
           })
         }
 
-        Vue.nextTick(function() {
+        Vue.nextTick(function () {
           // Fundation JS re-initialisation
           $('.off-canvas-absolute:not(.foundation-initialised)').each(
-            function() {
+            function () {
               $(this).addClass('foundation-initialised')
               new window.Foundation.OffCanvas($(this))
             }
@@ -289,7 +289,7 @@ $(() => {
         })
       },
 
-      get_text_from_id_or_siglum: function(id_or_siglum) {
+      get_text_from_id_or_siglum: function (id_or_siglum) {
         // Gotcha: some texts share the same siglum, e.g. PA in v5 and v6!
         //
         id_or_siglum += ''
@@ -304,16 +304,16 @@ $(() => {
         return null
       },
 
-      get_default_text: function() {
+      get_default_text: function () {
         return this.get_text_from_id_or_siglum('O')
       },
 
-      _get_new_view_data: function(view_type, chunk, status) {
+      _get_new_view_data: function (view_type, chunk, status) {
         return {
           type: view_type || 'transcription',
           chunk: chunk || null,
           status: status === undefined ? STATUS_TO_FETCH : status,
-          display_wregions: DISPLAY_WREGIONS_DEFAULT
+          display_wregions: DISPLAY_WREGIONS_DEFAULT,
         }
       },
 
@@ -324,7 +324,8 @@ $(() => {
 
         let $view = self._get_view_div(block, view)
 
-        $view.find('.variants').on('click', '.variant', function(e) {
+        $view.find('.variants').on('click', '.variant', function (e) {
+          clog('in')
           let text_id = this.getAttribute('data-tid')
           // let region_id = this.getAttribute('data-rid');
 
@@ -340,7 +341,7 @@ $(() => {
         })
 
         // user click on sentence number
-        $view.find('[data-dpt=sn]').on('click', function(e) {
+        $view.find('[data-dpt=sn]').on('click', function (e) {
           $view.find('.' + HIGHLIGHT_CLASS).removeClass(HIGHLIGHT_CLASS)
           $(this).addClass(HIGHLIGHT_CLASS)
 
@@ -354,7 +355,7 @@ $(() => {
         // user click to go up the hierarchy: MS->V, V->W
         // it is region-based and will open the corresponding region
         // in the other block
-        $view.find('[data-dpt-group]').on('click', function(e) {
+        $view.find('[data-dpt-group]').on('click', function (e) {
           $view.find('.' + HIGHLIGHT_CLASS).removeClass(HIGHLIGHT_CLASS)
           $(this).addClass(HIGHLIGHT_CLASS)
 
@@ -367,6 +368,27 @@ $(() => {
           }
           let region_id = this.getAttribute('data-rid')
           self._load_other_text_in_other_block(block, text, region_id)
+          e.stopPropagation()
+        })
+
+        // hover on the variants
+        $view.find('[data-toggle]').on('mouseover', function (e) {
+          const w = window.innerWidth
+          const x = e.clientX
+          let alignment = 'left'
+
+          if (x >= w / 4 && x <= w / 2) {
+            alignment = 'right'
+          } else if (x >= 3 * (w / 4)) {
+            alignment = 'right'
+          }
+
+          const el = $('#' + $(this).attr('id') + '-dd')
+          const dropdown = new Foundation.Dropdown(el, {
+            alignment: alignment,
+          })
+          dropdown.toggle()
+
           e.stopPropagation()
         })
 
@@ -383,7 +405,7 @@ $(() => {
             break
           }
         }
-      }
-    }
+      },
+    },
   })
 })

@@ -440,11 +440,11 @@ $highlighted-background-color: #ee0;
       span.variants {
         background-color: scale-color($light-gray, $lightness: 20%);
         border: 1px solid grey;
-        display: none;
         font-size: .875rem;
         opacity: .95;
         position: absolute;
         padding: .5em .5em .25em;
+        width: auto;
 
         .variant {
           display: block;
@@ -468,13 +468,6 @@ $highlighted-background-color: #ee0;
         }
       }
 
-      &:hover {
-        &>span.variants {
-          display: inline-block;
-          position: absolute;
-          z-index: 10;
-        }
-      }
     }
   }
 }
