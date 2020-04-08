@@ -170,7 +170,7 @@
 // Repetition below due to nesting
 
 .is-closed {
-  &+.off-canvas-content {
+  & + .off-canvas-content {
     .canvas-trigger {
       &::before {
         content: "\f0da";
@@ -180,7 +180,7 @@
 }
 
 .is-open {
-  &+.off-canvas-content {
+  & + .off-canvas-content {
     .canvas-trigger {
       background: scale-color($secondary-color, $lightness: 20%);
 
@@ -244,6 +244,20 @@
 
   .text-display {
     padding: 1rem;
+
+    .circle {
+      background: rgba(white, 0.2);
+      border: 1px solid $dark-gray;
+      // border-radius: 50%;
+      color: $rich-black;
+      font-size: .75rem;
+      margin-right: .5rem;
+      padding: 0 .25rem;
+
+      &:hover {
+        background: rgba(white, 1);
+      }
+    }
   }
 
   .toggle-off {
@@ -360,7 +374,7 @@ $highlighted-background-color: #ee0;
 
     &::before {
       color: $primary-color;
-      content: "?: ";
+      // content: "?: ";
       font-size: .75rem;
       padding-left: .25rem;
       padding-right: .125rem;
@@ -368,13 +382,6 @@ $highlighted-background-color: #ee0;
       // see ac-144
       cursor: pointer;
       pointer-events: all;
-    }
-
-    &:hover:before {
-      // GN: experiment with clickable label to open parent text
-      // see ac-144
-      // TODO: remove !important
-      // background-color: #ee0 !important;
     }
 
     &[data-dpt-group].highlighted {
@@ -396,12 +403,11 @@ $highlighted-background-color: #ee0;
     font-style: italic;
   }
 
-  span[data-dpt-type=unsettled][data-dpt-group=version] {
-
-    &::before {
-      content: "v: ";
-    }
-  }
+  // span[data-dpt-type=unsettled][data-dpt-group=version] {
+  //   &::before {
+  //     content: "v: ";
+  //   }
+  // }
 
 
   &.version,
@@ -414,9 +420,9 @@ $highlighted-background-color: #ee0;
       background: rgba($secondary-color, 0.5);
       padding: .25rem .5rem;
 
-      &::before {
-        content: "w: ";
-      }
+      // &::before {
+      //   content: "w: ";
+      // }
 
       span[data-dpt-type=unsettled][data-dpt-group=version] {
         .no-text {
