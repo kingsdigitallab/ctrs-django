@@ -100,14 +100,14 @@ class EncodedText(index.Indexed, TimestampedModel, ImportedModel):
             if ri >= len(regions):
                 break
 
-            dropdown_id = '{}-dd'.format(region.attrib['id'])
+            dropdown_id = '{}'.format(uuid.uuid1())
             region.attrib['data-toggle'] = dropdown_id
 
             # Insert the HTML of the variants under the region
             variants = utils.append_xml_element(
                 region.getparent(), 'span', None,
                 class_='dropdown-pane variants',
-                id='{}-dd'.format(region.attrib['id']),
+                id=dropdown_id,
                 data_dropdown='', data_hover='true', data_hover_pane='true'
             )
 

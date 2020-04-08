@@ -406,7 +406,7 @@ $(() => {
             alignment = 'right'
           }
 
-          const el = $('#' + $(this).attr('id') + '-dd')
+          const el = $('#' + $(this).data('toggle'))
           const dropdown = new Foundation.Dropdown(el, {
             alignment: alignment,
           })
