@@ -366,9 +366,9 @@ $(() => {
         } else {
           $view.find('[data-dpt-group]').each(function () {
             const group = $(this).data('dpt-group')
-            const link = $('<a>').html(group.substring(0, 1))
+            const link = $('<a class="circle">').html(group.substring(0, 1))
 
-            $(this).prepend(': ')
+            // $(this).prepend(': ')
             $(this).prepend(link)
           })
 
