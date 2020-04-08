@@ -1,9 +1,12 @@
+import uuid
+
 from django.db import models
 from django.utils.text import slugify
-from wagtail.snippets.models import register_snippet
 from wagtail.search import index
-from .models_abstract import ImportedModel, TimestampedModel, NamedModel
+from wagtail.snippets.models import register_snippet
+
 from . import utils
+from .models_abstract import ImportedModel, NamedModel, TimestampedModel
 
 
 class EncodedTextStatus(NamedModel):
@@ -97,10 +100,15 @@ class EncodedText(index.Indexed, TimestampedModel, ImportedModel):
             if ri >= len(regions):
                 break
 
+            dropdown_id = '{}'.format(uuid.uuid1())
+            region.attrib['data-toggle'] = dropdown_id
+
             # Insert the HTML of the variants under the region
             variants = utils.append_xml_element(
-                region, 'span', None,
-                class_='variants', prepend=True
+                region.getparent(), 'span', None,
+                class_='dropdown-pane variants',
+                id=dropdown_id,
+                data_dropdown='', data_hover='true', data_hover_pane='true'
             )
 
             for mi, r in enumerate(regions[ri]):
