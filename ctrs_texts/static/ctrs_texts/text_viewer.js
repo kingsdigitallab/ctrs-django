@@ -23,8 +23,10 @@ const TYPES_LABEL = {
   histogram: 'Histogram',
 }
 
-function clog(message) {
-  window.console.log(message)
+const HISTOGRAM_VIEW = 'histogram'
+
+function clog(...messages) {
+  window.console.log(...messages)
 }
 
 $(() => {
@@ -350,28 +352,47 @@ $(() => {
           e.stopPropagation()
         })
 
-        // user click region to go up the hierarchy: MS->V, V->W
-        // it is region-based and will open the corresponding region
-        // in the other block
-        // OR user click a histogram bar
-        $view.find('[data-dpt-group]').on('click', function (e) {
-          $view.find('.' + HIGHLIGHT_CLASS).removeClass(HIGHLIGHT_CLASS)
-          $(this).addClass(HIGHLIGHT_CLASS)
+        if (view.type === HISTOGRAM_VIEW) {
+          // user click a histogram bar
+          $view.find('[data-dpt-group]').on('click', function (e) {
+            $view.find('.' + HIGHLIGHT_CLASS).removeClass(HIGHLIGHT_CLASS)
+            $(this).addClass(HIGHLIGHT_CLASS)
 
-          // for histogram bar we don't change the text in the other block
-          let text = null
-          if (view.type != 'histogram') {
+            // for histogram bar we don't change the text in the other block
+            let region_id = $(this).data('rid')
+            self._load_other_text_in_other_block(block, null, region_id)
+            e.stopPropagation()
+          })
+        } else {
+          $view.find('[data-dpt-group]').each(function () {
+            const group = $(this).data('dpt-group')
+            const link = $('<a>').html(group.substring(0, 1))
+
+            $(this).prepend(': ')
+            $(this).prepend(link)
+          })
+
+          // user click region to go up the hierarchy: MS->V, V->W
+          // it is region-based and will open the corresponding region
+          // in the other block
+          $view.find('[data-dpt-group] a').on('click', function (e) {
+            const parent = $(this).parent()
+
+            $view.find('.' + HIGHLIGHT_CLASS).removeClass(HIGHLIGHT_CLASS)
+            parent.addClass(HIGHLIGHT_CLASS)
+
             // for a click on a region we open the current text
-            text = block.text
-            if (this.getAttribute('data-dpt-group') != block.text.type) {
+            let text = block.text
+            if (parent.data('dpt-group') != block.text.type) {
               // or its parent
               text = text.parent
             }
-          }
-          let region_id = this.getAttribute('data-rid')
-          self._load_other_text_in_other_block(block, text, region_id)
-          e.stopPropagation()
-        })
+
+            const region_id = parent.data('rid')
+            self._load_other_text_in_other_block(block, text, region_id)
+            e.stopPropagation()
+          })
+        }
 
         // hover on the variants
         $view.find('[data-toggle]').on('mouseover', function (e) {
