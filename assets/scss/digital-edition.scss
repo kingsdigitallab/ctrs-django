@@ -97,11 +97,12 @@
     }
   }
 
-  .variant {
+  .variant,
+  .custom-tooltip {
     .label {
       margin-left: 0;
 
-      &+.label {
+      & + .label {
         margin-right: .5rem;
       }
     }
