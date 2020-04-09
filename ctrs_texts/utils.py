@@ -1,11 +1,12 @@
-from django.utils.text import slugify
-from _collections import OrderedDict
-from django.conf import settings
 import json
 import os
-import lxml.etree as ET
 import re
 from collections import Counter
+
+import lxml.etree as ET
+from _collections import OrderedDict
+from django.conf import settings
+from django.utils.text import slugify
 
 
 def get_xml_from_unicode(document, ishtml=False, add_root=False):
@@ -292,3 +293,27 @@ def get_text_chunk(encoded_text, view, region_type):
         ret = encoded_text.get_content_with_readings()
 
     return ret
+
+
+def search_text(encoded_text, query=''):
+    if not encoded_text:
+        return None
+
+    query = query.lower()
+
+    lowercase = (
+        'translate(., '
+        '"ABCDEFGHIJKLMNOPQRSTUVWXYZ", '
+        '"abcdefghijklmnopqrstuvwxyz")'
+    )
+    search_xpath = (
+        './/p[contains(normalize-space({}), "{}")]'.format(lowercase, query)
+    )
+
+    xml = get_xml_from_unicode(
+        encoded_text.content, ishtml=True, add_root=True)
+
+    results = [get_unicode_from_xml(sentence)
+               for sentence in xml.xpath(search_xpath)]
+
+    return results
