@@ -110,14 +110,6 @@ $(() => {
       },
     },
     watch: {
-      'facets.deprecated': {
-        handler: function () {
-          // Something has changed in a block or view,
-          // fetch view content if needed.
-          this.fetch_results()
-        },
-        deep: true,
-      },
       'facets.sentence_number': function () {
         this.fetch_results()
       },
