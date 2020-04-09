@@ -146,7 +146,13 @@ button,
 
         input {
             margin: 0 0 1px;
-            max-width: 90px;
+            max-width: 100%;
+        }
+
+        &.ninetypx {
+            input {
+                max-width: 90px;
+            }
         }
     }
 }
