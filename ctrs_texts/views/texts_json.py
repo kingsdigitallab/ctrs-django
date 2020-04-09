@@ -181,6 +181,7 @@ def view_api_text_search_regions(request):
     '''
     '''
 
+    # TODO: GN remove hard-coded id
     text_ids = request.GET.get('texts', '') or '520'
     text_ids = text_ids.split(',')
 
@@ -204,32 +205,23 @@ def view_api_text_search_regions(request):
 
 def view_api_text_search(request):
     q = request.GET.get('q', '')
-
-    text_ids = request.GET.get('texts', '0')
-    text_ids = text_ids.split(',')
-
+    text_ids = request.GET.get('texts', None)
     encoding_type = request.GET.get('et', 'transcription')
 
-    search_xpath = (
-        './/p[contains(normalize-space(lower-case(.)), "{}")]'.format(q)
-    )
+    encoded_texts = EncodedText.objects.filter(type__slug=encoding_type)
 
-    encoded_texts = EncodedText.objects.filter(
-        # abstracted_text__id__in=text_ids,
-        type__slug=encoding_type,
-        content__icontains=q
-    ).order_by(
+    if text_ids:
+        text_ids = text_ids.split(',')
+        encoded_texts = encoded_texts.filter(abstracted_text__id__in=text_ids)
+
+    encoded_texts = encoded_texts.filter(content__icontains=q).order_by(
         'abstracted_text__group__short_name',
         'abstracted_text__short_name'
     )
 
     sentences = []
     for encoded_text in encoded_texts:
-        content = utils.get_xml_from_unicode(
-            encoded_text.content, ishtml=True, add_root=True
-        )
-
-        for sentence in content.findall(search_xpath):
+        for sentence in utils.search_text(encoded_text, q):
             html = render_to_string('ctrs_texts/search_sentence.html', {
                 'text': encoded_text.abstracted_text,
                 'sentence': sentence,
