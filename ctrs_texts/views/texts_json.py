@@ -203,7 +203,7 @@ def view_api_text_search_regions(request):
     return JsonResponse(ret)
 
 
-def view_api_text_search(request):
+def view_api_text_search_text(request):
     q = request.GET.get('q', '')
     text_ids = request.GET.get('texts', None)
     encoding_type = request.GET.get('et', 'transcription')
@@ -234,6 +234,7 @@ def view_api_text_search(request):
 
     ret = OrderedDict([
         ['jsonapi', '1.0'],
+        ['q', q],
         ['data', sentences],
     ])
 

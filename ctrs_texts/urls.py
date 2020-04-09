@@ -10,9 +10,9 @@ from .views.texts_html import (
 )
 from .views.texts_json import (
     view_api_text_chunk,
-    view_api_text_search,
     view_api_text_search_regions,
     view_api_text_search_sentences,
+    view_api_text_search_text,
     view_api_texts,
 )
 
@@ -64,8 +64,8 @@ urlpatterns = [
 
     # COTR Search API
     path(
-        'api/texts/search/',
-        view_api_text_search, name='view_api_text_search'
+        'api/texts/search/text/',
+        view_api_text_search_text, name='view_api_text_search_text'
     ),
     path(
         'api/texts/search/sentences/',
