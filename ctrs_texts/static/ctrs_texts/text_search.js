@@ -23,12 +23,12 @@ const LEAFLET_ZOOM_TRANFORM = 3
 const TYPES_LABEL = {
   transcription: 'Latin',
   translation: 'English',
-  histogram: 'Histogram'
+  histogram: 'Histogram',
 }
 
 const PRESELECTED_TEXT_SIGLA = ['V1']
 
-const DEFAULT_RESULT_TYPE = window.DEBUG ? 'regions' : 'sentences'
+const DEFAULT_RESULT_TYPE = window.DEBUG ? 'text' : 'sentences'
 // const DEFAULT_RESULT_TYPE = 'sentences';
 
 const SENTENCE_NUMBER_MAX = 27
@@ -66,15 +66,15 @@ $(() => {
           }
         }, [...]]
         */
-        texts: []
+        texts: [],
       },
       blocks: [],
       response: {},
-      selected_region: null
+      selected_region: null,
     },
     mounted() {
       let self = this
-      $.getJSON('/api/texts/?group=declaration').done(res => {
+      $.getJSON('/api/texts/?group=declaration').done((res) => {
         Vue.set(self.facets, 'texts', res.data)
         // clog(res);
 
@@ -95,46 +95,38 @@ $(() => {
       })
     },
     computed: {
-      text_types: function() {
+      text_types: function () {
         return [
           // {label: 'Work', type: 'work'},
           { label: 'Versions', type: 'version' },
-          { label: 'Manuscripts', type: 'manuscript' }
+          { label: 'Manuscripts', type: 'manuscript' },
         ]
       },
-      sentence_number_max: function() {
+      sentence_number_max: function () {
         return SENTENCE_NUMBER_MAX
       },
-      debug_mode: function() {
+      debug_mode: function () {
         return window.DEBUG
-      }
+      },
     },
     watch: {
-      'facets.deprecated': {
-        handler: function() {
-          // Something has changed in a block or view,
-          // fetch view content if needed.
-          this.fetch_results()
-        },
-        deep: true
-      },
-      'facets.sentence_number': function() {
+      'facets.sentence_number': function () {
         this.fetch_results()
       },
-      'facets.result_type': function() {
+      'facets.result_type': function () {
         this.fetch_results()
       },
-      'facets.encoding_type': function() {
+      'facets.encoding_type': function () {
         this.fetch_results()
-      }
+      },
     },
     filters: {
-      view_type_label: function(value) {
+      view_type_label: function (value) {
         return TYPES_LABEL[value]
-      }
+      },
     },
     methods: {
-      on_tick_text: function(text, silent) {
+      on_tick_text: function (text, silent) {
         let selected = text.selected
 
         if (text.type == 'version') {
@@ -154,7 +146,7 @@ $(() => {
 
         if (!silent) this.fetch_results()
       },
-      fetch_results: function(block, view) {
+      fetch_results: function (block, view) {
         if (this.status == STATUS_FETCHING) return
 
         // hide readings section
@@ -173,24 +165,25 @@ $(() => {
         $.getJSON('/api/texts/search/' + self.facets.result_type + '/', {
           texts: text_ids.join(','),
           et: self.facets.encoding_type,
-          sn: self.facets.sentence_number
+          sn: self.facets.sentence_number,
+          q: self.facets.q,
         })
-          .done(res => {
+          .done((res) => {
             // clog(res);
             self.status = STATUS_FETCHED
             Vue.set(self, 'response', res)
             // self.update_query_string();
 
-            Vue.nextTick(function() {
+            Vue.nextTick(function () {
               init_leaflet(res)
             })
           })
-          .fail(res => {
+          .fail((res) => {
             self.status = STATUS_ERROR
           })
       },
 
-      get_text_from_id_or_siglum: function(id_or_siglum) {
+      get_text_from_id_or_siglum: function (id_or_siglum) {
         id_or_siglum += ''
         for (let text of this.facets.texts) {
           if (
@@ -203,28 +196,28 @@ $(() => {
         return null
       },
 
-      get_default_text: function() {
+      get_default_text: function () {
         return this.get_text_from_id_or_siglum('O')
       },
 
-      move_sentence_number: function(increment) {
+      move_sentence_number: function (increment) {
         let ret = (parseInt(this.facets.sentence_number) || 1) + increment
         if (ret < 1) ret = 1
         if (ret > this.sentence_number_max) ret = this.sentence_number_max
         this.facets.sentence_number = ret
-      }
-    }
+      },
+    },
   })
 
   function init_leaflet(response) {
-    $('[data-leaflet-iiif]').each(function() {
+    $('[data-leaflet-iiif]').each(function () {
       if (!$(this).hasClass('ctrs-initialised')) {
         $(this).addClass('ctrs-initialised')
 
         let map = L.map(this, {
           center: [0, 0],
           crs: L.CRS.Simple,
-          zoom: 0
+          zoom: 0,
         })
         window.map = map
         map.annotation_loaded = false
@@ -238,7 +231,7 @@ $(() => {
         // https://github.com/mejackreed/Leaflet-IIIF/blob/master/leaflet-iiif.js#L73
         // so we are going through this frequent tile-related event instead
         // but make sure we execute only once.
-        image_layer.on('load', function() {
+        image_layer.on('load', function () {
           if (this.annotation_loaded) return
           load_annotations(this, response)
           // map.setZoom(0);
@@ -300,7 +293,7 @@ $(() => {
   function _on_rect_mousedown(e) {
     _on_rect_mouseover(e)
 
-    Vue.nextTick(function() {
+    Vue.nextTick(function () {
       const popupContent = document
         .getElementById('heatmap-tooltip')
         .cloneNode(true)
@@ -309,7 +302,7 @@ $(() => {
       e.target
         .bindPopup(popupContent, {
           class: 'custom-tooltip',
-          maxWidth: '1000'
+          maxWidth: '1000',
         })
         .addTo(window.map)
     })
@@ -335,7 +328,7 @@ $(() => {
     let ret = {
       color: '#ff0000',
       weight: 1,
-      fillOpacity: 0.3
+      fillOpacity: 0.3,
     }
 
     let region = window.regions[annotation.key]

@@ -19,10 +19,10 @@
 
 <div id="text-search" class="grid-x grid-margin-x">
   <div class="cell medium-3 controls">
-    <h2>Result Type</h2>
+    <h2>Type</h2>
 
     <div class="grid-x grid-margin-x">
-      <div class="cell small-6">
+      <div class="cell small-4">
         <p>Heatmap</p>
         <div class="switch tiny">
           <input class="switch-input" v-model="facets.result_type" type="radio"
@@ -32,7 +32,7 @@
           </label>
         </div>
       </div>
-      <div class="cell small-6">
+      <div class="cell small-4">
         <p>Sentences</p>
         <div class="switch tiny">
           <input class="switch-input" v-model="facets.result_type" type="radio"
@@ -42,13 +42,23 @@
           </label>
         </div>
       </div>
+      <div class="cell small-4">
+        <p>Text</p>
+        <div class="switch tiny">
+          <input class="switch-input" v-model="facets.result_type" type="radio"
+            value="text" id="text" name="radio-group-type">
+          <label class="switch-paddle" for="text">
+            <span class="show-for-sr">Text</span>
+          </label>
+        </div>
+      </div>
     </div>
 
     <h2>Options</h2>
 
     <template v-if="facets.result_type == 'sentences'">
       <h3>Sentence number</h3>
-      <div class="button-group with-input">
+      <div class="button-group with-input ninetypx">
         <button class="button secondary" @click="move_sentence_number(-1)"><i
             class="fas fa-angle-double-left"></i><span
             class="show-for-sr">Prev</span></button>
@@ -89,6 +99,19 @@
       </div>
     </template>
 
+    <template v-if="facets.result_type == 'text'">
+      <h3>Query</h3>
+      <form v-on:submit.prevent="fetch_results">
+        <div class="button-group with-input">
+          <input v-model="facets.q" type="string" value="">
+          <button class="button secondary">
+            <i class="fas fa-search"></i>
+            <span class="show-for-sr">Search</span>
+          </button>
+        </div>
+      </form>
+    </template>
+
     <h3>Texts</h3>
     <!-- TODO: implements select/deselect all button -->
     <button class="button small secondary select-all">Select all</button>
@@ -123,46 +146,11 @@
   </div>
 
   <div class="cell medium-9" id="results">
-    <h2>Results</h2>
-
-    <!-- Static visualisation to add info based on the heatmap -->
-    <!--
-      <template v-if="facets.result_type == 'sentences'">
-        <nav aria-label="Pagination" class="heatmap-viz-nav">
-          <ul class="pagination text-center">
-            <li class="pagination-previous disabled">Prev</li>
-            <li class="current"><span class="show-for-sr">You're on page</span> 1</li>
-            <li><a href="#" aria-label="Page 2">2</a></li>
-            <li><a href="#" aria-label="Page 3">3</a></li>
-            <li><a href="#" aria-label="Page 4">4</a></li>
-            <li><a href="#" aria-label="Page 5">5</a></li>
-            <li><a href="#" aria-label="Page 6">6</a></li>
-            <li><a href="#" aria-label="Page 7">7</a></li>
-            <li><a href="#" aria-label="Page 8">8</a></li>
-            <li><a href="#" aria-label="Page 9">9</a></li>
-            <li><a href="#" aria-label="Page 10">10</a></li>
-            <li><a href="#" aria-label="Page 11">11</a></li>
-            <li><a href="#" aria-label="Page 12">12</a></li>
-            <li><a href="#" aria-label="Page 13">13</a></li>
-            <li><a href="#" aria-label="Page 14">14</a></li>
-            <li><a href="#" aria-label="Page 15">15</a></li>
-            <li><a href="#" aria-label="Page 16">16</a></li>
-            <li><a href="#" aria-label="Page 17">17</a></li>
-            <li><a href="#" aria-label="Page 18">18</a></li>
-            <li><a href="#" aria-label="Page 19">19</a></li>
-            <li><a href="#" aria-label="Page 20">20</a></li>
-            <li><a href="#" aria-label="Page 21">21</a></li>
-            <li><a href="#" aria-label="Page 22">22</a></li>
-            <li><a href="#" aria-label="Page 23">23</a></li>
-            <li><a href="#" aria-label="Page 24">24</a></li>
-            <li><a href="#" aria-label="Page 25">25</a></li>
-            <li><a href="#" aria-label="Page 26">26</a></li>
-            <li><a href="#" aria-label="Page 27">27</a></li>
-            <li class="pagination-next"><a href="#" aria-label="Next page">Next</a></li>
-          </ul>
-        </nav>
-      </template>
-      -->
+    <h2>Results<span v-if="facets.result_type !== 'regions'"><span
+          v-if="response.data">: {{response.data.length}} sentences</span>
+      </span>
+      <span v-if="response.q">with <strong>{{response.q}}</strong></span>
+    </h2>
 
     <template v-if="response.data && response.data.length > 0">
       <div class="hit" v-for="hit in response.data" v-html="hit.html">
@@ -173,18 +161,26 @@
       <ul class="no-bullet">
         <li v-for="(sigla, reading) in selected_region.readings">
           <template v-for="siglum in sigla">
-            <span :class="'label version ' + siglum[0].toLowerCase() + '-text-id'">{{ siglum[0] }}</span><span :class="'label manuscript ' + siglum[1].toLowerCase() + '-text-id'">{{ siglum[1] }}</span><span class="reading">{{ reading }}</span>
+            <span
+              :class="'label version ' + siglum[0].toLowerCase() + '-text-id'">{{ siglum[0] }}</span><span
+              :class="'label manuscript ' + siglum[1].toLowerCase() + '-text-id'">{{ siglum[1] }}</span><span
+              class="reading">{{ reading }}</span>
           </template>
         </li>
       </ul>
     </div>
   </div>
-</div> {% endverbatim %}
-{% endblock %} {% block footer_scripts %} {{ block.super }}
+</div>
+
+{% endverbatim %}
+{% endblock main %}
+
+{% block footer_scripts %}
+{{ block.super }}
 <script>
   /* beautify preserve:start */
-          window.DEBUG = {% if DEBUG %}true{% else %}false{% endif %};
-          /* beautify preserve:end */
+  window.DEBUG = {% if DEBUG %}true{% else %}false{% endif %};
+  /* beautify preserve:end */
 </script>
 
 <script src="{% static 'vue/dist/vue.js' %}"></script>
