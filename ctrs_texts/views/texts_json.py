@@ -200,3 +200,49 @@ def view_api_text_search_regions(request):
     ])
 
     return JsonResponse(ret)
+
+
+def view_api_text_search(request):
+    q = request.GET.get('q', '')
+
+    text_ids = request.GET.get('texts', '0')
+    text_ids = text_ids.split(',')
+
+    encoding_type = request.GET.get('et', 'transcription')
+
+    search_xpath = (
+        './/p[contains(normalize-space(lower-case(.)), "{}")]'.format(q)
+    )
+
+    encoded_texts = EncodedText.objects.filter(
+        # abstracted_text__id__in=text_ids,
+        type__slug=encoding_type,
+        content__icontains=q
+    ).order_by(
+        'abstracted_text__group__short_name',
+        'abstracted_text__short_name'
+    )
+
+    sentences = []
+    for encoded_text in encoded_texts:
+        content = utils.get_xml_from_unicode(
+            encoded_text.content, ishtml=True, add_root=True
+        )
+
+        for sentence in content.findall(search_xpath):
+            html = render_to_string('ctrs_texts/search_sentence.html', {
+                'text': encoded_text.abstracted_text,
+                'sentence': sentence,
+            })
+            sentence_data = {
+                'html': html,
+            }
+
+            sentences.append(sentence_data)
+
+    ret = OrderedDict([
+        ['jsonapi', '1.0'],
+        ['data', sentences],
+    ])
+
+    return JsonResponse(ret)

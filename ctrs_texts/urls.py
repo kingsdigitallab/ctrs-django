@@ -1,14 +1,20 @@
 # from django.conf import settings
-from django.urls import path
 from django.contrib import admin
+from django.urls import path
+from django.views.generic import RedirectView
+
 from .views.texts_html import (
-    view_text_search, view_text_viewer, view_text_viewer_legacy,
+    view_text_search,
+    view_text_viewer,
+    view_text_viewer_legacy,
 )
 from .views.texts_json import (
-    view_api_texts, view_api_text_chunk, view_api_text_search_sentences
+    view_api_text_chunk,
+    view_api_text_search,
+    view_api_text_search_regions,
+    view_api_text_search_sentences,
+    view_api_texts,
 )
-from ctrs_texts.views.texts_json import view_api_text_search_regions
-from django.views.generic import RedirectView
 
 admin.autodiscover()
 
@@ -58,10 +64,13 @@ urlpatterns = [
 
     # COTR Search API
     path(
+        'api/texts/search/',
+        view_api_text_search, name='view_api_text_search'
+    ),
+    path(
         'api/texts/search/sentences/',
         view_api_text_search_sentences, name='view_api_text_search_sentence'
     ),
-
     path(
         'api/texts/search/regions/',
         view_api_text_search_regions, name='view_api_text_search_regions'
