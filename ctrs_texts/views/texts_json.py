@@ -229,8 +229,6 @@ def view_api_text_search_text(request):
     escaped = '|'.join([r'{}\w*\b'.format(w) for w in q.split()])
     pattern = re.compile('({})'.format(escaped), re.I)
 
-    print(q, escaped, pattern)
-
     sentences = []
     for encoded_text in encoded_texts:
         for sentence in utils.search_text(encoded_text, q):
