@@ -1,8 +1,11 @@
-from ctrs_texts.models import AbstractedText, EncodedText
-from django.http import JsonResponse
+import re
+
 from _collections import OrderedDict
+from ctrs_texts.models import AbstractedText, EncodedText
 from django.db.models import Q
+from django.http import JsonResponse
 from django.template.loader import render_to_string
+
 from .. import utils
 
 
@@ -205,6 +208,9 @@ def view_api_text_search_regions(request):
 
 def view_api_text_search_text(request):
     q = request.GET.get('q', '')
+    if q:
+        q = q.strip()
+
     text_ids = request.GET.get('texts', None)
     encoding_type = request.GET.get('et', 'transcription')
 
@@ -219,6 +225,12 @@ def view_api_text_search_text(request):
         'abstracted_text__short_name'
     )
 
+    # pattern to highlight the search results
+    escaped = '|'.join([r'{}\w*\b'.format(w) for w in q.split()])
+    pattern = re.compile('({})'.format(escaped), re.I)
+
+    print(q, escaped, pattern)
+
     sentences = []
     for encoded_text in encoded_texts:
         for sentence in utils.search_text(encoded_text, q):
@@ -226,6 +238,11 @@ def view_api_text_search_text(request):
                 'text': encoded_text.abstracted_text,
                 'sentence': sentence,
             })
+
+            # highlight the search results
+            if q:
+                html = pattern.sub(r'<span class="highlight">\1</span>', html)
+
             sentence_data = {
                 'html': html,
             }
