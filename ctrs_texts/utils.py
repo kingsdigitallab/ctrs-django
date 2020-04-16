@@ -7,6 +7,7 @@ import lxml.etree as ET
 from _collections import OrderedDict
 from django.conf import settings
 from django.utils.text import slugify
+from lxml import html
 
 
 def get_xml_from_unicode(document, ishtml=False, add_root=False):
@@ -317,3 +318,17 @@ def search_text(encoded_text, query=''):
                for sentence in xml.xpath(search_xpath)]
 
     return results
+
+
+def get_plain_text(encoded_text):
+    '''Returns the plain text content from an `EncodedText`.'''
+    if not encoded_text:
+        return None
+
+    xml = html.fromstring(encoded_text.content)
+    text = xml.text_content()
+
+    if not text:
+        return None
+
+    return text.strip()

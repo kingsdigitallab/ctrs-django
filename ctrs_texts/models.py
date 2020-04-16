@@ -44,6 +44,9 @@ class EncodedText(index.Indexed, TimestampedModel, ImportedModel):
     # The XML content
     content = models.TextField(blank=True, null=True)
 
+    plain = models.TextField(blank=True, null=True,
+                             help_text='Content in plain text')
+
     abstracted_text = models.ForeignKey(
         'AbstractedText', blank=False, null=False,
         related_name='encoded_texts',
@@ -75,6 +78,14 @@ class EncodedText(index.Indexed, TimestampedModel, ImportedModel):
         return '{} - {} [{}]'.format(
             self.abstracted_text, self.type, self.status
         )
+
+    def save(self, *args, **kwargs):
+        if self.content:
+            self.plain = utils.get_plain_text(self)
+
+        super().save(*args, **kwargs)
+
+
 
     def get_content_with_readings(self):
         '''
