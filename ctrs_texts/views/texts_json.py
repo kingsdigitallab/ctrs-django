@@ -214,7 +214,7 @@ def view_api_text_search_text(request):
         text_ids = text_ids.split(',')
         encoded_texts = encoded_texts.filter(abstracted_text__id__in=text_ids)
 
-    encoded_texts = encoded_texts.filter(content__icontains=q).order_by(
+    encoded_texts = encoded_texts.filter(plain__icontains=q).order_by(
         'abstracted_text__group__short_name',
         'abstracted_text__short_name'
     )
