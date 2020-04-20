@@ -330,10 +330,7 @@ $(() => {
           let text_id = this.getAttribute('data-tid')
 
           // e.g. v-4 (4th v-region)
-          let region_id = $(this)
-            .parents('[data-dpt-group]')
-            .first()
-            .data('rid')
+          let region_id = $(this).parent().data('rrid')
 
           let text = self.get_text_from_id_or_siglum(text_id)
           self._load_other_text_in_other_block(block, text, region_id)

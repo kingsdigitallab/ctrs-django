@@ -117,7 +117,12 @@ class EncodedText(index.Indexed, TimestampedModel, ImportedModel):
                 region.getparent(), 'span', None,
                 class_='dropdown-pane variants',
                 id=dropdown_id,
-                data_dropdown='', data_hover='true', data_hover_pane='true'
+                data_dropdown='', data_hover='true', data_hover_pane='true',
+                # ac-112
+                # rrid is on purpose
+                # it is a reference to data-rid of the parent region.
+                # We avoid duplicate values for rid in the same document.
+                data_rrid=region.attrib['data-rid']
             )
 
             for mi, r in enumerate(regions[ri]):
