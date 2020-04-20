@@ -161,10 +161,9 @@
       <ul class="no-bullet">
         <li v-for="(sigla, reading) in selected_region.readings">
           <template v-for="siglum in sigla">
-            <span
-              :class="'label version ' + siglum[0].toLowerCase() + '-text-id'">{{ siglum[0] }}</span><span
-              :class="'label manuscript ' + siglum[1].toLowerCase() + '-text-id'">{{ siglum[1] }}</span><span
-              class="reading">{{ reading }}</span>
+            <p>
+              <span :class="'label version ' + siglum[0].toLowerCase() + '-text-id'">{{ siglum[0] }}</span><span :class="'label manuscript ' + siglum[1].toLowerCase() + '-text-id'">{{ siglum[1] }}</span><span class="reading">{{ reading }}</span>
+            </p>
           </template>
         </li>
       </ul>
