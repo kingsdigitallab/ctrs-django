@@ -85,8 +85,6 @@ class EncodedText(index.Indexed, TimestampedModel, ImportedModel):
 
         super().save(*args, **kwargs)
 
-
-
     def get_content_with_readings(self):
         '''
         Returns XHTML content of this encoded text.
