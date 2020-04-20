@@ -146,6 +146,13 @@ $(() => {
 
         if (!silent) this.fetch_results()
       },
+      on_select_all_texts: function () {
+        for (let t of this.facets.texts) {
+          Vue.set(t, 'selected', true)
+        }
+
+        this.fetch_results()
+      },
       fetch_results: function (block, view) {
         if (this.status == STATUS_FETCHING) return
 
