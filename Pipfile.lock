@@ -1,7 +1,7 @@
 {
     "_meta": {
         "hash": {
-            "sha256": "0645f53408d279587abeb6aefa24ed1092cd02d8c9995292bf2c476ffdfcfbeb"
+            "sha256": "d1e6fc724db3bc3da60f1f25947df53a10f1cea63607f5f60abcc97609164efa"
         },
         "pipfile-spec": 6,
         "requires": {
@@ -169,6 +169,12 @@
                 "sha256:a068a21ceac8a4d63dbfd964670474107f541babbd2250d61922f029858365fa"
             ],
             "version": "==2.9"
+        },
+        "l18n": {
+            "hashes": [
+                "sha256:46e72c980d06a7511726f1da10a32fa524f7e2937c0af5ad52d39577024a4382"
+            ],
+            "version": "==2018.5"
         },
         "libsass": {
             "hashes": [
@@ -408,18 +414,18 @@
         },
         "urllib3": {
             "hashes": [
-                "sha256:2f3db8b19923a873b3e5256dc9c2dedfa883e33d87c690d9c7913e1f40673cdc",
-                "sha256:87716c2d2a7121198ebcb7ce7cccf6ce5e9ba539041cfbaeecfb641dc0bf6acc"
+                "sha256:3018294ebefce6572a474f0604c2021e33b3fd8006ecd11d62107a5d2a963527",
+                "sha256:88206b0eb87e6d677d424843ac5209e3fb9d0190d0ee169599165ec25e9d9115"
             ],
-            "version": "==1.25.8"
+            "version": "==1.25.9"
         },
         "wagtail": {
             "hashes": [
-                "sha256:357cdb5733aeed18ae36c865eefd04484f545387331371d26a40b99affb1a327",
-                "sha256:e4d129ec3560cc4ee1fc9dae384c898938dded2bd7e7197376da8517be6b688b"
+                "sha256:7159841cad23defb5bc1fee8267c3116da1a7806bb27133cca6bba7760379774",
+                "sha256:d1daa6ba920a93c082333c053430a491b32d1b807ae253bc0d307966e849e0b2"
             ],
             "index": "pypi",
-            "version": "==2.7.2"
+            "version": "==2.8.1"
         },
         "webencodings": {
             "hashes": [
@@ -830,10 +836,10 @@
         },
         "virtualenv": {
             "hashes": [
-                "sha256:00cfe8605fb97f5a59d52baab78e6070e72c12ca64f51151695407cc0eb8a431",
-                "sha256:c8364ec469084046c779c9a11ae6340094e8a0bf1d844330fc55c1cefe67c172"
+                "sha256:5021396e8f03d0d002a770da90e31e61159684db2859d0ba4850fbea752aa675",
+                "sha256:ac53ade75ca189bc97b6c1d9ec0f1a50efe33cbf178ae09452dcd9fd309013c1"
             ],
-            "version": "==20.0.17"
+            "version": "==20.0.18"
         },
         "virtualenv-clone": {
             "hashes": [

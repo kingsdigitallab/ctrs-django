@@ -226,8 +226,8 @@ def view_api_text_search_text(request):
     )
 
     # pattern to highlight the search results
-    escaped = '|'.join([r'{}\w*\b'.format(w) for w in q.split()])
-    pattern = re.compile('({})'.format(escaped), re.I)
+    escaped = '|'.join([r'\b{}\w*\b'.format(w) for w in q.split()])
+    pattern = re.compile('({})(?=(?:[^>]|<[^>]*>)*$)'.format(escaped), re.I)
 
     sentences = []
     for encoded_text in encoded_texts:
