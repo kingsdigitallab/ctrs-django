@@ -245,10 +245,9 @@
   .text-display {
     padding: 1rem;
 
-    .circle {
+    .view-type {
       background: rgba(white, 0.2);
       border: 1px solid $dark-gray;
-      // border-radius: 50%;
       color: $rich-black;
       font-size: .75rem;
       margin-right: .5rem;
@@ -273,6 +272,11 @@
 
     // Hide empty symbol if w-regions are hidden
     .no-text {
+      display: none;
+    }
+
+    // Hide work region label with toggling off
+    .view-type-work {
       display: none;
     }
   }
