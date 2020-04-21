@@ -102,7 +102,7 @@
     .label {
       margin-left: 0;
 
-      & + .label {
+      &+.label {
         margin-right: .5rem;
       }
     }
@@ -170,7 +170,7 @@
 // Repetition below due to nesting
 
 .is-closed {
-  & + .off-canvas-content {
+  &+.off-canvas-content {
     .canvas-trigger {
       &::before {
         content: "\f0da";
@@ -180,7 +180,7 @@
 }
 
 .is-open {
-  & + .off-canvas-content {
+  &+.off-canvas-content {
     .canvas-trigger {
       background: scale-color($secondary-color, $lightness: 20%);
 
@@ -446,40 +446,41 @@ $highlighted-background-color: #ee0;
       position: relative;
     }
 
-    span[data-dpt-type=unsettled] {
+    span.variants {
+      background-color: scale-color($light-gray, $lightness: 20%);
+      border: 1px solid grey;
+      font-size: .875rem;
+      opacity: .95;
+      position: absolute;
+      padding: .5em .5em .25em;
+      width: auto;
 
-      span.variants {
-        background-color: scale-color($light-gray, $lightness: 20%);
-        border: 1px solid grey;
-        font-size: .875rem;
-        opacity: .95;
-        position: absolute;
-        padding: .5em .5em .25em;
-        width: auto;
-
-        .variant {
-          display: block;
-          white-space: nowrap;
-
-          .ms {
-            background: scale-color($secondary-color, $lightness: 20%);
-            border: 1px solid $secondary-color;
-            color: $black;
-            font-size: .75rem;
-            margin-right: 4px;
-            padding: 4px 4px 0;
-          }
-
-          // GN: interaction POC, to be improved
-          cursor: pointer;
-
-          &:hover {
-            background-color: $highlighted-background-color;
-          }
-        }
+      &:not(.dropdown-pane) {
+        display: none;
+        visibility: hidden;
       }
 
+      .variant {
+        display: block;
+
+        .ms {
+          background: scale-color($secondary-color, $lightness: 20%);
+          border: 1px solid $secondary-color;
+          color: $black;
+          font-size: .75rem;
+          margin-right: 4px;
+          padding: 4px 4px 0;
+        }
+
+        // GN: interaction POC, to be improved
+        cursor: pointer;
+
+        &:hover {
+          background-color: $highlighted-background-color;
+        }
+      }
     }
+
   }
 }
 
