@@ -114,9 +114,11 @@ class EncodedText(index.Indexed, TimestampedModel, ImportedModel):
 
             # Insert the HTML of the variants under the region
             variants = utils.append_xml_element(
-                region, 'span', None,
+                region.getparent(), 'span', None,
                 class_='variants',
-                id=related_id
+                id=related_id,
+                # ac-112
+                data_parent_rid=region.attrib['data-rid']
             )
 
             for mi, r in enumerate(regions[ri]):
