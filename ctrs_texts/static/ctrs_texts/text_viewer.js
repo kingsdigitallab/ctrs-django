@@ -324,13 +324,28 @@ $(() => {
 
         let $view = self._get_view_div(block, view)
 
+        // build the html markup for foundation dropdowns
+        $view.find('[data-related-id]').each(function () {
+          $(this).attr('data-toggle', $(this).data('related-id'))
+        })
+
+        $view.find('.variants').each(function () {
+          $(this).addClass('dropdown-pane')
+          $(this).attr('data-dropdown', '')
+          $(this).attr('data-hover', true)
+          $(this).attr('data-hover-pane', true)
+        })
+
         // when the user clicks a variant/reading in a region
         // we load the text of that variant in the other block/pane
         $view.find('.variants').on('click', '.variant', function (e) {
           let text_id = this.getAttribute('data-tid')
 
           // e.g. v-4 (4th v-region)
-          let region_id = $(this).parent().data('rrid')
+          let region_id = $(this)
+            .parents('[data-dpt-group]')
+            .first()
+            .data('rid')
 
           let text = self.get_text_from_id_or_siglum(text_id)
           self._load_other_text_in_other_block(block, text, region_id)
@@ -363,7 +378,9 @@ $(() => {
         } else {
           $view.find('[data-dpt-group]').each(function () {
             const group = $(this).data('dpt-group')
-            const link = $('<a class="view-type view-type-' + group + '">').html(group.substring(0, 1))
+            const link = $(
+              '<a class="view-type view-type-' + group + '">'
+            ).html(group.substring(0, 1))
 
             // $(this).prepend(': ')
             $(this).prepend(link)

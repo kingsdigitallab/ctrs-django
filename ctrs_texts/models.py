@@ -109,20 +109,14 @@ class EncodedText(index.Indexed, TimestampedModel, ImportedModel):
             if ri >= len(regions):
                 break
 
-            dropdown_id = '{}'.format(uuid.uuid1())
-            region.attrib['data-toggle'] = dropdown_id
+            related_id = '{}'.format(uuid.uuid1().fields[0])
+            region.attrib['data-related-id'] = related_id
 
             # Insert the HTML of the variants under the region
             variants = utils.append_xml_element(
-                region.getparent(), 'span', None,
-                class_='dropdown-pane variants',
-                id=dropdown_id,
-                data_dropdown='', data_hover='true', data_hover_pane='true',
-                # ac-112
-                # rrid is on purpose
-                # it is a reference to data-rid of the parent region.
-                # We avoid duplicate values for rid in the same document.
-                data_rrid=region.attrib['data-rid']
+                region, 'span', None,
+                class_='variants',
+                id=related_id
             )
 
             for mi, r in enumerate(regions[ri]):
@@ -130,7 +124,6 @@ class EncodedText(index.Indexed, TimestampedModel, ImportedModel):
                     variants, 'span', None,
                     class_='variant',
                     data_tid=str(members[mi].id),
-                    # data_rid=str(r['id'])
                 )
 
                 utils.append_xml_element(
