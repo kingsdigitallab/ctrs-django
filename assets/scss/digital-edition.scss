@@ -372,7 +372,7 @@ $highlighted-background-color: #ee0;
     // GN: added some margin to prevent the box from sticking to the
     // previous of next word.
     border: 1px dashed scale-color($secondary-color, $lightness: -40%);
-    margin: 0 .25rem;
+    // margin: 0 .25rem;
 
     // pointer-events: none;
 
@@ -422,7 +422,7 @@ $highlighted-background-color: #ee0;
       // Also adding W label
 
       background: rgba($secondary-color, 0.5);
-      padding: .25rem .5rem;
+      padding: 0 .5rem 0 0;
 
       // &::before {
       //   content: "w: ";
