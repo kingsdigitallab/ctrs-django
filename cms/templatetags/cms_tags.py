@@ -9,6 +9,7 @@ register = template.Library()
 
 @register.filter
 def get_section(current_page):
+    '''Returns the highest ancestor of current_page'''
     homepage = HomePage.objects.first()
     current_section = Page.objects.ancestor_of(current_page, inclusive=True)\
         .child_of(homepage).first()
