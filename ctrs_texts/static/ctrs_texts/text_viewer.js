@@ -20,7 +20,7 @@ const HIGHLIGHT_CLASS = 'highlighted'
 const TYPES_LABEL = {
   transcription: 'Latin',
   translation: 'English translation',
-  histogram: 'Histogram',
+  histogram: 'Bar chart',
 }
 
 const HISTOGRAM_VIEW = 'histogram'
