@@ -226,6 +226,7 @@ def view_api_text_search_text(request):
     )
 
     # pattern to highlight the search results
+    # https://regexr.com/532qa
     escaped = '|'.join([r'\b{}\w*\b'.format(w) for w in q.split()])
     pattern = re.compile('({})(?=(?:[^>]|<[^>]*>)*$)'.format(escaped), re.I)
 
