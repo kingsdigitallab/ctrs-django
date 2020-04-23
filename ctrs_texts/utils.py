@@ -18,7 +18,7 @@ def get_xml_from_unicode(document, ishtml=False, add_root=False):
     #         <root> element before parsing. In case there is no
     #        single containing element.
 
-    if document is not None and add_root:
+    if document and add_root:
         document = r'<root>%s</root>' % document
 
     parser = None
@@ -307,17 +307,26 @@ def search_text(encoded_text, query=''):
         '"ABCDEFGHIJKLMNOPQRSTUVWXYZ", '
         '"abcdefghijklmnopqrstuvwxyz")'
     )
+    search_pattern = get_text_search_pattern()
     search_xpath = (
-        './/p[contains(normalize-space({}), "{}")]'.format(lowercase, query)
+        r'.//p[re:match(normalize-space({}), "{}", "i")]'.format(
+            lowercase, search_pattern.format(query))
     )
 
     xml = get_xml_from_unicode(
         encoded_text.content, ishtml=True, add_root=True)
 
     results = [get_unicode_from_xml(sentence)
-               for sentence in xml.xpath(search_xpath)]
+               for sentence in xml.xpath(
+                   search_xpath,
+                   namespaces={'re': 'http://exslt.org/regular-expressions'})
+               ]
 
     return results
+
+
+def get_text_search_pattern():
+    return r'\b{}\w*\b'
 
 
 def get_plain_text(encoded_text):
