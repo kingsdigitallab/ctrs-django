@@ -109,7 +109,7 @@ class EncodedText(index.Indexed, TimestampedModel, ImportedModel):
             if ri >= len(regions):
                 break
 
-            related_id = '{}'.format(uuid.uuid1())
+            related_id = '{}'.format(uuid.uuid1().fields[0])
             region.attrib['data-related-id'] = related_id
 
             # Insert the HTML of the variants under the region
