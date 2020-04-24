@@ -220,15 +220,21 @@ def view_api_text_search_text(request):
         text_ids = text_ids.split(',')
         encoded_texts = encoded_texts.filter(abstracted_text__id__in=text_ids)
 
-    encoded_texts = encoded_texts.filter(plain__icontains=q).order_by(
+    # match only words that begin with the search query
+    # needs to use PSQL regex syntax, not Python's
+    # https://www.postgresql.org/docs/9.4/functions-matching.html#POSIX-CONSTRAINT-ESCAPES-TABLE
+    encoded_texts = encoded_texts.filter(
+        plain__iregex=r'\m{}'.format(q)).order_by(
         'abstracted_text__group__short_name',
         'abstracted_text__short_name'
     )
 
+    search_pattern = utils.get_text_search_pattern()
+    escaped = '|'.join([search_pattern.format(w) for w in q.split()])
     # pattern to highlight the search results
     # https://regexr.com/532qa
-    escaped = '|'.join([r'\b{}\w*\b'.format(w) for w in q.split()])
-    pattern = re.compile('({})(?=(?:[^>]|<[^>]*>)*$)'.format(escaped), re.I)
+    highlight_pattern = re.compile(
+        '({})(?=(?:[^>]|<[^>]*>)*$)'.format(escaped), re.I)
 
     sentences = []
     for encoded_text in encoded_texts:
@@ -240,7 +246,8 @@ def view_api_text_search_text(request):
 
             # highlight the search results
             if q:
-                html = pattern.sub(r'<span class="highlight">\1</span>', html)
+                html = highlight_pattern.sub(
+                    r'<span class="highlight">\1</span>', html)
 
             sentence_data = {
                 'html': html,
