@@ -36,7 +36,19 @@ def _paginate(request, items):
     return items
 
 
-class HomePage(Page, WithStreamField):
+class BasePage(Page):
+    show_in_main_menu = models.BooleanField(default=False)
+
+    class Meta:
+        abstract = True
+
+
+BasePage.promote_panels = Page.promote_panels + [
+    FieldPanel('show_in_main_menu')
+]
+
+
+class HomePage(BasePage, WithStreamField):
     subpage_types = [
         'BlogIndexPage',
         'IndexPage',
@@ -50,10 +62,8 @@ HomePage.content_panels = [
     StreamFieldPanel('body'),
 ]
 
-HomePage.promote_panels = Page.promote_panels
 
-
-class IndexPage(Page, WithStreamField):
+class IndexPage(BasePage, WithStreamField):
     subpage_types = ['IndexPage', 'RichTextPage']
 
 
@@ -62,10 +72,8 @@ IndexPage.content_panels = [
     StreamFieldPanel('body'),
 ]
 
-IndexPage.promote_panels = Page.promote_panels
 
-
-class BlogIndexPage(Page, WithStreamField):
+class BlogIndexPage(BasePage, WithStreamField):
     subpage_types = ['BlogPost']
 
     @property
@@ -124,10 +132,8 @@ BlogIndexPage.content_panels = [
     StreamFieldPanel('body')
 ]
 
-BlogIndexPage.promote_panels = Page.promote_panels
 
-
-class PeopleIndexPage(Page, WithFeedImage, WithStreamField):
+class PeopleIndexPage(BasePage, WithFeedImage, WithStreamField):
     subpage_types = ['IndexPage', 'PeoplePage', 'RichTextPage']
 
 
@@ -136,10 +142,8 @@ PeopleIndexPage.content_panels = [
     StreamFieldPanel('body')
 ]
 
-PeopleIndexPage.promote_panels = Page.promote_panels
 
-
-class PeoplePage(Page, WithFeedImage, WithStreamField):
+class PeoplePage(BasePage, WithFeedImage, WithStreamField):
     subpage_types = []
 
     job_title = models.CharField(max_length=255)
@@ -151,12 +155,12 @@ PeoplePage.content_panels = [
     StreamFieldPanel('body')
 ]
 
-PeoplePage.promote_panels = Page.promote_panels + [
+PeoplePage.promote_panels = BasePage.promote_panels + [
     ImageChooserPanel('feed_image')
 ]
 
 
-class RichTextPage(Page, WithFeedImage, WithStreamField):
+class RichTextPage(BasePage, WithFeedImage, WithStreamField):
     subpage_types = []
 
 
@@ -165,7 +169,7 @@ RichTextPage.content_panels = [
     StreamFieldPanel('body'),
 ]
 
-RichTextPage.promote_panels = Page.promote_panels + [
+RichTextPage.promote_panels = BasePage.promote_panels + [
     ImageChooserPanel('feed_image')
 ]
 
@@ -174,7 +178,7 @@ class BlogPostTag(TaggedItemBase):
     content_object = ParentalKey('BlogPost', related_name='tagged_items')
 
 
-class BlogPost(Page, WithFeedImage, WithStreamField):
+class BlogPost(BasePage, WithFeedImage, WithStreamField):
     tags = ClusterTaggableManager(through=BlogPostTag, blank=True)
     date = models.DateField('Post date')
 
@@ -208,7 +212,7 @@ class BlogPost(Page, WithFeedImage, WithStreamField):
         StreamFieldPanel('body')
     ]
 
-    promote_panels = Page.promote_panels + [
+    promote_panels = BasePage.promote_panels + [
         ImageChooserPanel('feed_image'),
         FieldPanel('authors', widget=forms.CheckboxSelectMultiple),
         FieldPanel('tags'),

@@ -1,9 +1,12 @@
+import uuid
+
 from django.db import models
 from django.utils.text import slugify
-from wagtail.snippets.models import register_snippet
 from wagtail.search import index
-from .models_abstract import ImportedModel, TimestampedModel, NamedModel
+from wagtail.snippets.models import register_snippet
+
 from . import utils
+from .models_abstract import ImportedModel, NamedModel, TimestampedModel
 
 
 class EncodedTextStatus(NamedModel):
@@ -41,6 +44,9 @@ class EncodedText(index.Indexed, TimestampedModel, ImportedModel):
     # The XML content
     content = models.TextField(blank=True, null=True)
 
+    plain = models.TextField(blank=True, null=True,
+                             help_text='Content in plain text')
+
     abstracted_text = models.ForeignKey(
         'AbstractedText', blank=False, null=False,
         related_name='encoded_texts',
@@ -73,7 +79,13 @@ class EncodedText(index.Indexed, TimestampedModel, ImportedModel):
             self.abstracted_text, self.type, self.status
         )
 
-    def content_variants(self):
+    def save(self, *args, **kwargs):
+        if self.content:
+            self.plain = utils.get_plain_text(self)
+
+        super().save(*args, **kwargs)
+
+    def get_content_with_readings(self):
         '''
         Returns XHTML content of this encoded text.
         Where each unsettled region contains the variant readings
@@ -84,29 +96,7 @@ class EncodedText(index.Indexed, TimestampedModel, ImportedModel):
         if abstracted_type.slug == 'manuscript':
             return self.content
 
-        ab_text = self.abstracted_text
-        members = list(ab_text.members.all().exclude(
-            short_name__in=['HM1', 'HM2']
-        ))
-
-        # TODO: won't work yet with Work...
-        # need to filter the type of regions
-
-        #  Collate all the regions from all the members
-        regions = []
-        for mi, member in enumerate(members):
-            other_content = member.encoded_texts.filter(type=self.type).first()
-            if not other_content:
-                continue
-            for ri, region in enumerate(other_content.get_regions(
-                abstracted_type.slug)
-            ):
-                if len(regions) <= ri:
-                    regions.append([{
-                        'text': '[absent]',
-                        'id': '',
-                    }] * len(members))
-                regions[ri][mi] = region
+        regions, members = self.get_readings_from_members()
 
         #  Get the content of the parent (i.e. self)
         xml = utils.get_xml_from_unicode(
@@ -119,29 +109,46 @@ class EncodedText(index.Indexed, TimestampedModel, ImportedModel):
             if ri >= len(regions):
                 break
 
+            related_id = '{}'.format(uuid.uuid1().fields[0])
+            region.attrib['data-related-id'] = related_id
+
             # Insert the HTML of the variants under the region
             variants = utils.append_xml_element(
-                region, 'span', None,
-                class_='variants', prepend=True
+                region.getparent(), 'span', None,
+                class_='variants',
+                id=related_id,
+                # ac-112
+                data_parent_rid=region.attrib['data-rid']
             )
 
             for mi, r in enumerate(regions[ri]):
-
                 variant = utils.append_xml_element(
                     variants, 'span', None,
                     class_='variant',
                     data_tid=str(members[mi].id),
-                    # data_rid=str(r['id'])
                 )
 
                 utils.append_xml_element(
-                    variant, 'span', members[mi].short_name,
-                    class_='ms'
+                    variant,
+                    'span',
+                    r['parent'],
+                    class_='label version {}-text-id'.format(
+                        r['parent'].lower())
+                )
+
+                clazz = 'version' if r['parent'] == 'W' else 'manuscript'
+
+                utils.append_xml_element(
+                    variant,
+                    'span',
+                    members[mi].short_name,
+                    class_='label {} {}-text-id'.format(
+                        clazz, members[mi].short_name.lower())
                 )
 
                 utils.append_xml_element(
-                    variant, 'span', r['text'],
-                    class_='reading'
+                    variant, 'span', r['reading'],
+                    class_='reading', data_copies=r['copies']
                 )
 
             ri += 1
@@ -150,12 +157,57 @@ class EncodedText(index.Indexed, TimestampedModel, ImportedModel):
 
         return ret
 
+    def get_readings_from_members(self):
+        '''
+        Returns (regions, members)
+        regions: a list of region in their order of appearance in this text
+        region: a list of m readings, one for each member
+        members: a list of m members
+        member: an AbstractedText that belongs to the group formed by this text
+        '''
+        regions = []
+        members = []
+        abstracted_type = self.abstracted_text.type
+
+        if abstracted_type.slug == 'manuscript':
+            return regions, members
+
+        ab_text = self.abstracted_text
+        members = list(ab_text.members.all().exclude(
+            short_name__in=['HM1', 'HM2']
+        ))
+
+        #  Collate all the regions from all the members
+        regions = []
+        for mi, member in enumerate(members):
+            other_content = member.encoded_texts.filter(type=self.type).first()
+
+            if not other_content:
+                continue
+            for ri, region in enumerate(other_content.get_regions(
+                abstracted_type.slug)
+            ):
+                if len(regions) <= ri:
+                    # watch out: the SAME dictionary instance is shared by all
+                    # entries by default. You modify one => all are modified!
+                    regions.append([
+                        {
+                            'parent': 'ms',
+                            'reading': '[absent]',
+                            'id': '',
+                            'copies': '0',
+                        }
+                    ] * len(members))
+
+                regions[ri][mi] = region
+                region['parent'] = ab_text.short_name
+
+        return regions, members
+
     def get_regions(self, region_type):
         '''
-        Returns a list of regions of type region_type.
-        region_type = work|version
-        Each region is a string that contains the text of the region.
-        All XML tags are removed.
+        Returns a list of unsettled regions (of type region_type=work|version)
+        with their plain text reading extracted from this text ONLY.
         '''
         ret = []
 
@@ -166,8 +218,9 @@ class EncodedText(index.Indexed, TimestampedModel, ImportedModel):
         region_selector = './/span[@data-dpt-group="' + region_type + '"]'
         for region in xml.findall(region_selector):
             ret.append({
-                'text': utils.get_unicode_from_xml(region, text_only=True),
+                'reading': utils.get_unicode_from_xml(region, text_only=True),
                 'id': region.attrib.get('id', ''),
+                'copies': region.attrib.get('data-copies', '0'),
             })
 
         return ret

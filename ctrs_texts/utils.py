@@ -1,5 +1,13 @@
-import lxml.etree as ET
+import json
+import os
 import re
+from collections import Counter
+
+import lxml.etree as ET
+from _collections import OrderedDict
+from django.conf import settings
+from django.utils.text import slugify
+from lxml import html
 
 
 def get_xml_from_unicode(document, ishtml=False, add_root=False):
@@ -122,3 +130,214 @@ def get_sentence_from_text(encoded_text, sentence_number):
         ret = match.group(1)
 
     return ret
+
+
+def get_regions_with_unique_variants(text_ids):
+    ret = []
+
+    # build ret: list of all wregions in HM1, in their order of appearance.
+    # for each region, ['key'] is a key that will match the annotation key
+    # see _get_annotations_from_archetype()
+    wpattern = './/span[@data-dpt-group="work"]'
+
+    keys_freq = Counter()
+
+    from ctrs_texts.models import EncodedText
+
+    for encoded_text in EncodedText.objects.filter(
+        abstracted_text__short_name__in=['HM1'],
+        type__slug='transcription'
+    ):
+        content = get_xml_from_unicode(
+            encoded_text.content, ishtml=True, add_root=True
+        )
+        for wregion in content.findall(wpattern):
+            key = slugify(get_unicode_from_xml(wregion, text_only=True))[:20]
+            key = key or '∅'
+            keys_freq.update([key])
+            freq = keys_freq[key]
+            if freq > 1:
+                key = '{}:{}'.format(key, freq)
+            ret.append({
+                'key': key,
+                'readings': OrderedDict()
+            })
+
+    # for each selected manuscript, get its parent w-regions
+    # where all v-regions have been substituted with the content from the MS
+    vpattern = './/span[@data-dpt-group="version"]'
+
+    for encoded_text in EncodedText.objects.filter(
+        abstracted_text_id__in=text_ids,
+        type__slug='transcription',
+        abstracted_text__type__slug='manuscript',
+    ).order_by('abstracted_text__short_name'):
+        member_siglum = encoded_text.abstracted_text.short_name
+
+        # get vregions from member
+        vregions = []
+        content = get_xml_from_unicode(
+            encoded_text.content, ishtml=True, add_root=True
+        )
+        for vregion in content.findall(vpattern):
+            vregions.append(get_unicode_from_xml(vregion, text_only=True))
+
+        # print(vregions)
+
+        # get parent
+        parent = EncodedText.objects.filter(
+            abstracted_text=encoded_text.abstracted_text.group,
+            type__slug='transcription',
+        ).first()
+
+        content_parent = get_xml_from_unicode(
+            parent.content, ishtml=True, add_root=True
+        )
+        parent_siglum = parent.abstracted_text.short_name
+
+        # replace vregion in parent with text from member
+        for i, vregion in enumerate(content_parent.findall(vpattern)):
+            if i < len(vregions):
+                vregion.clear(keep_tail=True)
+                vregion.text = vregions[i]
+            else:
+                print('WARNING: v-region #{} of {} not found in {}'.format(
+                    i, encoded_text, parent)
+                )
+
+        # get the text of all the wregions from parent
+        for i, wregion in enumerate(content_parent.findall(wpattern)):
+            if i < len(ret):
+                wreading = get_unicode_from_xml(wregion, text_only=True)
+                wreading = wreading.strip()
+                if wreading not in ret[i]['readings']:
+                    ret[i]['readings'][wreading] = []
+                ret[i]['readings'][wreading].append(
+                    [parent_siglum, member_siglum])
+            else:
+                print('WARNING: w-region #{} of {} not found in {}'.format(
+                    i, parent, 'heatmap text (HM1)')
+                )
+
+    return ret
+
+
+def get_annotations_from_archetype():
+    '''
+    Returns a simplified dictionary of annotations from archetype api.
+
+    ret['principem-regem'] = {
+        rects: [
+            [
+                [994.4017594070153,2871.1062469927056]],
+                [1201.1631251142062,2825.8702290932333]
+            ]
+        ]
+    },
+    '''
+    ret = {}
+
+    annotation_path = os.path.join(
+        settings.MEDIA_ROOT, 'arch-annotations.json'
+    )
+    with open(annotation_path, 'rt') as fh:
+        api_response = json.load(fh)
+
+    for a in api_response['results']:
+        geo_json = json.loads(a['geo_json'])
+
+        # skip 'ghost' annotations (no properties)
+        if not geo_json['properties']:
+            continue
+
+        # extract bounds and text from geo_json
+        key = ':'.join([
+            e[1] for e in
+            geo_json['properties']['elementid']
+            if e[0].startswith('@')
+        ])
+
+        if key not in ret:
+            ret[key] = {'rects': []}
+
+        ret[key]['rects'].append([
+            geo_json['geometry']['coordinates'][0][0],
+            geo_json['geometry']['coordinates'][0][2]
+        ])
+
+    return ret
+
+
+def get_text_chunk(encoded_text, view, region_type):
+    if view in ['histogram']:
+        '''Returns a list of sentences; for each one, the number of regions'''
+        ret = []
+
+        xml = get_xml_from_unicode(
+            encoded_text.content, add_root=True, ishtml=True)
+        for para in xml.findall('.//p'):
+            for sentence_element in para.findall('.//span[@data-dpt="sn"]'):
+                number = re.sub(r'^s-(\d+)$', r'\1',
+                                sentence_element.attrib.get('data-rid', ''))
+                if not number:
+                    continue
+
+                regions = para.findall(
+                    './/span[@data-dpt-group="' + region_type + '"]')
+
+                res = {
+                    'key': number,
+                    'value': len(regions),
+                }
+                ret.append(res)
+    else:
+        ret = encoded_text.get_content_with_readings()
+
+    return ret
+
+
+def search_text(encoded_text, query=''):
+    if not encoded_text:
+        return None
+
+    query = query.lower()
+
+    lowercase = (
+        'translate(., '
+        '"ABCDEFGHIJKLMNOPQRSTUVWXYZ", '
+        '"abcdefghijklmnopqrstuvwxyz")'
+    )
+    search_pattern = get_text_search_pattern()
+    search_xpath = (
+        r'.//p[re:match(normalize-space({}), "{}", "i")]'.format(
+            lowercase, search_pattern.format(query))
+    )
+
+    xml = get_xml_from_unicode(
+        encoded_text.content, ishtml=True, add_root=True)
+
+    results = [get_unicode_from_xml(sentence)
+               for sentence in xml.xpath(
+                   search_xpath,
+                   namespaces={'re': 'http://exslt.org/regular-expressions'})
+               ]
+
+    return results
+
+
+def get_text_search_pattern():
+    return r'\b{}\w*\b'
+
+
+def get_plain_text(encoded_text):
+    '''Returns the plain text content from an `EncodedText`.'''
+    if not encoded_text:
+        return None
+
+    xml = html.fromstring(encoded_text.content)
+    text = xml.text_content()
+
+    if not text:
+        return None
+
+    return text.strip()

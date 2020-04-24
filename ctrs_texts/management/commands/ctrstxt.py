@@ -43,6 +43,9 @@ class Command(BaseCommand):
                 m.objects.all().delete()
             valid = True
 
+        if action == 'unique':
+            valid = self.handle_unique()
+
         if not valid:
             self.show_help()
         else:
@@ -77,7 +80,69 @@ class Command(BaseCommand):
             self.error('%s' % e)
             return False
 
-        return self.import_json(data)
+        ret = self.import_json(data)
+
+        if ret:
+            ret = self.handle_unique()
+
+        return ret
+
+    def handle_unique(self):
+        # get all versions and works
+        parents = EncodedText.objects.filter(
+            abstracted_text__type__slug__in=['work', 'version']
+        ).exclude(
+            abstracted_text__short_name__in=['HM1', 'HM2']
+        ).order_by(
+            'abstracted_text__type__slug', 'abstracted_text__short_name'
+        )
+
+        for parent in parents:
+            regions, members = parent.get_readings_from_members()
+
+            encoded_texts = [
+                member.encoded_texts.filter(type=parent.type).first()
+                for member in members
+            ]
+
+            xmls = [
+                get_xml_from_unicode(text.content, ishtml=True, add_root=True)
+                for text in encoded_texts
+            ]
+
+            for ri, region in enumerate(regions):
+                groups = {}
+                for mi, variants in enumerate(region):
+                    variants['mi'] = mi
+                    if variants['reading'] not in groups:
+                        groups[variants['reading']] = []
+                    groups[variants['reading']].append(variants)
+
+                for reading, group in groups.items():
+                    # print(reading, len(group))
+                    if len(group) != 1:
+                        continue
+                    # print('unique')
+                    for variant in group:
+                        el = xmls[variant['mi']].find(
+                            './/span[@id="{}"]'.format(variant['id']))
+                        if el is None:
+                            print(
+                                'WARNING: region not found ({} in {})'.format(
+                                    ri, members[variant['mi']].short_name
+                                )
+                            )
+                            continue
+                        el.attrib['data-copies'] = '1'
+
+            for mi, encoded_text in enumerate(encoded_texts):
+                encoded_text.content = get_unicode_from_xml(
+                    xmls[mi], remove_root=True
+                )
+                # print(encoded_text.abstracted_text.id)
+                encoded_text.save()
+
+        return True
 
     def import_json(self, data):
         '''
@@ -252,7 +317,11 @@ ACTION:
     update if the record already exists.
     FILE: a json file obtained from archetype API,
           see inline comment (handle_import)
+
   delete
     delete all the text concent records from the DB
+
+  unique
+    mark up unique readings in all the texts
 
 '''.format(self.help))

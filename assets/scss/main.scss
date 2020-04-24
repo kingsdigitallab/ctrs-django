@@ -18,6 +18,7 @@
  *  5.  Social media
  *  6.  Media queries
  *  7.  Print
+ *  8.  Digital edition global
  *
  *  TODO - Add:
  *      code (pre & code)
@@ -65,6 +66,10 @@ blockquote {
     background: rgba(yellow, 0.3);
     padding-left: .5rem;
     padding-right: .5rem;
+}
+
+.hover {
+    cursor: pointer;
 }
 
 hr {
@@ -117,6 +122,8 @@ button,
     border: none;
     color: white;
     cursor: pointer;
+    font-family: "Open Sans Condensed";
+    font-weight: 700;
     line-height: 1.75em;
     padding: 5px 10px;
 
@@ -143,7 +150,13 @@ button,
 
         input {
             margin: 0 0 1px;
-            max-width: 90px;
+            max-width: 100%;
+        }
+
+        &.ninetypx {
+            input {
+                max-width: 90px;
+            }
         }
     }
 }
@@ -538,6 +551,7 @@ footer {
     position: fixed;
     text-align: center;
     width: 100%;
+    z-index: 1001;
 }
 
 
@@ -813,3 +827,45 @@ main {
 }
 
 /* 7. Print */
+
+/* 8. Digital edition global */
+
+
+.label {
+  &.manuscript {
+    background: scale-color($secondary-color, $lightness: 20%);
+    color: $black;
+  }
+
+  &.version,
+  &.work {
+    background: scale-color($primary-color, $lightness: 75%);
+    color: $black;
+  }
+}
+
+// Using colour blind friendly palette for the versions
+
+.v1-text-id {
+  border-left: 10px solid $orange;
+}
+
+.v2-text-id {
+  border-left: 10px solid $sky-blue;
+}
+
+.v3-text-id {
+  border-left: 10px solid $bluish-green;
+}
+
+.v4-text-id {
+  border-left: 10px solid $yellow;
+}
+
+.v5-text-id {
+  border-left: 10px solid $vermillion;
+}
+
+.v6-text-id {
+  border-left: 10px solid $reddish-purple;
+}
