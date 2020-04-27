@@ -1,3 +1,5 @@
+This project is now archived, for the latest version of the project see https://github.com/kingsdigitallab/cotr.
+
 # ctrs-django
 
 This is the repository for the ctrs project at [Kings Digital Lab](https://kdl.kcl.ac.uk)
